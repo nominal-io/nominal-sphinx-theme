@@ -50,6 +50,28 @@ open. The link is relative (the `/{lang}/` folder above a project's home at `/{l
 so it works on the hub and in its offline copies. A site published on its own, outside the hub,
 sets `nominal_hub_url` instead.
 
+## Social links
+
+The header's right side shows the "Request a demo" and "Open app" buttons. To put icons before
+them, pass `nav_socials` (Shibuya's format): a name such as `"github"` or `"discord"` uses the
+matching `<name>_url` option, and a `{"name", "url", "icon"}` dict adds any other link, with any
+[Iconify](https://icon-sets.iconify.design/) icon. The default is none.
+
+```python
+html_theme_options = theme_options(
+    github_url="https://github.com/nominal-io/<repo>",
+    discord_url="https://discord.gg/<invite>",
+    nav_socials=[
+        "github",
+        "discord",
+        {"name": "Forum", "url": "https://community.example.com", "icon": "lucide:messages-square"},
+    ],
+)
+```
+
+The footer's icons are Shibuya's `foot_socials`: by default, every `<name>_url` that is set (here
+GitHub, Discord, and the X and LinkedIn links `theme_options` sets).
+
 ## Tabs
 
 Each `nav_links` entry that points at a page in a folder, e.g.

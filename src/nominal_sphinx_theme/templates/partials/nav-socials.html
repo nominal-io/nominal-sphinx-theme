@@ -1,3 +1,8 @@
-{#- The landing page's header buttons, in place of Shibuya's social icons (those stay in the footer). -#}
+{#- The project's social icons (nav_socials; none by default), then the landing page's header buttons. -#}
+{%- if theme_nav_socials -%}
+<div class="sy-head-socials">
+  {%- include "components/nav-socials.html" -%}
+</div>
+{%- endif -%}
 <a class="nominal-btn" href="https://nominal.io/request-demo">Request a demo</a>
 <a class="nominal-btn nominal-btn-filled" href="https://app.gov.nominal.io/home">Open app</a>

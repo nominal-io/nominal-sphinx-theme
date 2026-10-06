@@ -46,15 +46,14 @@ _HREF = re.compile(r'href="([^"#]*)')
 
 def theme_options(*, github_url: str | None = None, **overrides: Any) -> dict[str, Any]:
     """Shibuya options for a Nominal docs site; keyword arguments override the defaults."""
-    socials: list[Any] = ["github"] if github_url else []
-    socials += ["x", "linkedin"]
     options: dict[str, Any] = {
         "accent_color": "gray",
         # dark, like the landing page, unless the visitor picks light with the theme switch
         "color_mode": "dark",
         "x_url": "https://x.com/nominal_io",
         "linkedin_url": "https://linkedin.com/company/nominal-io",
-        "nav_socials": socials,
+        # header icons before the buttons; a project lists its own (Shibuya's nav_socials format)
+        "nav_socials": [],
         "toctree_titles_only": True,
     }
     if github_url:
