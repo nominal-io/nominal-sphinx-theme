@@ -294,3 +294,8 @@ html.dark .sd-card:hover {
   padding: 0.25rem 0.5rem;
 }
 
+/* Shibuya scrolls the active local TOC entry on page scroll. Smooth page scrolling
+   lets that interrupt deep links on long API pages; use immediate anchor navigation. */
+html {
+  scroll-behavior: auto;
+}

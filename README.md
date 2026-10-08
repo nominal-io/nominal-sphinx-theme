@@ -79,3 +79,12 @@ Each `nav_links` entry that points at a page in a folder, e.g.
 page belongs to the tab without a folder (`"index"`). The current tab is underlined, and the left
 sidebar shows only its toctree groups (unless `nominal_section_sidebar = False`). So with tabs,
 give each section its own captioned, `:hidden:` toctree in the root document.
+
+## API reference
+
+The local contents lists classes, functions, and methods. Attributes, properties,
+and type aliases remain in the reference body and keep their link targets.
+Anchor navigation is immediate so the sidebar's active-entry scrolling does not
+interrupt deep links on long reference pages.
+
+Run the navigation regression test with `uv run --with pytest pytest tests`.

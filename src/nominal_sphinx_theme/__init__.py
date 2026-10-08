@@ -28,6 +28,8 @@ import re
 from pathlib import Path
 from typing import Any
 
+from docutils import nodes
+from sphinx import addnodes
 from sphinx.application import Sphinx
 from sphinx.config import Config
 from sphinx.util.osutil import relative_uri
@@ -131,6 +133,13 @@ def _on_builder_inited(app: Sphinx) -> None:
         )
 
 
+def _api_contents(app: Sphinx, doctree: nodes.document) -> None:
+    # Keep all targets and reference content; only omit non-callable objects from the local TOC.
+    for node in doctree.findall(addnodes.desc):
+        if node.get("domain") == "py" and node.get("objtype") in {"attribute", "property", "data", "type"}:
+            node["no-contents-entry"] = True
+
+
 def setup(app: Sphinx) -> dict[str, Any]:
     app.add_config_value("nominal_ga_id", None, "html", types=[str, type(None)])
     # where the header's Nominal logo leads; None: the docs hub's landing page, relative to the project
@@ -140,6 +149,7 @@ def setup(app: Sphinx) -> dict[str, Any]:
     app.connect("config-inited", _on_config_inited)
     app.connect("builder-inited", _on_builder_inited)
     app.connect("html-page-context", _on_page)
+    app.connect("doctree-read", _api_contents, priority=400)
     app.add_css_file(FONTS)
     app.add_css_file("nominal.css")
     app.add_js_file("nominal.js")
