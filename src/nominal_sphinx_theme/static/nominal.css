@@ -294,3 +294,8 @@ html.dark .sd-card:hover {
   padding: 0.25rem 0.5rem;
 }
 
+/* A heading's "#" copies its link (nominal.js), then says so for a moment. */
+.yue a.headerlink.nominal-copied::after {
+  content: "Copied";
+  margin-left: 0.4em;
+}

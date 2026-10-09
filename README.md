@@ -79,3 +79,9 @@ Each `nav_links` entry that points at a page in a folder, e.g.
 page belongs to the tab without a folder (`"index"`). The current tab is underlined, and the left
 sidebar shows only its toctree groups (unless `nominal_section_sidebar = False`). So with tabs,
 give each section its own captioned, `:hidden:` toctree in the root document.
+
+## Heading links
+
+Clicking the `#` after a heading copies a link to that section, as well as going to it, and
+"Copied" shows beside it for a moment. Copying needs a secure page (https, or localhost when
+previewing); elsewhere the `#` is a plain link.
