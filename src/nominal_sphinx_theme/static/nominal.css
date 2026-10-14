@@ -197,6 +197,12 @@ html.dark .sd-card:hover {
   margin-bottom: 0;
 }
 
+/* Tab content: Shibuya drops sphinx-design's padding, which leaves prose touching the tab bar.
+   Start it half a line down. Code blocks stay flush, since Shibuya squares them to sit on the bar. */
+.yue .sd-tab-content > :first-child:not([class*="highlight"], .literal-block-wrapper, .sd-tab-set) {
+  margin-top: 0.75rem !important;
+}
+
 /* Numbered steps (Mintlify <Steps>): a counter badge beside each step. */
 .steps {
   counter-reset: step;
