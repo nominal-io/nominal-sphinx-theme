@@ -84,7 +84,7 @@ Most repos split docs into three types. Folders and names differ per project.
 - Include a sentence only if the reader acts on it or needs it for the next step.
 - Give the instruction, not the mechanism behind it.
 - Exact rules and rare edge cases go in reference pages or error messages.
-- Too much detail at once overwhelmss. Leaving out common failure modes frustrates. Balance the two.
+- Too much detail at once overwhelms. Leaving out common failure modes frustrates. Balance the two.
 - Match page length to the task. No filler sections, recaps or stacked caveats.
 - Assume widely used standards. Write "ISO 8601", don't explain it.
 - Nominal limitations that may change: show what works ("this example exports format X"), not the limit ("Nominal only supports X").
