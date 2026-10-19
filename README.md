@@ -85,3 +85,21 @@ give each section its own captioned, `:hidden:` toctree in the root document.
 Clicking the `#` after a heading copies a link to that section, as well as going to it, and
 "Copied" shows beside it for a moment. Copying needs a secure page (https, or localhost when
 previewing); elsewhere the `#` is a plain link.
+
+## Docs skill for AI agents
+
+[`skills/nominal-docs/`](skills/nominal-docs/) holds Nominal's shared rules for writing docs and docstrings, as a Claude Code plugin.
+
+To use it in a repo, add this to the repo's `.claude/settings.json`:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "nominal": { "source": { "source": "github", "repo": "nominal-io/nominal-sphinx-theme" } }
+  },
+  "enabledPlugins": { "nominal-docs@nominal": true }
+}
+```
+
+- Repo-specific details (docs folders, build commands, layout) go in that repo's own docs skill or `AGENTS.md`.
+- The Style section and the docstring files are written by people. Change them through a PR here.

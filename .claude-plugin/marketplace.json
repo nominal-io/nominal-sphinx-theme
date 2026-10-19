@@ -1,0 +1,13 @@
+{
+  "name": "nominal",
+  "owner": {
+    "name": "Nominal"
+  },
+  "plugins": [
+    {
+      "name": "nominal-docs",
+      "source": "./",
+      "description": "Nominal's shared rules for writing docs and docstrings"
+    }
+  ]
+}
