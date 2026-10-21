@@ -14,5 +14,5 @@
 - Classes: the `__init__` docstring gives a full usage example.
 - Unsure what something means? Don't guess. Leave it out and add `TODO: add doc`.
 - Docstrings are reStructuredText, rendered by Sphinx.
-- use cross referenceing where appropriate. 
+- use cross referencing where appropriate.
 
