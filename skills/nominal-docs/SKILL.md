@@ -5,8 +5,8 @@ description: Nominal's shared rules for writing docs and docstrings. Use when wr
 
 # Nominal docs
 
-- These are  shared rules for all Nominal developer-facing docs.
-- Each repo's `README.md` or  `AGENTS.md` gives its folders, build commands and layout. Read it too.
+- These are shared rules for all Nominal developer-facing docs.
+- Each repo's `README.md` or `AGENTS.md` gives its folders, build commands and layout. Read it too.
 - Docstrings: read the file for the language.
   - Python: [python.md](python.md)
 
@@ -19,7 +19,7 @@ description: Nominal's shared rules for writing docs and docstrings. Use when wr
 - [Style](#style)
   - [General](#general)
   - [Accuracy and confidentiality](#accuracy-and-confidentiality)
-  - [Readers](#readers)
+  - [Audience](#audience)
   - [What to include](#what-to-include)
   - [Examples and code](#examples-and-code)
   - [Clear references](#clear-references)
@@ -39,15 +39,15 @@ Most repos split docs into three types. Folders and names differ per project.
 
 ### Guides
 
-- For:  user doing a task with the product.
+- For: user doing a task with the product.
 - Covers: how to get a task done, along the common path.
 - Format: MyST Markdown pages
 
 ### Examples
 
-- For: users looking for examples  
-- Covers: use-case drive examples that  users can clone and modify or copy code from.
-- Format: .py file,  myst markdown,  or Jupyter notebooks. Executable notebooks are preferred, as they are both user-frendly and testable. 
+- For: users looking for examples
+- Covers: use-case driven examples that users can clone and modify or copy code from.
+- Format: .py file, myst markdown, or Jupyter notebooks. Executable notebooks are preferred, as they are both user-friendly and testable.
 
 ### Reference
 
@@ -61,7 +61,7 @@ Most repos split docs into three types. Folders and names differ per project.
 
 - Explain things concisely and clearly. 
 - Do not re-explain things that are explained in another doc. Link to it instead.
-- when mixing narration with code, use comments to explain the code as much as pssible. inline if they fit, otherwise above the code block.
+- When mixing narration with code, use comments to explain the code as much as possible. Inline if they fit, otherwise above the code block.
 
 ### Accuracy and confidentiality
 
