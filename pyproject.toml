@@ -7,7 +7,15 @@ requires-python = ">=3.12"
 dependencies = [
     "sphinx>=9.1.0",
     "shibuya>=2026.7.12",
+    # shared snippets are MyST
+    "myst-parser>=5.0",
 ]
+
+[dependency-groups]
+dev = ["pytest"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
 
 [build-system]
 requires = ["hatchling"]
