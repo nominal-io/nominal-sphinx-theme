@@ -145,7 +145,7 @@ Most repos split docs into three types. Folders and names differ per project.
 ### Terms
 
 - Use one term for one concept, every time. Don't swap in a synonym to make a paragraph read better.
-- Use the names Nominal uses: asset, dataset, channel, workbook, profile.
+- Use the names Nominal uses: asset, dataset, channel, workbook, profile. Where this is ambiguous (physical asset vs nominal asset) use a qualifier like "nominal asset" or "metadata asset" consistently. Only use this qualifier when it is actually ambiguous.
 - "REST API" or "gRPC API", never bare "API". The SDKs are APIs too.
 - UI labels keep their own wording: "API key", the **API keys** page.
 - Graphical interface: "user interface" or "UI". Command line: "CLI", "command line interface" or "terminal interface".
