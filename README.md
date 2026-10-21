@@ -92,14 +92,14 @@ Snippets are MyST fragments in `src/nominal_sphinx_theme/snippets/` that any pro
 includes one by its path, without `.md`:
 
 ````md
-```{nominal-snippet} api-keys/get-values
+```{nominal-snippet} api-keys-setup
 ```
 ````
 
 The snippet renders in its place as if written there, and its headings become the page's
 sections. A misspelled name fails the build.
 
-A snippet's images sit beside it, linked relative to it (`![The API keys page](api-keys-page.png)`,
+A snippet's images sit beside it, linked relative to it (`![The API keys page](api-keys.png)`,
 or a `{figure}`). When a build starts, they're copied into the project's source folder under
 `_nominal_snippets/`, which ignores itself in git and is excluded as a source of pages.
 
@@ -117,7 +117,7 @@ A snippet change reaches a project when it updates its theme pin, like any theme
 
 | Snippet          | What it covers                                                              |
 | ---------------- | --------------------------------------------------------------------------- |
-| `api-keys/setup` | The config file, the three values from the **API keys** page, and the CLIs. Needs `sphinx_design` and MyST's `attrs_block`. |
+| `api-keys-setup` | The config file, the three values from the **API keys** page, and the CLIs. Needs `sphinx_design` and MyST's `attrs_block`. |
 
 The theme styles callouts for any project: a screenshot with class `callout-screenshot` beside a
 `{.callouts}` numbered list gets red numbers matching the screenshot's.

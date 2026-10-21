@@ -2,10 +2,10 @@
 
 In a MyST page::
 
-    ```{nominal-snippet} api-keys/get-values
+    ```{nominal-snippet} api-keys-setup
     ```
 
-renders snippets/api-keys/get-values.md in its place, as if it were written there. A snippet's
+renders snippets/api-keys-setup.md in its place, as if it were written there. A snippet's
 images sit beside it and are linked relative to it. They're copied into the project's source
 folder, under _nominal_snippets/ (ignored by git), when the build starts, since Sphinx only
 resolves images there, and the snippet's image paths are rewritten to point at the copies.
