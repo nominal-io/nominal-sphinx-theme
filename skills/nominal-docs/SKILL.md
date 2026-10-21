@@ -21,6 +21,7 @@ description: Nominal's shared rules for writing docs and docstrings. Use when wr
   - [Accuracy and confidentiality](#accuracy-and-confidentiality)
   - [Audience](#audience)
   - [What to include](#what-to-include)
+  - [Say the thing](#say-the-thing)
   - [Examples and code](#examples-and-code)
   - [Clear references](#clear-references)
   - [Lists and punctuation](#lists-and-punctuation)
@@ -59,7 +60,9 @@ Most repos split docs into three types. Folders and names differ per project.
 
 ### General
 
-- Explain things concisely and clearly. 
+- Explain things concisely and clearly.
+- Use short sentences, with one idea in each.
+- Use the active voice and the present tense. Address the reader as "you".
 - Do not re-explain things that are explained in another doc. Link to it instead.
 - When mixing narration with code, use comments to explain the code as much as possible. Inline if they fit, otherwise above the code block.
 
@@ -90,6 +93,17 @@ Most repos split docs into three types. Folders and names differ per project.
 - Nominal limitations that may change: show what works ("this example exports format X"), not the limit ("Nominal only supports X").
 - Limits set by outside standards or protocols: state them plainly, with the workaround.
 - Embed a small concept rather than make the reader switch pages.
+
+### Say the thing
+
+- Don't announce. Delete a sentence that only says the next one is worth reading ("Let's take a look:").
+- Don't describe the page. Readers can see its structure.
+- The lead paragraph (`{.lead}`) says what the subject does and what it needs, in one or two sentences. It doesn't list the sections.
+- Don't sell. State what the code does, not how good it is: no "seamless", "powerful", "easy", "simply" or "just".
+- Don't grade sources ("the client docs explain this well"). Link or quote them.
+- Cut empty openers: "note that", "it is worth noting", "in fact", "of course", "interestingly", "importantly", "the key insight is".
+- No rhetorical shape: no triples for rhythm, no one-line paragraph for effect, no metaphor where a plain name exists.
+- To test a sentence, delete it and reread the paragraph. If nothing is lost, leave it out.
 
 ### Examples and code
 
@@ -130,6 +144,8 @@ Most repos split docs into three types. Folders and names differ per project.
 
 ### Terms
 
+- Use one term for one concept, every time. Don't swap in a synonym to make a paragraph read better.
+- Use the names Nominal uses: asset, dataset, channel, workbook, profile.
 - "REST API" or "gRPC API", never bare "API". The SDKs are APIs too.
 - UI labels keep their own wording: "API key", the **API keys** page.
 - Graphical interface: "user interface" or "UI". Command line: "CLI", "command line interface" or "terminal interface".
