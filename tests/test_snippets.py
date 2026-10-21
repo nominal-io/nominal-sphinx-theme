@@ -33,11 +33,11 @@ def snippets(tmp_path, monkeypatch):
     return root
 
 
-def build(tmp_path: Path, page: str) -> tuple[Path, int, str]:
+def build(tmp_path: Path, page: str, conf: str = CONF) -> tuple[Path, int, str]:
     """Build a one-page project with warnings as errors: its output folder, status and warnings."""
     src = tmp_path / "src"
     src.mkdir(exist_ok=True)
-    (src / "conf.py").write_text(CONF)
+    (src / "conf.py").write_text(conf)
     (src / "index.md").write_text(page)
     out = tmp_path / "out"
     warnings = io.StringIO()
@@ -63,6 +63,18 @@ def test_unknown_snippet_fails_the_build(tmp_path, snippets):
     _, status, warnings = build(tmp_path, "# Page\n\n```{nominal-snippet} demo/missing\n```\n")
     assert status == 1
     assert "unknown snippet 'demo/missing'" in warnings
+
+
+def test_shipped_snippets_build(tmp_path):
+    # every snippet the theme ships, with the extensions the README says they need
+    names = sorted(p.relative_to(snippet_directive.SNIPPETS).with_suffix("").as_posix() for p in snippet_directive.SNIPPETS.rglob("*.md"))
+    assert names
+    page = "# Page\n\n" + "".join(f"```{{nominal-snippet}} {name}\n```\n\n" for name in names)
+    conf = CONF.replace('"myst_parser",', '"myst_parser", "sphinx_design",').replace('["colon_fence"]', '["colon_fence", "attrs_block"]')
+    out, status, warnings = build(tmp_path, page, conf)
+    assert status == 0, warnings
+    for image in snippet_directive.SNIPPETS.rglob("*.png"):
+        assert (out / "_images" / image.name).exists()
 
 
 def test_builds_without_snippets(tmp_path, monkeypatch):

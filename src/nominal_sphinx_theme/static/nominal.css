@@ -305,3 +305,21 @@ html.dark .sd-card:hover {
   content: "Copied";
   margin-left: 0.4em;
 }
+
+/* Callouts: a screenshot marked with red numbers (an image with class callout-screenshot),
+   beside a list whose numbers match them ({.callouts} on the list). Used by shared snippets. */
+section:has(img.callout-screenshot) h2,
+section:has(img.callout-screenshot) details.sd-dropdown {
+  clear: both;
+}
+ol.callouts > li::marker {
+  color: #ef4444;
+  font-weight: 700;
+}
+@media (max-width: 640px) {
+  .yue img.callout-screenshot {
+    float: none;
+    display: block;
+    margin: 0 auto 1rem;
+  }
+}

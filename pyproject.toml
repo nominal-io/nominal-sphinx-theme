@@ -12,7 +12,8 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = ["pytest"]
+# sphinx-design: the shipped snippets' tabs and dropdowns
+dev = ["pytest", "sphinx-design"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

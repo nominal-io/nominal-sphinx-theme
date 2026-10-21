@@ -115,6 +115,13 @@ have:
 
 A snippet change reaches a project when it updates its theme pin, like any theme change.
 
+| Snippet          | What it covers                                                              |
+| ---------------- | --------------------------------------------------------------------------- |
+| `api-keys/setup` | The config file, the three values from the **API keys** page, and the CLIs. Needs `sphinx_design` and MyST's `attrs_block`. |
+
+The theme styles callouts for any project: a screenshot with class `callout-screenshot` beside a
+`{.callouts}` numbered list gets red numbers matching the screenshot's.
+
 To test the directive:
 
 ```sh
