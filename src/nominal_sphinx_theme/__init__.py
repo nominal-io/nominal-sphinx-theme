@@ -137,6 +137,8 @@ def setup(app: Sphinx) -> dict[str, Any]:
     app.add_config_value("nominal_hub_url", None, "html", types=[str, type(None)])
     # show only the current tab's toctree groups in the left sidebar
     app.add_config_value("nominal_section_sidebar", True, "html", types=[bool])
+    # the {nominal-snippet} directive: fragments shared by every project using the theme
+    app.setup_extension("nominal_sphinx_theme.snippet_directive")
     app.connect("config-inited", _on_config_inited)
     app.connect("builder-inited", _on_builder_inited)
     app.connect("html-page-context", _on_page)

@@ -86,6 +86,48 @@ Clicking the `#` after a heading copies a link to that section, as well as going
 "Copied" shows beside it for a moment. Copying needs a secure page (https, or localhost when
 previewing); elsewhere the `#` is a plain link.
 
+## Shared snippets
+
+Snippets are MyST fragments in `src/nominal_sphinx_theme/snippets/` that any project using the theme can include, for content many projects repeat. A MyST page
+includes one by its path, without `.md`:
+
+````md
+```{nominal-snippet} api-keys-setup
+```
+````
+
+The snippet renders in its place as if written there, and its headings become the page's
+sections. A misspelled name fails the build.
+
+A snippet's images sit beside it, linked relative to it (`![The API keys page](api-keys.png)`,
+or a `{figure}`). When a build starts, they're copied into the project's source folder under
+`_nominal_snippets/`, which ignores itself in git and is excluded as a source of pages.
+
+Snippets are built in every project that includes them, so a snippet uses only what all of them
+have:
+
+- Links to other pages are absolute URLs to the docs hub, not relative links.
+- No labels such as `(name)=`. A page that includes two snippets defining one would fail.
+- Core MyST, `colon_fence`, and directives every project loads. Not a project's own roles, such as
+  pub-docs' `{gloss}`.
+- Images as Markdown images or `{image}`/`{figure}`, not HTML `<img>`.
+- Tabs use the shared sync groups, `os` and `code`.
+
+A snippet change reaches a project when it updates its theme pin, like any theme change.
+
+| Snippet          | What it covers                                                              |
+| ---------------- | --------------------------------------------------------------------------- |
+| `api-keys-setup` | The config file, the three values from the **API keys** page, and the CLIs. Needs `sphinx_design` and MyST's `attrs_block`. |
+
+The theme styles callouts for any project: a screenshot with class `callout-screenshot` beside a
+`{.callouts}` numbered list gets red numbers matching the screenshot's.
+
+To test the directive:
+
+```sh
+uv run --group dev pytest
+```
+
 ## Docs skill for AI agents
 
 [`skills/nominal-docs/`](skills/nominal-docs/) holds Nominal's shared rules for writing docs and docstrings, as a Claude Code plugin.
