@@ -35,3 +35,14 @@ document.addEventListener("click", (event) => {
     setTimeout(() => a.classList.remove("nominal-copied"), 1500);
   });
 });
+
+
+// With nominal_sidebar_open set, each sidebar group's caption is a button (rendered by the theme,
+// with each group open or folded to start); a click opens or closes the group under it.
+document.addEventListener("click", (event) => {
+  const button = event.target.closest("button.nominal-fold");
+  if (!button) return;
+  const open = button.getAttribute("aria-expanded") !== "true";
+  button.setAttribute("aria-expanded", String(open));
+  button.parentElement.nextElementSibling.hidden = !open;
+});
