@@ -38,11 +38,14 @@ document.addEventListener("click", (event) => {
 
 
 // With nominal_sidebar_open set, each sidebar group's caption is a button (rendered by the theme,
-// with each group open or folded to start); a click opens or closes the group under it.
-document.addEventListener("click", (event) => {
-  const button = event.target.closest("button.nominal-fold");
-  if (!button) return;
-  const open = button.getAttribute("aria-expanded") !== "true";
-  button.setAttribute("aria-expanded", String(open));
-  button.parentElement.nextElementSibling.hidden = !open;
+// with each group open or folded to start); a click opens or closes the group under it. Each button
+// gets its own listener: Shibuya stops clicks inside the sidebar from reaching the document.
+document.addEventListener("DOMContentLoaded", () => {
+  for (const button of document.querySelectorAll("button.nominal-fold")) {
+    button.addEventListener("click", () => {
+      const open = button.getAttribute("aria-expanded") !== "true";
+      button.setAttribute("aria-expanded", String(open));
+      button.parentElement.nextElementSibling.hidden = !open;
+    });
+  }
 });
