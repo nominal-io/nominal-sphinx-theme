@@ -61,8 +61,9 @@ def _copy_images(app: Sphinx) -> None:
             if not copy.exists() or copy.read_bytes() != src.read_bytes():
                 copy.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(src, copy)
-    if dest.exists():
-        (dest / ".gitignore").write_text("*\n")
+    ignore = dest / ".gitignore"
+    if dest.exists() and (not ignore.exists() or ignore.read_text() != "*\n"):
+        ignore.write_text("*\n")
 
 
 def _exclude_copies(app: Sphinx, config: Config) -> None:
