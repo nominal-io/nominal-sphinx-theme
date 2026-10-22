@@ -38,6 +38,7 @@ Any other keyword to `theme_options` is passed through as a Shibuya option.
 | ------------------------- | ------- | ---------------------------------------------------------------------- |
 | `nominal_hub_url`         | `None`  | Where the Nominal logo links. `None` = the docs hub, one level up. Set to `"https://dev.nominal.io/"` for standalone sites. |
 | `nominal_section_sidebar` | `True`  | Sidebar shows only the current tab's captioned toctrees.               |
+| `nominal_sidebar_open`    | `None`  | Sidebar groups fold under their captions. See [Folding sidebar groups](#folding-sidebar-groups). |
 | `nominal_ga_id`           | `None`  | Google Analytics measurement ID.                                       |
 
 A project's own `_static` and `_templates` override the theme's files of the same name.
@@ -79,6 +80,21 @@ Each `nav_links` entry that points at a page in a folder, e.g.
 page belongs to the tab without a folder (`"index"`). The current tab is underlined, and the left
 sidebar shows only its toctree groups (unless `nominal_section_sidebar = False`). So with tabs,
 give each section its own captioned, `:hidden:` toctree in the root document.
+
+## Folding sidebar groups
+
+Set `nominal_sidebar_open` to make each captioned toctree group in the left sidebar fold under its
+caption. Clicking a caption opens or closes its group, and the caption keeps its font.
+
+```python
+nominal_sidebar_open = None             # default: groups don't fold
+nominal_sidebar_open = True             # every group starts open
+nominal_sidebar_open = False            # every group starts folded
+nominal_sidebar_open = ["Get started"]  # these groups start open, the others folded
+```
+
+The group holding the current page always starts open. Captions in the list match the toctrees'
+`:caption:` text in the root document, and one that matches none is a build warning.
 
 ## Heading links
 

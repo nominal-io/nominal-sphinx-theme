@@ -293,6 +293,43 @@ html.dark .sd-card:hover {
   font-family: var(--sy-f-mono);
 }
 
+/* Folding sidebar groups (nominal_sidebar_open): the caption is a button in the caption's own
+   font, with a chevron that turns when the group is open. Folded groups sit close together. */
+.sy-lside .caption button.nominal-fold {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.sy-lside .caption button.nominal-fold:hover {
+  color: var(--sy-c-text);
+}
+
+.sy-lside .caption button.nominal-fold > i {
+  transition: transform 0.2s;
+}
+
+.sy-lside .caption button.nominal-fold[aria-expanded="true"] > i {
+  transform: rotate(90deg);
+}
+
+.sy-lside .globaltoc > ul[hidden] {
+  display: none;
+}
+
+.sy-lside .globaltoc > ul[hidden] + .caption {
+  margin-top: 0;
+}
+
 /* Current page in the left nav: shaded, as on Mintlify. */
 .sy-lside .globaltoc a.current {
   background: var(--gray-a3);
