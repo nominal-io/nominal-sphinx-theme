@@ -59,6 +59,16 @@ def test_renders_snippet_with_images(tmp_path, snippets):
     assert (copies / ".gitignore").read_text() == "*\n"
 
 
+def test_rebuild_leaves_copies_untouched(tmp_path, snippets):
+    # sphinx-autobuild watches the source folder, so a rewrite would trigger another build
+    page = "# Page\n\n```{nominal-snippet} demo/steps\n```\n"
+    build(tmp_path, page)
+    copies = tmp_path / "src" / "_nominal_snippets"
+    before = {p: p.stat().st_mtime_ns for p in copies.rglob("*")}
+    build(tmp_path, page)
+    assert {p: p.stat().st_mtime_ns for p in copies.rglob("*")} == before
+
+
 def test_unknown_snippet_fails_the_build(tmp_path, snippets):
     _, status, warnings = build(tmp_path, "# Page\n\n```{nominal-snippet} demo/missing\n```\n")
     assert status == 1
