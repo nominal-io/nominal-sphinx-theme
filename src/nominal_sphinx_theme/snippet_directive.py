@@ -53,7 +53,7 @@ class NominalSnippet(SphinxDirective):
 
 
 def _copy_images(app: Sphinx) -> None:
-    # copied only when changed, so sphinx-autobuild doesn't rebuild on every build
+    # files are written only when changed, so sphinx-autobuild doesn't rebuild on every build
     dest = Path(app.srcdir) / COPIES
     for src in SNIPPETS.rglob("*"):
         if src.suffix.lower() in IMAGES:
@@ -61,8 +61,9 @@ def _copy_images(app: Sphinx) -> None:
             if not copy.exists() or copy.read_bytes() != src.read_bytes():
                 copy.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(src, copy)
-    if dest.exists():
-        (dest / ".gitignore").write_text("*\n")
+    ignore = dest / ".gitignore"
+    if dest.exists() and not ignore.exists():
+        ignore.write_text("*\n")
 
 
 def _exclude_copies(app: Sphinx, config: Config) -> None:
