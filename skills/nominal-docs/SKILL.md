@@ -82,6 +82,7 @@ Most repos split docs into three types. Folders and names differ per project.
 - Assume readers are new to Nominal. On advanced pages, link to introductory content.
 - Describe the customer's application, not Nominal internals. A passed check means the check passed, not that the test plan did.
 
+
 ### What to include
 
 - Include a sentence only if the reader acts on it or needs it for the next step.
@@ -98,12 +99,14 @@ Most repos split docs into three types. Folders and names differ per project.
 
 - Don't announce. Delete a sentence that only says the next one is worth reading ("Let's take a look:").
 - Don't describe the page. Readers can see its structure.
-- The lead paragraph (`{.lead}`) says what the subject does and what it needs, in one or two sentences. It doesn't list the sections.
+- The lead paragraph (`{.lead}`) or page opening says what the subject does and what it needs, in one or two sentences. It doesn't list the sections.
 - Don't sell. State what the code does, not how good it is: no "seamless", "powerful", "easy", "simply" or "just".
 - Don't grade sources ("the client docs explain this well"). Link or quote them.
 - Cut empty openers: "note that", "it is worth noting", "in fact", "of course", "interestingly", "importantly", "the key insight is".
 - No rhetorical shape: no triples for rhythm, no one-line paragraph for effect, no metaphor where a plain name exists.
 - To test a sentence, delete it and reread the paragraph. If nothing is lost, leave it out.
+- Describe what exists, not what Nominal plans or does internally
+- Where readers choose between two things, explain clearly which to use and why
 
 ### Examples and code
 
