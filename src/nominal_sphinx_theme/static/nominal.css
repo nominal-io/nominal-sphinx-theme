@@ -360,3 +360,15 @@ ol.callouts > li::marker {
     margin: 0 auto 1rem;
   }
 }
+
+/* Links in code blocks, such as sphinx-codeautolink's, keep a light underline so they stay recognizable. */
+.yue pre a,
+.yue pre a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+}
+.yue pre a:hover {
+  text-decoration-color: currentColor;
+}
