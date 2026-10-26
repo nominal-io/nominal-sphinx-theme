@@ -111,6 +111,15 @@ def _on_page(app: Sphinx, pagename: str, templatename: str, context: dict[str, A
     # the landing page with that language's card (scripts/site.py writes /{lang}/index.html)
     context["nominal_hub_url"] = app.config.nominal_hub_url or relative_uri(target, "") + "../"
     context["nominal_hub_external"] = bool(app.config.nominal_hub_url)
+    # the header's docs-site menu: a site without a url is the developer docs hub
+    context["nominal_doc_sites"] = [
+        {
+            "title": site["title"],
+            "url": site.get("url") or context["nominal_hub_url"],
+            "external": bool(re.match(r"[a-z]+:", site.get("url") or "")),
+        }
+        for site in app.config.nominal_doc_sites
+    ]
 
     tabs = _tabs(app)
     current = _section(pagename, list(tabs))
@@ -247,6 +256,14 @@ def setup(app: Sphinx) -> dict[str, Any]:
     app.add_config_value("nominal_pygments_dark_style", f"{styles}.OneDarkStyle", "html", types=[str])
     # where the header's Nominal logo leads; None: the docs hub's landing page, relative to the project
     app.add_config_value("nominal_hub_url", None, "html", types=[str, type(None)])
+    # the docs sites in the header's menu, after the Nominal logo: the first is the current one and
+    # names the menu; a site without a url is the developer docs hub. [] shows no menu.
+    app.add_config_value(
+        "nominal_doc_sites",
+        [{"title": "Developer docs", "url": None}, {"title": "Product guides", "url": "https://docs.nominal.io/"}],
+        "html",
+        types=[list],
+    )
     # show only the current tab's toctree groups in the left sidebar
     app.add_config_value("nominal_section_sidebar", True, "html", types=[bool])
     # fold the left sidebar's toctree groups: True/False start them all open/folded, a list of

@@ -15,9 +15,22 @@
   <div class="sy-head-inner sy-container mx-auto">
     {#- pub-docs: the Nominal logo, linking to the docs landing page (set in nominal_sphinx_theme) -#}
     <a class="nominal-hub" href="{{ nominal_hub_url }}" title="Nominal developer docs"{% if not nominal_hub_external %} data-hub-lang{% endif %}>
-      <img class="light-logo" src="{{ pathto('_static/nominal-docs-logo-black.svg', 1) }}" alt="Nominal Developer Docs" />
-      <img class="dark-logo" src="{{ pathto('_static/nominal-docs-logo-white.svg', 1) }}" alt="Nominal Developer Docs" />
+      <img class="light-logo" src="{{ pathto('_static/nominal-logo-black.svg', 1) }}" alt="Nominal" />
+      <img class="dark-logo" src="{{ pathto('_static/nominal-logo-white.svg', 1) }}" alt="Nominal" />
     </a>
+    {#- the docs sites (nominal_doc_sites), the current one first: a menu under its name, like the logo's words -#}
+    {%- if nominal_doc_sites %}
+    <div class="nominal-sites">
+      <button class="nominal-sites-button js-menu" type="button" aria-controls="nominal-sites-menu" aria-expanded="false" aria-haspopup="true">
+        <span>{{ nominal_doc_sites[0].title }}</span><i class="i-lucide chevron-down"></i>
+      </button>
+      <ul class="nominal-sites-menu" id="nominal-sites-menu" aria-hidden="true">
+        {%- for site in nominal_doc_sites %}
+        <li><a href="{{ site.url }}"{% if loop.first %} aria-current="page"{% elif site.external %} target="_blank" rel="noopener"{% endif %}>{{ site.title }}</a></li>
+        {%- endfor %}
+      </ul>
+    </div>
+    {%- endif %}
     <span class="nominal-hub-divider" aria-hidden="true">/</span>
     <a class="sy-head-brand" href="{% if theme_logo_target %}{{ theme_logo_target }}{% else %}{{ pathto(root_doc) }}{% endif %}">
       {{ render_logo(theme_light_logo, 'light-logo') }}
