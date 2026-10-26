@@ -107,6 +107,26 @@ html.dark {
 .dark .nominal-hub .dark-logo {
   display: inline;
 }
+
+/* The docs-site menu after the logo (templates/nominal/sites.html, styled by nominal-sites.css):
+   its colours, from the docs palette. */
+:root,
+html.light {
+  --nominal-sites-text: #525252;
+}
+html.dark {
+  --nominal-sites-text: #a3a3a3;
+}
+.sy-head {
+  --nominal-sites-hover: var(--sy-c-heading);
+  --nominal-sites-menu-bg: var(--sy-c-background);
+  --nominal-sites-menu-border: var(--sy-c-divider);
+  --nominal-sites-menu-text: var(--sy-c-text);
+  --nominal-sites-menu-hover-bg: var(--gray-a3);
+  --nominal-sites-shadow: var(--sy-dropdown-shadow);
+  --nominal-sites-font: var(--sy-f-mono);
+}
+
 .nominal-hub-divider {
   margin: 0 0.75rem;
   color: #7a7a7a;
@@ -441,11 +461,11 @@ html.dark .sd-card:hover {
   }
   .nominal-two-row .sy-head-inner {
     display: grid;
-    grid-template-columns: auto auto auto 1fr auto;
+    grid-template-columns: auto auto auto auto 1fr auto;
     grid-template-rows: var(--nominal-head-row) var(--nominal-tabs-row);
     grid-template-areas:
-      "hub divider brand extra actions"
-      "tabs tabs tabs tabs tabs";
+      "hub sites divider brand extra actions"
+      "tabs tabs tabs tabs tabs tabs";
     align-items: center;
   }
   /* the nav's two parts become grid items of their own */
@@ -454,6 +474,9 @@ html.dark .sd-card:hover {
   }
   .nominal-two-row .nominal-hub {
     grid-area: hub;
+  }
+  .nominal-two-row .nominal-sites {
+    grid-area: sites;
   }
   .nominal-two-row .nominal-hub-divider {
     grid-area: divider;
