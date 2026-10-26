@@ -34,6 +34,7 @@ import re
 from pathlib import Path
 from typing import Any
 
+from docutils import nodes
 from sphinx import addnodes
 from sphinx.application import Sphinx
 from sphinx.config import Config
@@ -56,6 +57,11 @@ _HREF = re.compile(r'href="([^"#]*)')
 _CAPTION_TEXT = re.compile(r'(<p class="caption"[^>]*>)(.*?)(</p>)', re.DOTALL)
 _CURRENT = re.compile(r'class="[^"]*\bcurrent\b')
 _TAG = re.compile(r"<[^>]+>")
+
+# API field lists whose entries are "name (type) -- description", and that separator, before or
+# after smart quotes turn it into an en dash
+_PARAM_FIELDS = {"parameters", "keyword arguments", "other parameters"}
+_PARAM_SEPARATOR = re.compile(r" (?:--|–) ")
 
 
 def theme_options(*, github_url: str | None = None, **overrides: Any) -> dict[str, Any]:
@@ -185,6 +191,42 @@ def _on_builder_inited(app: Sphinx) -> None:
         )
 
 
+def _split_param(para: nodes.paragraph) -> None:
+    """Split "name (type) -- description" into a head paragraph and a description paragraph after it."""
+    for index, child in enumerate(para.children):
+        if not isinstance(child, nodes.Text):
+            continue
+        match = _PARAM_SEPARATOR.search(child)
+        if not match:
+            continue
+        before, after = str(child)[: match.start()], str(child)[match.end() :]
+        desc = nodes.paragraph(classes=["nominal-param-desc"])
+        if after:
+            desc += nodes.Text(after)
+        desc.extend(para.children[index + 1 :])
+        del para.children[index:]
+        if before:
+            para += nodes.Text(before)
+        para["classes"].append("nominal-param-head")
+        para.parent.insert(para.parent.index(para) + 1, desc)
+        return
+
+
+def _split_params(app: Sphinx, doctree: nodes.document) -> None:
+    # each parameter's name and type on a line of its own, its description below (nominal.css)
+    for field in list(doctree.findall(nodes.field)):
+        if field[0].astext().strip().rstrip(":").lower() not in _PARAM_FIELDS:
+            continue
+        body = field[1]
+        if body.children and isinstance(body[0], nodes.bullet_list):
+            body[0]["classes"].append("nominal-params")
+            heads = [item[0] for item in body[0].children if item.children and isinstance(item[0], nodes.paragraph)]
+        else:
+            heads = [body[0]] if body.children and isinstance(body[0], nodes.paragraph) else []
+        for para in heads:
+            _split_param(para)
+
+
 def _set_highlighting(app: Sphinx) -> None:
     # Shibuya's highlighter writes a light and a dark style; swap in ours, unless the project picked
     # its own pygments_style (Shibuya then uses that one alone)
@@ -216,6 +258,7 @@ def setup(app: Sphinx) -> dict[str, Any]:
     app.connect("builder-inited", _on_builder_inited)
     # after Shibuya's builder-inited, which sets up its highlighter
     app.connect("builder-inited", _set_highlighting, priority=900)
+    app.connect("doctree-read", _split_params)
     app.connect("html-page-context", _on_page)
     app.connect("env-check-consistency", _check_open_groups)
     app.add_css_file(FONTS)

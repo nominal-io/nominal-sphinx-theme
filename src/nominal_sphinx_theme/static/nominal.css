@@ -145,6 +145,119 @@ dl.py.pydantic_model > dt {
   font-size: 0.95em;
 }
 
+/* API signatures, tinted like the code blocks (Atom One): each part of a signature has its own
+   colour, at normal weight except the name, and type links are underlined only on hover. The
+   light colours are Atom One Light's, darkened where needed to keep 4.5:1 on the page. */
+:root,
+html.light {
+  --nominal-api-keyword: #a626a4;
+  --nominal-api-name: #1f60f0;
+  --nominal-api-param: var(--sy-c-text);
+  --nominal-api-type: #916301;
+  --nominal-api-default: #cc2d1e;
+  --nominal-api-punct: #6a6b72;
+}
+html.dark {
+  --nominal-api-keyword: #c678dd;
+  --nominal-api-name: #61afef;
+  --nominal-api-param: #abb2bf;
+  --nominal-api-type: #e5c07b;
+  --nominal-api-default: #d19a66;
+  --nominal-api-punct: #8e929b;
+}
+.yue dt.sig {
+  font-weight: 400;
+  color: var(--nominal-api-punct);
+}
+.yue dt.sig .property,
+.yue dt.sig > em.property:first-child {
+  color: var(--nominal-api-keyword);
+}
+.yue dt.sig .sig-prename {
+  color: var(--nominal-api-punct);
+}
+.yue dt.sig .sig-name {
+  color: var(--nominal-api-name);
+  font-weight: 600;
+}
+.yue dt.sig em.sig-param {
+  color: var(--nominal-api-type);
+}
+/* the parameter's name: its first part, or the one after * or ** */
+.yue dt.sig em.sig-param > .n:first-child,
+.yue dt.sig em.sig-param > .o:first-child + .n {
+  color: var(--nominal-api-param);
+}
+.yue dt.sig .default_value {
+  color: var(--nominal-api-default);
+}
+.yue dt.sig .p,
+.yue dt.sig .o,
+.yue dt.sig .sig-paren,
+.yue dt.sig .sig-return-icon {
+  color: var(--nominal-api-punct);
+}
+.yue dt.sig .sig-return-typehint,
+.yue dt.sig .sig-return-typehint > a {
+  color: var(--nominal-api-type);
+}
+.yue dt.sig a.reference {
+  color: inherit;
+  font-weight: inherit;
+  text-decoration: none;
+}
+.yue dt.sig a.reference:hover {
+  text-decoration: underline;
+}
+
+/* A signature's description: body-coloured text, with its Parameters / Returns / Raises labels as
+   small muted mono caps, and parameter names in mono like the signature's. */
+.yue dt.sig + dd {
+  color: var(--sy-c-text);
+}
+.yue dt.sig + dd > dl.field-list > dt {
+  font-family: var(--sy-f-mono);
+  font-size: 0.84rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--sy-c-light);
+}
+.yue dt.sig + dd > dl.field-list > dd li > p > strong:first-child,
+.yue dt.sig + dd > dl.field-list > dd > p > strong:first-child {
+  font-family: var(--sy-f-mono);
+  font-weight: 400;
+  font-size: 0.95em;
+  color: var(--sy-c-heading);
+}
+/* the parameter's type, after its name (autodoc_typehints = "description"): coloured as in signatures */
+.yue dl.field-list p.nominal-param-head em {
+  font-family: var(--sy-f-mono);
+  font-size: 0.95em;
+  font-style: normal;
+  color: var(--nominal-api-type);
+}
+.yue dl.field-list p.nominal-param-head a.reference {
+  text-decoration: none;
+}
+.yue dl.field-list p.nominal-param-head a.reference:hover {
+  text-decoration: underline;
+}
+/* Parameters laid out like numpy's docs (split by __init__.py's _split_params): each one's name and
+   type on a line, its description indented below, and no bullets. */
+.yue dl.field-list ul.nominal-params {
+  list-style: none;
+  padding-left: 0;
+}
+.yue dl.field-list ul.nominal-params > li {
+  margin: 0 0 0.75rem;
+}
+.yue dl.field-list p.nominal-param-head {
+  margin: 0;
+}
+.yue dl.field-list p.nominal-param-desc {
+  margin: 0.15rem 0 0 1.5rem;
+}
+
 /* Long method names in the on-page TOC wrap instead of clipping. */
 .sy-rside .localtoc a,
 .sy-rside a {
@@ -471,16 +584,15 @@ ol.callouts > li::marker {
   }
 }
 
-/* Links in code blocks, such as sphinx-codeautolink's, keep a light underline so they stay recognizable. */
-.yue pre a,
+/* Links in code blocks, such as sphinx-codeautolink's, are underlined on hover, so the code reads
+   cleanly and a link still shows itself under the pointer. */
+.yue pre a {
+  text-decoration: none;
+}
 .yue pre a:hover {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
-  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
-}
-.yue pre a:hover {
-  text-decoration-color: currentColor;
 }
 
 /* Notebook cells (myst-nb). Its palettes switch on data-theme; Shibuya marks the mode with a class. */
