@@ -23,6 +23,11 @@ html.light {
   --nominal-card: #f8f8f5;
   --nominal-card-hover: #ffffff;
 }
+/* Shibuya gives code in tabs and notebook outputs their own light background; keep them like the rest. */
+html.light .sd-tab-content,
+html.light .jupyter_container .cell_output {
+  --code-block-background: #e5e4df;
+}
 /* The light Pygments style's colours that fall under 4.5:1 on ivory-dark code blocks, darkened
    just enough. Each --nominal-syntax-* replaces one colour in every role that uses it. */
 html.light {
