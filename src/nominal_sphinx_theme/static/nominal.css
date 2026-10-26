@@ -286,6 +286,88 @@ html.dark .sd-card:hover {
   text-decoration-thickness: 2px;
   text-underline-offset: 8px;
 }
+/* A tab's optional icon (templates/components/nav-links.html), before its title. */
+.sy-head-links a,
+.sy-head-links button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.sy-head-links iconify-icon {
+  font-size: 1rem;
+}
+
+/* Two-row header, on wide screens when there are tabs (nominal-two-row, templates/partials/site-head.html):
+   logos, search and buttons on the first row, tabs on the second. Shibuya places the sidebars,
+   anchors and tab menus below --sy-s-navbar-height, so it spans both rows, and the first row's own
+   controls keep that row's height. Narrow screens keep one row, with the tabs in the menu. */
+:root {
+  --nominal-head-row: 56px;
+  --nominal-tabs-row: 44px;
+}
+@media (min-width: 768px) {
+  :root:has(.sy-head.nominal-two-row) {
+    --sy-s-navbar-height: calc(var(--nominal-head-row) + var(--nominal-tabs-row));
+  }
+  .nominal-two-row .sy-head-inner {
+    display: grid;
+    grid-template-columns: auto auto auto 1fr auto;
+    grid-template-rows: var(--nominal-head-row) var(--nominal-tabs-row);
+    grid-template-areas:
+      "hub divider brand extra actions"
+      "tabs tabs tabs tabs tabs";
+    align-items: center;
+  }
+  /* the nav's two parts become grid items of their own */
+  .nominal-two-row .sy-head-nav {
+    display: contents;
+  }
+  .nominal-two-row .nominal-hub {
+    grid-area: hub;
+  }
+  .nominal-two-row .nominal-hub-divider {
+    grid-area: divider;
+  }
+  .nominal-two-row .sy-head-brand {
+    grid-area: brand;
+  }
+  .nominal-two-row .nominal-tabs-divider {
+    display: none;
+  }
+  .nominal-two-row .sy-head-extra {
+    grid-area: extra;
+    justify-content: flex-end;
+  }
+  .nominal-two-row .sy-head-actions {
+    grid-area: actions;
+  }
+  .nominal-two-row .sy-head-actions button,
+  .nominal-two-row .nav-versions,
+  .nominal-two-row .nav-languages {
+    height: var(--nominal-head-row);
+  }
+  /* the tabs line up with the logo, and a bar along the header's edge marks the current one */
+  .nominal-two-row .sy-head-links {
+    grid-area: tabs;
+    align-self: stretch;
+    margin-left: -0.5rem;
+    padding: 0;
+  }
+  .nominal-two-row .sy-head-links .link {
+    height: var(--nominal-tabs-row);
+  }
+  .nominal-two-row .sy-head-links .link > a,
+  .nominal-two-row .sy-head-links .link > button {
+    height: 100%;
+  }
+  .nominal-two-row .sy-head-links .link:hover > a {
+    background: none;
+  }
+  .nominal-two-row .sy-head-links a.current {
+    text-decoration: none;
+    box-shadow: inset 0 -2px 0 currentColor;
+  }
+}
 
 /* Sidebar section titles: uppercase mono, like the tabs. */
 .sy-lside .caption,

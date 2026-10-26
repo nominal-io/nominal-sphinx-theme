@@ -81,6 +81,19 @@ page belongs to the tab without a folder (`"index"`). The current tab is underli
 sidebar shows only its toctree groups (unless `nominal_section_sidebar = False`). So with tabs,
 give each section its own captioned, `:hidden:` toctree in the root document.
 
+With tabs, the header has two rows on wide screens: the logos, search and buttons on the first,
+and the tabs on the second. On narrow screens the tabs fold into the menu, as before.
+
+A tab can show an icon before its title: give it an `icon` with any
+[Iconify](https://icon-sets.iconify.design/) name, as in `nav_socials`.
+
+```python
+nav_links=[
+    {"title": "Guides", "url": "index", "icon": "lucide:book-open"},
+    {"title": "Examples", "url": "examples/index", "icon": "lucide:code"},
+]
+```
+
 ## Folding sidebar groups
 
 Set `nominal_sidebar_open` to make each captioned toctree group in the left sidebar fold under its
