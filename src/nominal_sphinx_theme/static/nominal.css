@@ -13,30 +13,32 @@
   --sy-c-link-hover: #525252;
 }
 
-/* Light mode's greys: an ivory-dark header over an ivory-medium page, with code blocks and cards
-   a step lighter than the page (as dark mode's are). */
+/* Light mode's greys: an ivory-dark header over an ivory-medium page, code blocks between the two,
+   and cards lighter than the page. */
 :root,
 html.light {
   --sy-c-background: #f0f0eb;
   --nominal-header: #e5e4df;
-  --code-block-background: #f7f7f3;
+  --code-block-background: #eeede9;
   --nominal-card: #f8f8f5;
   --nominal-card-hover: #ffffff;
 }
 /* Shibuya gives code in tabs and notebook outputs their own light background; keep them like the rest. */
 html.light .sd-tab-content,
 html.light .jupyter_container .cell_output {
-  --code-block-background: #f7f7f3;
+  --code-block-background: #eeede9;
 }
-/* The light Pygments style's comment colour falls under 4.5:1 on the code blocks, so it's darkened
-   just enough, in every role that uses it. */
+/* The light Pygments style's comment and function colours fall under 4.5:1 on the code blocks, so
+   they're darkened just enough, in every role that uses them. */
 html.light {
-  --nominal-syntax-grey: #68717a;
+  --nominal-syntax-grey: #626a73;
+  --nominal-syntax-purple: #7c47dd;
   --syntax-light-comment: var(--nominal-syntax-grey);
   --syntax-light-comment-hashbang: var(--nominal-syntax-grey);
   --syntax-light-comment-multiline: var(--nominal-syntax-grey);
   --syntax-light-comment-single: var(--nominal-syntax-grey);
   --syntax-light-comment-special: var(--nominal-syntax-grey);
+  --syntax-light-name-function: var(--nominal-syntax-purple);
 }
 
 /* The landing page's dark palette: neutral greys, white headings, hairline borders. */
