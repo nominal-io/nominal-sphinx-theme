@@ -1,4 +1,5 @@
-{#- Shibuya 2026.7.12's partials/site-head.html, plus the Nominal logo before the project's (pub-docs). -#}
+{#- Shibuya 2026.7.12's partials/site-head.html, plus the Nominal logo before the project's (pub-docs).
+    With tabs, the header has two rows on wide screens (nominal-two-row, nominal.css). -#}
 {%- macro render_logo(src, classname) -%}
   {%- if src and src.startswith(('https://', 'http://')) -%}
     <img class="{{ classname }}" src="{{ src }}" alt="{{ project }}" height="28" loading="lazy" />
@@ -9,13 +10,13 @@
   {%- endif -%}
 {%- endmacro -%}
 
-<div class="sy-head">
+<div class="sy-head{% if theme_nav_links %} nominal-two-row{% endif %}">
   <div class="sy-head-blur"></div>
   <div class="sy-head-inner sy-container mx-auto">
     {#- pub-docs: the Nominal logo, linking to the docs landing page (set in nominal_sphinx_theme) -#}
     <a class="nominal-hub" href="{{ nominal_hub_url }}" title="Nominal developer docs"{% if not nominal_hub_external %} data-hub-lang{% endif %}>
-      <img class="light-logo" src="{{ pathto('_static/nominal-docs-logo-black.svg', 1) }}" alt="Nominal Docs" />
-      <img class="dark-logo" src="{{ pathto('_static/nominal-docs-logo-white.svg', 1) }}" alt="Nominal Docs" />
+      <img class="light-logo" src="{{ pathto('_static/nominal-docs-logo-black.svg', 1) }}" alt="Nominal Developer Docs" />
+      <img class="dark-logo" src="{{ pathto('_static/nominal-docs-logo-white.svg', 1) }}" alt="Nominal Developer Docs" />
     </a>
     <span class="nominal-hub-divider" aria-hidden="true">/</span>
     <a class="sy-head-brand" href="{% if theme_logo_target %}{{ theme_logo_target }}{% else %}{{ pathto(root_doc) }}{% endif %}">
