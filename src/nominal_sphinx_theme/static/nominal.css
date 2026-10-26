@@ -28,29 +28,6 @@ html.light .sd-tab-content,
 html.light .jupyter_container .cell_output {
   --code-block-background: #e9e8e3;
 }
-/* The light Pygments style's comment, function and keyword colours fall under 4.5:1 on the code
-   blocks, so they're darkened just enough, in every role that uses them. */
-html.light {
-  --nominal-syntax-grey: #606870;
-  --nominal-syntax-purple: #7a45dd;
-  --nominal-syntax-red: #c8212d;
-  --syntax-light-comment: var(--nominal-syntax-grey);
-  --syntax-light-comment-hashbang: var(--nominal-syntax-grey);
-  --syntax-light-comment-multiline: var(--nominal-syntax-grey);
-  --syntax-light-comment-single: var(--nominal-syntax-grey);
-  --syntax-light-comment-special: var(--nominal-syntax-grey);
-  --syntax-light-name-function: var(--nominal-syntax-purple);
-  --syntax-light-comment-preproc: var(--nominal-syntax-red);
-  --syntax-light-generic-prompt: var(--nominal-syntax-red);
-  --syntax-light-keyword: var(--nominal-syntax-red);
-  --syntax-light-keyword-declaration: var(--nominal-syntax-red);
-  --syntax-light-keyword-namespace: var(--nominal-syntax-red);
-  --syntax-light-keyword-pseudo: var(--nominal-syntax-red);
-  --syntax-light-keyword-reserved: var(--nominal-syntax-red);
-  --syntax-light-literal-string-affix: var(--nominal-syntax-red);
-  --syntax-light-literal-string-interpol: var(--nominal-syntax-red);
-  --syntax-light-operator: var(--nominal-syntax-red);
-}
 
 /* The landing page's dark palette: neutral greys, white headings, hairline borders. */
 html.dark {

@@ -185,8 +185,24 @@ def _on_builder_inited(app: Sphinx) -> None:
         )
 
 
+def _set_highlighting(app: Sphinx) -> None:
+    # Shibuya's highlighter writes a light and a dark style; swap in ours, unless the project picked
+    # its own pygments_style (Shibuya then uses that one alone)
+    highlighter = getattr(app.builder, "highlighter", None)
+    if app.config.pygments_style is not None or not hasattr(highlighter, "dark_style_name"):
+        return
+    new = type(highlighter)("html", app.config.nominal_pygments_style)
+    new.dark_style_name = app.config.nominal_pygments_dark_style
+    app.builder.highlighter = new
+
+
 def setup(app: Sphinx) -> dict[str, Any]:
     app.add_config_value("nominal_ga_id", None, "html", types=[str, type(None)])
+    # code highlighting in light and dark mode: Pygments style names, or dotted paths to style classes
+    # (default: Atom's One Light and One Dark, in pygments_styles.py)
+    styles = "nominal_sphinx_theme.pygments_styles"
+    app.add_config_value("nominal_pygments_style", f"{styles}.OneLightStyle", "html", types=[str])
+    app.add_config_value("nominal_pygments_dark_style", f"{styles}.OneDarkStyle", "html", types=[str])
     # where the header's Nominal logo leads; None: the docs hub's landing page, relative to the project
     app.add_config_value("nominal_hub_url", None, "html", types=[str, type(None)])
     # show only the current tab's toctree groups in the left sidebar
@@ -198,6 +214,8 @@ def setup(app: Sphinx) -> dict[str, Any]:
     app.setup_extension("nominal_sphinx_theme.snippet_directive")
     app.connect("config-inited", _on_config_inited)
     app.connect("builder-inited", _on_builder_inited)
+    # after Shibuya's builder-inited, which sets up its highlighter
+    app.connect("builder-inited", _set_highlighting, priority=900)
     app.connect("html-page-context", _on_page)
     app.connect("env-check-consistency", _check_open_groups)
     app.add_css_file(FONTS)
