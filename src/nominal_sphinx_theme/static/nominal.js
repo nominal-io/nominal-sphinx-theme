@@ -21,18 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// The docs-site menu after the logo opens and closes with Shibuya's js-menu; Escape also closes it,
-// returning focus to its button.
-document.addEventListener("keydown", (event) => {
-  if (event.key !== "Escape") return;
-  const menu = document.getElementById("nominal-sites-menu");
-  if (!menu || menu.getAttribute("aria-hidden") !== "false") return;
-  const button = document.querySelector('[aria-controls="nominal-sites-menu"]');
-  button.click();
-  button.focus();
-});
-
-
 // The "#" after each heading also copies a link to that section, so it can be pasted straight into
 // a message. "Copied" shows beside it for a moment (nominal.css). The link still goes to the section.
 document.addEventListener("DOMContentLoaded", () => {

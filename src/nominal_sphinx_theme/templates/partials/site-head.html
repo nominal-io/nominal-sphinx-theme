@@ -20,16 +20,8 @@
     </a>
     {#- the docs sites (nominal_doc_sites), the current one first: a menu under its name, like the logo's words -#}
     {%- if nominal_doc_sites %}
-    <div class="nominal-sites">
-      <button class="nominal-sites-button js-menu" type="button" aria-controls="nominal-sites-menu" aria-expanded="false" aria-haspopup="true">
-        <span>{{ nominal_doc_sites[0].title }}</span><i class="i-lucide chevron-down"></i>
-      </button>
-      <ul class="nominal-sites-menu" id="nominal-sites-menu" aria-hidden="true">
-        {%- for site in nominal_doc_sites %}
-        <li><a href="{{ site.url }}"{% if loop.first %} aria-current="page"{% elif site.external %} target="_blank" rel="noopener"{% endif %}>{{ site.title }}</a></li>
-        {%- endfor %}
-      </ul>
-    </div>
+    {%- from "nominal/sites.html" import sites_menu %}
+    {{ sites_menu(nominal_doc_sites) }}
     {%- endif %}
     <span class="nominal-hub-divider" aria-hidden="true">/</span>
     <a class="sy-head-brand" href="{% if theme_logo_target %}{{ theme_logo_target }}{% else %}{{ pathto(root_doc) }}{% endif %}">

@@ -108,92 +108,23 @@ html.dark {
   display: inline;
 }
 
-/* The docs-site menu after the logo (nominal_doc_sites): its name is set like the logo's words, in
-   Geist Mono at the logo's cap height and in its grey, one space after NOMINAL, with a chevron. The
-   menu opens with Shibuya's js-menu, and nominal.js closes it on Escape. */
+/* The docs-site menu after the logo (templates/nominal/sites.html, styled by nominal-sites.css):
+   its colours, from the docs palette. */
 :root,
 html.light {
-  --nominal-logo-words: #525252;
+  --nominal-sites-text: #525252;
 }
 html.dark {
-  --nominal-logo-words: #a3a3a3;
+  --nominal-sites-text: #a3a3a3;
 }
-.nominal-sites {
-  position: relative;
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-  margin-left: 9px;
-}
-.nominal-sites-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0;
-  border: 0;
-  background: none;
-  cursor: pointer;
-  font-family: var(--sy-f-mono);
-  font-size: 21.68px;
-  font-weight: 400;
-  line-height: 1;
-  text-transform: uppercase;
-  white-space: nowrap;
-  color: var(--nominal-logo-words);
-}
-.nominal-sites-button:hover,
-.nominal-sites-button[aria-expanded="true"] {
-  color: var(--sy-c-heading);
-}
-.nominal-sites-button:focus-visible {
-  outline: 2px solid var(--sy-c-heading);
-  outline-offset: 3px;
-}
-.nominal-sites-button i {
-  font-size: 0.875rem;
-  transition: transform 0.15s;
-}
-.nominal-sites-button[aria-expanded="true"] i {
-  transform: rotate(180deg);
-}
-.nominal-sites-menu {
-  position: absolute;
-  top: calc(100% + 0.6rem);
-  left: 0;
-  z-index: 30;
-  min-width: 15rem;
-  margin: 0;
-  padding: 0.35rem;
-  list-style: none;
-  background: var(--sy-c-background);
-  border: 1px solid var(--sy-c-divider);
-  box-shadow: var(--sy-dropdown-shadow);
-}
-.nominal-sites-menu[aria-hidden="true"] {
-  display: none;
-}
-.nominal-sites-menu a {
-  display: block;
-  padding: 0.5rem 0.6rem;
-  font-family: var(--sy-f-mono);
-  font-size: 0.8125rem;
-  text-transform: uppercase;
-  color: var(--sy-c-text);
-  text-decoration: none;
-}
-.nominal-sites-menu a:hover,
-.nominal-sites-menu a:focus-visible {
-  background: var(--gray-a3);
-  color: var(--sy-c-heading);
-}
-.nominal-sites-menu a[aria-current] {
-  color: var(--sy-c-heading);
-}
-/* On narrow screens the menu keeps only its chevron, beside the logo. */
-@media (max-width: 599px) {
-  .nominal-sites-button span {
-    display: none;
-  }
+.sy-head {
+  --nominal-sites-hover: var(--sy-c-heading);
+  --nominal-sites-menu-bg: var(--sy-c-background);
+  --nominal-sites-menu-border: var(--sy-c-divider);
+  --nominal-sites-menu-text: var(--sy-c-text);
+  --nominal-sites-menu-hover-bg: var(--gray-a3);
+  --nominal-sites-shadow: var(--sy-dropdown-shadow);
+  --nominal-sites-font: var(--sy-f-mono);
 }
 
 .nominal-hub-divider {
