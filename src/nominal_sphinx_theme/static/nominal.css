@@ -371,6 +371,8 @@ ol.callouts > li::marker {
 }
 .yue pre a:hover {
   text-decoration-color: currentColor;
+}
+
 /* Notebook cells (myst-nb). Its palettes switch on data-theme; Shibuya marks the mode with a class. */
 html.dark {
   --light: ;
