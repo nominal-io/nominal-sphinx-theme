@@ -13,22 +13,18 @@
   --sy-c-link-hover: #525252;
 }
 
-/* Light mode's greys: a cloud-light header and code blocks around an ivory page, with cards lighter
-   than the page. */
+/* Light mode's greys: an ivory-dark header over an ivory-medium page, cloud-light code blocks, and
+   cards lighter than the page. */
 :root,
 html.light {
-  --sy-c-background: #e5e4df;
-  --nominal-header: #bfbfba;
+  --sy-c-background: #f0f0eb;
+  --nominal-header: #e5e4df;
   --code-block-background: #bfbfba;
-  --nominal-card: #f4f3ef;
+  --nominal-card: #f8f8f5;
   --nominal-card-hover: #ffffff;
 }
-/* Muted text in the header (the tabs) and the syntax colours, darkened to keep 4.5:1 on cloud
-   light. Each --nominal-syntax-* replaces one colour of the light Pygments style in every role
-   that uses it. */
-html.light .sy-head {
-  --sy-c-light: #4c4c4c;
-}
+/* The syntax colours, darkened to keep 4.5:1 on the cloud-light code blocks. Each
+   --nominal-syntax-* replaces one colour of the light Pygments style in every role that uses it. */
 html.light {
   --nominal-syntax-grey: #474d54;
   --nominal-syntax-red: #961921;
@@ -371,7 +367,7 @@ html.dark .sd-card:hover {
   --nominal-head-row: 56px;
   --nominal-tabs-row: 44px;
   /* how far the tabs start right of the logo */
-  --nominal-tabs-indent: 6rem;
+  --nominal-tabs-indent: 3rem;
 }
 @media (min-width: 768px) {
   :root:has(.sy-head.nominal-two-row) {
