@@ -13,6 +13,16 @@
   --sy-c-link-hover: #525252;
 }
 
+/* Light mode's greys, ordered as dark mode's are: a white header, an ivory page, and code blocks
+   and cards lighter than the page. */
+:root,
+html.light {
+  --sy-c-background: #e5e4df;
+  --code-block-background: #f4f3ef;
+  --nominal-card: #f4f3ef;
+  --nominal-card-hover: #ffffff;
+}
+
 /* The landing page's dark palette: neutral greys, white headings, hairline borders. */
 html.dark {
   --accent-9: #ffffff;
@@ -31,6 +41,9 @@ html.dark {
   --sy-c-divider: rgba(255, 255, 255, 0.08);
   --sy-c-foot-background: #181818;
   --nominal-header: #181818;
+  --code-block-background: var(--accent-a2);
+  --nominal-card: #222222;
+  --nominal-card-hover: #2d2d2d;
 }
 
 /* Header: a solid bar with a hairline border, like the landing page's (no blur). */
@@ -176,20 +189,18 @@ dl.py.pydantic_model > dt {
   margin-top: -0.5rem;
 }
 
-/* Cards: hairline border; in dark mode the landing page's card greys. */
+/* Cards: hairline border, a shade lighter than the page (--nominal-card); in dark mode the landing
+   page's card greys. */
 .sd-card {
   border: 1px solid var(--sy-c-border);
   box-shadow: none !important;
-  background: var(--sy-c-background);
+  background: var(--nominal-card);
 }
 .sd-card:hover {
+  background: var(--nominal-card-hover);
   border-color: var(--sy-c-text);
 }
-html.dark .sd-card {
-  background: #222222;
-}
 html.dark .sd-card:hover {
-  background: #2d2d2d;
   border-color: rgba(255, 255, 255, 0.25);
 }
 .sd-card .sd-card-title {
@@ -346,26 +357,38 @@ html.dark .sd-card:hover {
   .nominal-two-row .nav-languages {
     height: var(--nominal-head-row);
   }
-  /* the tabs line up with the logo, and a bar along the header's edge marks the current one */
+  /* Tabs, lined up with the logo. The current one is filled with the page's color and open at the
+     bottom, so it joins the page below: the header's bottom line moves inside the header, where the
+     tab covers it. */
+  .nominal-two-row .sy-head-blur {
+    box-shadow: inset 0 -1px 0 var(--sy-c-divider);
+  }
   .nominal-two-row .sy-head-links {
     grid-area: tabs;
     align-self: stretch;
-    margin-left: -0.5rem;
+    align-items: flex-end;
+    margin-left: -0.875rem;
     padding: 0;
   }
   .nominal-two-row .sy-head-links .link {
-    height: var(--nominal-tabs-row);
+    height: calc(var(--nominal-tabs-row) - 0.375rem);
   }
   .nominal-two-row .sy-head-links .link > a,
   .nominal-two-row .sy-head-links .link > button {
     height: 100%;
+    padding: 0 0.875rem;
   }
   .nominal-two-row .sy-head-links .link:hover > a {
-    background: none;
+    background: var(--gray-a3);
   }
-  .nominal-two-row .sy-head-links a.current {
+  .nominal-two-row .sy-head-links a.current,
+  .nominal-two-row .sy-head-links .link:hover > a.current {
     text-decoration: none;
-    box-shadow: inset 0 -2px 0 currentColor;
+    background: var(--sy-c-background);
+    box-shadow:
+      inset 1px 0 0 var(--sy-c-divider),
+      inset -1px 0 0 var(--sy-c-divider),
+      inset 0 1px 0 var(--sy-c-divider);
   }
 }
 
