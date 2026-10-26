@@ -313,7 +313,8 @@ html.dark .sd-card:hover {
 .sy-head-links a.current {
   color: var(--sy-c-heading);
 }
-.sy-head-links a.current {
+/* on the title, since the link is a flex box (for its icon) */
+.sy-head-links a.current > span {
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 8px;
@@ -406,7 +407,6 @@ html.dark .sd-card:hover {
   }
   .nominal-two-row .sy-head-links a.current,
   .nominal-two-row .sy-head-links .link:hover > a.current {
-    text-decoration: none;
     background: var(--sy-c-background);
     box-shadow:
       inset 1px 0 0 var(--sy-c-divider),
