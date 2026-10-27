@@ -30,7 +30,9 @@
       <strong>{{ project }}</strong>
     </a>
     {#- pub-docs: a divider between the logos and the tabs -#}
+    {%- if theme_nav_links %}
     <span class="nominal-hub-divider nominal-tabs-divider" aria-hidden="true">/</span>
+    {%- endif %}
     <div class="sy-head-nav" id="head-nav">
       <nav class="sy-head-links"{% if theme_nav_links_align %} data-align={{ theme_nav_links_align }}{% endif %}>
         {%- if theme_nav_links -%}

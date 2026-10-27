@@ -68,6 +68,25 @@ html.dark {
   border-radius: 0 !important;
 }
 
+/* The background grid, on every page: 60px squares in faint lines, behind the page's sheet (on the
+   header, the color around the sheet and the footer), or behind the page where there's no sheet;
+   fixed to the window, so the header's lines and the page's line up. */
+:root {
+  --nominal-grid-line: rgba(0, 0, 0, 0.04);
+}
+html.dark {
+  --nominal-grid-line: rgba(255, 255, 255, 0.03);
+}
+:root,
+body,
+.sy-head-blur {
+  background-image:
+    linear-gradient(to right, var(--nominal-grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--nominal-grid-line) 1px, transparent 1px);
+  background-size: 60px 60px;
+  background-attachment: fixed;
+}
+
 /* Mintlify-style links: text colour with an underline, not an accent colour. */
 .yue a.reference,
 .yue a.external {
@@ -82,9 +101,10 @@ html.dark {
   height: 28px;
   width: auto;
 }
+/* the project's name, near the size of the logo's words (nominal-path.css) */
 .sy-head-brand strong {
   font-family: var(--sy-f-mono);
-  font-size: 1rem;
+  font-size: 1.25rem;
   font-weight: 500;
   text-transform: uppercase;
   color: var(--sy-c-heading);
@@ -552,14 +572,15 @@ html.dark .sd-card:hover {
     height: 100%;
     padding: 0 0.875rem;
     border-radius: var(--nominal-tab-radius) var(--nominal-tab-radius) 0 0 !important;
-    background: var(--gray-a2);
+    /* the shade over the header's color, so the grid doesn't show through */
+    background: linear-gradient(var(--gray-a2), var(--gray-a2)), var(--nominal-header);
     box-shadow:
       inset 1px 0 0 var(--sy-c-divider),
       inset -1px 0 0 var(--sy-c-divider),
       inset 0 1px 0 var(--sy-c-divider);
   }
   .nominal-two-row .sy-head-links .link:hover > a {
-    background: var(--gray-a3);
+    background: linear-gradient(var(--gray-a3), var(--gray-a3)), var(--nominal-header);
   }
   .nominal-two-row .sy-head-links a.current,
   .nominal-two-row .sy-head-links .link:hover > a.current {
