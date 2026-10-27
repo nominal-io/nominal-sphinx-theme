@@ -13,15 +13,15 @@
 <div class="sy-head{% if theme_nav_links %} nominal-two-row{% endif %}">
   <div class="sy-head-blur"></div>
   <div class="sy-head-inner sy-container mx-auto">
-    {#- pub-docs: the Nominal logo, reading NOMINAL / DOCS / DEVELOPERS: NOMINAL links to nominal.io, the
-        words after it to the docs hub's home page (set in nominal_sphinx_theme) -#}
+    {#- pub-docs: the Nominal logo, reading NOMINAL / DOCS / DEVELOPERS: NOMINAL links to nominal.io, DOCS
+        to the docs hub's home page, and DEVELOPERS to its For developers tab (set in nominal_sphinx_theme) -#}
     {%- from "nominal/path.html" import docs_path %}
     <div class="nominal-hub">
       <a class="nominal-home" href="https://nominal.io/" title="Nominal">
         <img class="light-logo" src="{{ pathto('_static/nominal-logo-black.svg', 1) }}" alt="Nominal" />
         <img class="dark-logo" src="{{ pathto('_static/nominal-logo-white.svg', 1) }}" alt="Nominal" />
       </a>
-      {{ docs_path(nominal_hub_url) }}
+      {{ docs_path(nominal_hub_url, nominal_developers_url) }}
     </div>
     <span class="nominal-hub-divider" aria-hidden="true">/</span>
     <a class="sy-head-brand" href="{% if theme_logo_target %}{{ theme_logo_target }}{% else %}{{ pathto(root_doc) }}{% endif %}">

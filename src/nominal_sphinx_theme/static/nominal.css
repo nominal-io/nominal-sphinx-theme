@@ -514,6 +514,7 @@ html.dark .sd-card:hover {
   /* The page as a sheet of paper: the header's color around it, the sheet in the page's color with
      rounded corners, and the footer below it. The sheet is the docs' .sy-page, or the simple
      layout's .sy-container.body. */
+  :root:has(.sy-head.nominal-two-row),
   body:has(.sy-head.nominal-two-row) {
     background-color: var(--nominal-header);
   }
