@@ -13,8 +13,8 @@
 <div class="sy-head{% if theme_nav_links %} nominal-two-row{% endif %}">
   <div class="sy-head-blur"></div>
   <div class="sy-head-inner sy-container mx-auto">
-    {#- pub-docs: the Nominal logo, linking to the docs landing page (set in nominal_sphinx_theme) -#}
-    <a class="nominal-hub" href="{{ nominal_hub_url }}" title="Nominal developer docs"{% if not nominal_hub_external %} data-hub-lang{% endif %}>
+    {#- pub-docs: the Nominal logo, linking to the docs hub's home page (set in nominal_sphinx_theme) -#}
+    <a class="nominal-hub" href="{{ nominal_hub_url }}" title="Nominal developer docs">
       <img class="light-logo" src="{{ pathto('_static/nominal-logo-black.svg', 1) }}" alt="Nominal" />
       <img class="dark-logo" src="{{ pathto('_static/nominal-logo-white.svg', 1) }}" alt="Nominal" />
     </a>
