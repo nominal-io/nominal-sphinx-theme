@@ -380,8 +380,8 @@ html.dark .sd-card:hover {
   border-left-color: transparent;
 }
 
-/* "Request a demo" (outlined) and "Open app" (filled), the landing page's header buttons
-   (templates/partials/nav-socials.html). */
+/* "Product Guides" and "Request a demo" (outlined) and "Open app" (filled), the landing page's header
+   buttons (templates/partials/nav-socials.html). */
 .nominal-btn {
   display: inline-flex;
   align-items: center;
@@ -400,6 +400,10 @@ html.dark .sd-card:hover {
 }
 .nominal-btn:hover {
   background-color: var(--gray-a3);
+}
+.nominal-btn-icon {
+  flex-shrink: 0;
+  margin-right: 0.4rem;
 }
 .nominal-btn-filled {
   background-color: var(--sy-c-heading);
