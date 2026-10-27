@@ -53,7 +53,7 @@ sets `nominal_hub_url` instead.
 
 ## Social links
 
-The header's right side shows the "Request a demo" and "Open app" buttons. To put icons before
+The header's right side shows the "Product Guides", "Request a demo" and "Open app" buttons. To put icons before
 them, pass `nav_socials` (Shibuya's format): a name such as `"github"` or `"discord"` uses the
 matching `<name>_url` option, and a `{"name", "url", "icon"}` dict adds any other link, with any
 [Iconify](https://icon-sets.iconify.design/) icon. The default is none.
