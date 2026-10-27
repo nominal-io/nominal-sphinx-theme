@@ -12,9 +12,10 @@ In a project's conf.py::
         dark_logo="_static/logo/instro-logo-solid-white.svg",
     )
 
-The header shows the Nominal logo, linking to the docs hub's home page (its For developers tab), then
-the project's logo (or its name). Projects published on their own, outside the docs hub, set
-``nominal_hub_url = "https://dev.nominal.io/"`` so the Nominal logo and the docs-site menu lead there.
+The header shows the Nominal logo, reading NOMINAL / DOCS / DEVELOPERS, then the project's logo (or its
+name). NOMINAL links to nominal.io, and DOCS and DEVELOPERS to the docs hub's home page (its For
+developers tab). Projects published on their own, outside the docs hub, set
+``nominal_hub_url = "https://dev.nominal.io/"`` so those words lead there.
 
 Tabs: each ``nav_links`` entry pointing at a page in a folder (``{"title": "Examples", "url":
 "examples/index"}``) is a section: pages in that folder belong to it, and every other page to the
@@ -63,30 +64,6 @@ _TAG = re.compile(r"<[^>]+>")
 _PARAM_FIELDS = {"parameters", "keyword arguments", "other parameters"}
 _PARAM_SEPARATOR = re.compile(r" (?:--|–) ")
 
-# the docs sites in the header's menu after the Nominal logo (templates/nominal/sites.html): the first
-# is the current one and names the menu; each url is a full URL, or a path on the docs hub (its tabs),
-# "" for its home page
-DOC_SITES = [
-    {"title": "Developer docs", "url": ""},
-    {"title": "Product guides", "url": "user-guides/"},
-]
-
-
-def doc_sites(sites: list[dict] | None = None, hub_url: str = "") -> list[dict]:
-    """The docs-site menu's entries, for sites_menu(): each site's title, its url (a path on the hub
-    joined to hub_url, the hub's home page), and whether it's another site. The docs hub's landing
-    pages call it too."""
-    # the hub's folder: hub_url without a file name ("index.html"), which urljoin would drop with a
-    # relative hub_url such as "../../"
-    hub = hub_url[: hub_url.rfind("/") + 1]
-    entries = []
-    for site in DOC_SITES if sites is None else sites:
-        url = site.get("url") or ""
-        external = bool(re.match(r"[a-z]+:", url))
-        entries.append({"title": site["title"], "url": url if external else (hub + url or hub_url), "external": external})
-    return entries
-
-
 def theme_options(*, github_url: str | None = None, **overrides: Any) -> dict[str, Any]:
     """Shibuya options for a Nominal docs site; keyword arguments override the defaults."""
     options: dict[str, Any] = {
@@ -132,7 +109,6 @@ def _on_page(app: Sphinx, pagename: str, templatename: str, context: dict[str, A
     target = app.builder.get_target_uri(pagename)
     # the docs hub's home page, two above this project's home at /{lang}/{project}/
     context["nominal_hub_url"] = app.config.nominal_hub_url or relative_uri(target, "") + "../../"
-    context["nominal_doc_sites"] = doc_sites(app.config.nominal_doc_sites, context["nominal_hub_url"])
 
     tabs = _tabs(app)
     current = _section(pagename, list(tabs))
@@ -267,10 +243,8 @@ def setup(app: Sphinx) -> dict[str, Any]:
     styles = "nominal_sphinx_theme.pygments_styles"
     app.add_config_value("nominal_pygments_style", f"{styles}.OneLightStyle", "html", types=[str])
     app.add_config_value("nominal_pygments_dark_style", f"{styles}.OneDarkStyle", "html", types=[str])
-    # where the header's Nominal logo leads; None: the docs hub's home page, relative to the project
+    # where DOCS and DEVELOPERS in the header's logo lead; None: the docs hub's home page, relative to the project
     app.add_config_value("nominal_hub_url", None, "html", types=[str, type(None)])
-    # the docs sites in the header's menu (DOC_SITES); [] shows no menu
-    app.add_config_value("nominal_doc_sites", DOC_SITES, "html", types=[list])
     # show only the current tab's toctree groups in the left sidebar
     app.add_config_value("nominal_section_sidebar", True, "html", types=[bool])
     # fold the left sidebar's toctree groups: True/False start them all open/folded, a list of
@@ -287,7 +261,6 @@ def setup(app: Sphinx) -> dict[str, Any]:
     app.connect("env-check-consistency", _check_open_groups)
     app.add_css_file(FONTS)
     app.add_css_file("nominal.css")
-    app.add_css_file("nominal-sites.css")
+    app.add_css_file("nominal-path.css")
     app.add_js_file("nominal.js")
-    app.add_js_file("nominal-sites.js")
     return {"version": __version__, "parallel_read_safe": True, "parallel_write_safe": True}

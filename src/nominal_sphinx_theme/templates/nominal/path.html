@@ -1,0 +1,6 @@
+{#- The words after the Nominal logo, so it reads like a path: NOMINAL / DOCS / DEVELOPERS. DOCS and
+    DEVELOPERS each link to the docs hub's home page (hub_url); shared by partials/site-head.html and the
+    docs hub's landing pages, with nominal-path.css beside it. -#}
+{%- macro docs_path(hub_url) -%}
+<span class="nominal-path"><span class="nominal-path-sep" aria-hidden="true">/</span><a href="{{ hub_url }}">Docs</a><span class="nominal-path-sep" aria-hidden="true">/</span><a href="{{ hub_url }}" title="Nominal developer docs">Developers</a></span>
+{%- endmacro -%}
