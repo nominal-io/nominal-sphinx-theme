@@ -1,5 +1,6 @@
-{#- Shibuya 2026.7.12's components/nav-links.html; pub-docs marks the current tab (nominal_tab), and a
-    link's optional icon (an Iconify name, as in nav_socials) comes before its title. -#}
+{#- Shibuya 2026.7.12's components/nav-links.html; pub-docs marks the current tab (nominal_tab), a
+    link's optional icon (an Iconify name, as in nav_socials) comes before its title, and an external
+    link opens in a new tab. -#}
 {%- macro icon(link) -%}
 {%- if link.icon %}<iconify-icon icon="{{ link.icon }}" aria-hidden="true"></iconify-icon>{% endif -%}
 {%- endmacro -%}
@@ -42,7 +43,7 @@
     {%- else %}
       {%- if link.url.startswith(('https://', 'http://')) -%}
         <li class="link">
-          <a href="{{ link.url }}">
+          <a href="{{ link.url }}"{% if link.external %} target="_blank" rel="noopener"{% endif %}>
             {{ icon(link) }}<span>{{ link.title }}</span>
             {%- if link.external -%}
               <i class="i-lucide external-link"></i>

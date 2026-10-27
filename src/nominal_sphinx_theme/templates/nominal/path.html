@@ -1,0 +1,8 @@
+{#- The words after the Nominal logo, so it reads like a path: NOMINAL / DOCS / DEVELOPERS. DOCS links to
+    the docs hub's home page (docs_url), a folder with a tab per docs site, and DEVELOPERS to its For
+    developers tab (developers_url; without one, the path ends at DOCS); shared by partials/site-head.html and the docs hub's landing pages,
+    with nominal-path.css beside it. -#}
+{%- macro docs_path(docs_url, developers_url=None) -%}
+<span class="nominal-path"><span class="nominal-path-sep" aria-hidden="true">/</span><a href="{{ docs_url }}" title="Nominal docs">Docs</a>
+{%- if developers_url %}<span class="nominal-path-sep" aria-hidden="true">/</span><a href="{{ developers_url }}" title="Nominal developer docs">Developers</a>{% endif %}</span>
+{%- endmacro -%}

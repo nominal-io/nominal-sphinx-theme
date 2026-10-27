@@ -12,9 +12,10 @@ In a project's conf.py::
         dark_logo="_static/logo/instro-logo-solid-white.svg",
     )
 
-The header shows the Nominal logo, linking to the docs landing page (opened at the project's
-language, via the hub's /{lang}/ redirect), then the project's logo (or its name). Projects published on their own, outside the docs hub, set
-``nominal_hub_url = "https://dev.nominal.io/"`` so the Nominal logo leads there.
+The header shows the Nominal logo, reading NOMINAL / DOCS / DEVELOPERS, then the project's logo (or its
+name). NOMINAL links to nominal.io, DOCS to the docs hub's home page, and DEVELOPERS to the hub's For
+developers tab (``developers/``). Projects published on their own, outside the docs hub, set
+``nominal_hub_url = "https://dev.nominal.io/"`` so those words lead there.
 
 Tabs: each ``nav_links`` entry pointing at a page in a folder (``{"title": "Examples", "url":
 "examples/index"}``) is a section: pages in that folder belong to it, and every other page to the
@@ -47,6 +48,9 @@ __version__ = "0.1.0"
 HERE = Path(__file__).parent
 logger = logging.getLogger(__name__)
 
+# the docs hub's For developers tab, from its home page
+DEVELOPERS = "developers/"
+
 # the landing page's fonts
 FONTS = "https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;700&display=swap"
 
@@ -62,27 +66,6 @@ _TAG = re.compile(r"<[^>]+>")
 # after smart quotes turn it into an en dash
 _PARAM_FIELDS = {"parameters", "keyword arguments", "other parameters"}
 _PARAM_SEPARATOR = re.compile(r" (?:--|–) ")
-
-# the docs sites in the header's menu after the Nominal logo (templates/nominal/sites.html): the first
-# is the current one and names the menu; a site without a url is the developer docs hub
-DOC_SITES = [
-    {"title": "Developer docs", "url": None},
-    {"title": "Product guides", "url": "https://docs.nominal.io/"},
-]
-
-
-def doc_sites(sites: list[dict] | None = None, hub_url: str = "") -> list[dict]:
-    """The docs-site menu's entries, for sites_menu(): each site's title, its url (hub_url for the docs
-    hub), and whether it's another site. The docs hub's landing pages call it too."""
-    return [
-        {
-            "title": site["title"],
-            "url": site.get("url") or hub_url,
-            "external": bool(re.match(r"[a-z]+:", site.get("url") or "")),
-        }
-        for site in (DOC_SITES if sites is None else sites)
-    ]
-
 
 def theme_options(*, github_url: str | None = None, **overrides: Any) -> dict[str, Any]:
     """Shibuya options for a Nominal docs site; keyword arguments override the defaults."""
@@ -127,11 +110,10 @@ def _section(path: str, folders: list[str]) -> str:
 
 def _on_page(app: Sphinx, pagename: str, templatename: str, context: dict[str, Any], doctree: Any) -> None:
     target = app.builder.get_target_uri(pagename)
-    # the docs hub's language folder, one above this project's home at /{lang}/{project}/: it opens
-    # the landing page with that language's card (scripts/site.py writes /{lang}/index.html)
-    context["nominal_hub_url"] = app.config.nominal_hub_url or relative_uri(target, "") + "../"
-    context["nominal_hub_external"] = bool(app.config.nominal_hub_url)
-    context["nominal_doc_sites"] = doc_sites(app.config.nominal_doc_sites, context["nominal_hub_url"])
+    # the docs hub's home page, two above this project's home at /{lang}/{project}/
+    context["nominal_hub_url"] = app.config.nominal_hub_url or relative_uri(target, "") + "../../"
+    # its For developers tab
+    context["nominal_developers_url"] = context["nominal_hub_url"] + DEVELOPERS
 
     tabs = _tabs(app)
     current = _section(pagename, list(tabs))
@@ -266,10 +248,9 @@ def setup(app: Sphinx) -> dict[str, Any]:
     styles = "nominal_sphinx_theme.pygments_styles"
     app.add_config_value("nominal_pygments_style", f"{styles}.OneLightStyle", "html", types=[str])
     app.add_config_value("nominal_pygments_dark_style", f"{styles}.OneDarkStyle", "html", types=[str])
-    # where the header's Nominal logo leads; None: the docs hub's landing page, relative to the project
+    # the docs hub's home page, where DOCS in the header's logo leads (and DEVELOPERS, to its developers/
+    # tab); None: the hub's home page, relative to the project
     app.add_config_value("nominal_hub_url", None, "html", types=[str, type(None)])
-    # the docs sites in the header's menu (DOC_SITES); [] shows no menu
-    app.add_config_value("nominal_doc_sites", DOC_SITES, "html", types=[list])
     # show only the current tab's toctree groups in the left sidebar
     app.add_config_value("nominal_section_sidebar", True, "html", types=[bool])
     # fold the left sidebar's toctree groups: True/False start them all open/folded, a list of
@@ -286,7 +267,6 @@ def setup(app: Sphinx) -> dict[str, Any]:
     app.connect("env-check-consistency", _check_open_groups)
     app.add_css_file(FONTS)
     app.add_css_file("nominal.css")
-    app.add_css_file("nominal-sites.css")
+    app.add_css_file("nominal-path.css")
     app.add_js_file("nominal.js")
-    app.add_js_file("nominal-sites.js")
     return {"version": __version__, "parallel_read_safe": True, "parallel_write_safe": True}

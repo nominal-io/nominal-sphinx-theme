@@ -13,16 +13,16 @@
 <div class="sy-head{% if theme_nav_links %} nominal-two-row{% endif %}">
   <div class="sy-head-blur"></div>
   <div class="sy-head-inner sy-container mx-auto">
-    {#- pub-docs: the Nominal logo, linking to the docs landing page (set in nominal_sphinx_theme) -#}
-    <a class="nominal-hub" href="{{ nominal_hub_url }}" title="Nominal developer docs"{% if not nominal_hub_external %} data-hub-lang{% endif %}>
-      <img class="light-logo" src="{{ pathto('_static/nominal-logo-black.svg', 1) }}" alt="Nominal" />
-      <img class="dark-logo" src="{{ pathto('_static/nominal-logo-white.svg', 1) }}" alt="Nominal" />
-    </a>
-    {#- the docs sites (nominal_doc_sites), the current one first: a menu under its name, like the logo's words -#}
-    {%- if nominal_doc_sites %}
-    {%- from "nominal/sites.html" import sites_menu %}
-    {{ sites_menu(nominal_doc_sites) }}
-    {%- endif %}
+    {#- pub-docs: the Nominal logo, reading NOMINAL / DOCS / DEVELOPERS: NOMINAL links to nominal.io, DOCS
+        to the docs hub's home page, and DEVELOPERS to its For developers tab (set in nominal_sphinx_theme) -#}
+    {%- from "nominal/path.html" import docs_path %}
+    <div class="nominal-hub">
+      <a class="nominal-home" href="https://nominal.io/" title="Nominal">
+        <img class="light-logo" src="{{ pathto('_static/nominal-logo-black.svg', 1) }}" alt="Nominal" />
+        <img class="dark-logo" src="{{ pathto('_static/nominal-logo-white.svg', 1) }}" alt="Nominal" />
+      </a>
+      {{ docs_path(nominal_hub_url, nominal_developers_url) }}
+    </div>
     <span class="nominal-hub-divider" aria-hidden="true">/</span>
     <a class="sy-head-brand" href="{% if theme_logo_target %}{{ theme_logo_target }}{% else %}{{ pathto(root_doc) }}{% endif %}">
       {{ render_logo(theme_light_logo, 'light-logo') }}
@@ -30,7 +30,9 @@
       <strong>{{ project }}</strong>
     </a>
     {#- pub-docs: a divider between the logos and the tabs -#}
+    {%- if theme_nav_links %}
     <span class="nominal-hub-divider nominal-tabs-divider" aria-hidden="true">/</span>
+    {%- endif %}
     <div class="sy-head-nav" id="head-nav">
       <nav class="sy-head-links"{% if theme_nav_links_align %} data-align={{ theme_nav_links_align }}{% endif %}>
         {%- if theme_nav_links -%}
@@ -39,9 +41,12 @@
       </nav>
       <div class="sy-head-extra flex items-center print:hidden">
         {%- include "components/searchbox.html" -%}
-        {%- include "components/nav-versions.html" -%}
-        {%- include "components/nav-languages.html" -%}
-        {%- include "partials/nav-socials.html" -%}
+        {#- pub-docs: kept together, so the search can move to the tabs' row (nominal.css) -#}
+        <div class="nominal-head-buttons flex items-center">
+          {%- include "components/nav-versions.html" -%}
+          {%- include "components/nav-languages.html" -%}
+          {%- include "partials/nav-socials.html" -%}
+        </div>
       </div>
     </div>
     <div class="sy-head-actions flex items-center shrink-0 print:hidden">
