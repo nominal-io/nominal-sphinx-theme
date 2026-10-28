@@ -27,6 +27,10 @@ Folding: ``nominal_sidebar_open`` makes each captioned toctree group in the left
 its caption. ``True`` starts every group open, ``False`` every group folded, and a list of captions
 (``["Get started"]``) starts those open. The group holding the current page always starts open.
 The default, ``None``, leaves the groups unfolded, with plain captions.
+
+Edit links: with Shibuya's ``source_*`` keys in ``html_context`` (``source_type = "github"``),
+"Edit this page" opens the file in GitHub's editor. To link somewhere else, set
+``source_edit_template`` in ``html_context``.
 """
 
 import html
@@ -88,6 +92,15 @@ def _on_config_inited(app: Sphinx, config: Config) -> None:
     config.templates_path.append(str(HERE / "templates"))
     if not config.html_favicon:
         config.html_favicon = str(HERE / "static" / "favicon.svg")
+    ctx = config.html_context
+    if ctx.get("source_type") == "github" and ctx.get("source_user") and ctx.get("source_repo"):
+        # Shibuya's defaults; its own link opens the file view, not the editor
+        version = ctx.get("source_version", "main")
+        path = ctx.get("source_docs_path", "/docs/")
+        ctx.setdefault(
+            "source_edit_template",
+            f"https://github.com/{ctx['source_user']}/{ctx['source_repo']}/edit/{version}{path}{{}}",
+        )
 
 
 def _tabs(app: Sphinx) -> dict[str, str]:
