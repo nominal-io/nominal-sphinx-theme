@@ -179,12 +179,19 @@ on:
 
 jobs:
   bump:
-    uses: nominal-io/nominal-sphinx-theme/.github/workflows/bump-theme.yml@main
+    uses: nominal-io/nominal-sphinx-theme/.github/workflows/bump-theme.yml@<commit> # main, <date>
     # with:
     #   uv-version: "0.8.x"   # the repo's own uv, so uv.lock's format doesn't drift
     #   auto-merge: false     # leave the PR for a person
-    secrets: inherit
+    secrets:
+      NOMBOT_APP_ID: ${{ secrets.NOMBOT_APP_ID }}
+      NOMBOT_PRIVATE_KEY: ${{ secrets.NOMBOT_PRIVATE_KEY }}
 ```
+
+- Pin `uses:` to a commit of this repo, as for any action. The bump still takes the theme's newest
+  commit; the pin only fixes which version of the workflow runs with the repo's NomBot secrets.
+- Pass the two NomBot secrets, not `secrets: inherit`, which hands every secret in the repo to
+  this repo's workflow. Semgrep blocks `secrets: inherit`.
 
 Then add the repo to `REPOS` in [`bump-all.yml`](.github/workflows/bump-all.yml).
 
