@@ -13,9 +13,9 @@ In a project's conf.py::
     )
 
 The header shows the Nominal logo, reading NOMINAL / DOCS / DEVELOPERS, then the project's logo (or its
-name). NOMINAL links to nominal.io, DOCS to the docs hub's home page, and DEVELOPERS to the hub's For
-developers tab (``developers/``). Projects published on their own, outside the docs hub, set
-``nominal_hub_url = "https://dev.nominal.io/"`` so those words lead there.
+name). NOMINAL links to nominal.io, DOCS to Nominal's docs (``nominal_docs_url``, in a new tab), and
+DEVELOPERS to the docs hub's home page. Projects published on their own, outside the docs hub, set
+``nominal_hub_url = "https://dev.nominal.io/"`` so DEVELOPERS leads there.
 
 Tabs: each ``nav_links`` entry pointing at a page in a folder (``{"title": "Examples", "url":
 "examples/index"}``) is a section: pages in that folder belong to it, and every other page to the
@@ -47,9 +47,6 @@ __version__ = "0.1.0"
 
 HERE = Path(__file__).parent
 logger = logging.getLogger(__name__)
-
-# the docs hub's For developers tab, from its home page
-DEVELOPERS = "developers/"
 
 # the landing page's fonts
 FONTS = "https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;700&display=swap"
@@ -112,8 +109,7 @@ def _on_page(app: Sphinx, pagename: str, templatename: str, context: dict[str, A
     target = app.builder.get_target_uri(pagename)
     # the docs hub's home page, two above this project's home at /{lang}/{project}/
     context["nominal_hub_url"] = app.config.nominal_hub_url or relative_uri(target, "") + "../../"
-    # its For developers tab
-    context["nominal_developers_url"] = context["nominal_hub_url"] + DEVELOPERS
+    context["nominal_docs_url"] = app.config.nominal_docs_url
 
     tabs = _tabs(app)
     current = _section(pagename, list(tabs))
@@ -248,9 +244,11 @@ def setup(app: Sphinx) -> dict[str, Any]:
     styles = "nominal_sphinx_theme.pygments_styles"
     app.add_config_value("nominal_pygments_style", f"{styles}.OneLightStyle", "html", types=[str])
     app.add_config_value("nominal_pygments_dark_style", f"{styles}.OneDarkStyle", "html", types=[str])
-    # the docs hub's home page, where DOCS in the header's logo leads (and DEVELOPERS, to its developers/
-    # tab); None: the hub's home page, relative to the project
+    # the docs hub's home page, where DEVELOPERS in the header's logo leads; None: the hub's home page,
+    # relative to the project
     app.add_config_value("nominal_hub_url", None, "html", types=[str, type(None)])
+    # Nominal's docs, where DOCS in the header's logo leads, in a new tab
+    app.add_config_value("nominal_docs_url", "https://docs.nominal.io/", "html", types=[str])
     # show only the current tab's toctree groups in the left sidebar
     app.add_config_value("nominal_section_sidebar", True, "html", types=[bool])
     # fold the left sidebar's toctree groups: True/False start them all open/folded, a list of
