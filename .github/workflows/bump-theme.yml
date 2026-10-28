@@ -12,7 +12,7 @@ on:
         type: string
         default: ""
       auto-merge:
-        description: Merge the PR once the required checks pass. Needs "Allow auto-merge" and a ruleset on the default branch.
+        description: Merge the PR once the required checks pass. Needs "Allow auto-merge" and a ruleset on the default branch that requires checks; without one, the PR waits for a person.
         type: boolean
         default: true
     secrets:
@@ -91,7 +91,14 @@ jobs:
             gh pr create --head "$BRANCH" --title "$title" --body "$body"
           fi
           if [ "$AUTO_MERGE" = "true" ]; then
-            # refused when the default branch has no required checks or reviews to wait for
-            gh pr merge "$BRANCH" --auto --squash \
-              || echo "::warning::Couldn't turn on auto-merge. Turn on \"Allow auto-merge\" and add a ruleset that requires the docs checks."
+            # with no required checks, `gh pr merge --auto` merges at once, before any check runs
+            base=$(gh repo view --json defaultBranchRef -q .defaultBranchRef.name)
+            rules=$(gh api "repos/$GITHUB_REPOSITORY/rules/branches/$base" -q '[.[] | select(.type == "required_status_checks")] | length')
+            classic=$(gh api "repos/$GITHUB_REPOSITORY/branches/$base" -q '.protection.required_status_checks.contexts // [] | length')
+            if [ "$rules" -eq 0 ] && [ "$classic" -eq 0 ]; then
+              echo "::warning::Left the PR for a person: $base has no required checks for auto-merge to wait for. Add a ruleset that requires the docs checks."
+            else
+              gh pr merge "$BRANCH" --auto --squash \
+                || echo "::warning::Couldn't turn on auto-merge. Turn on \"Allow auto-merge\" in the repo's settings."
+            fi
           fi
