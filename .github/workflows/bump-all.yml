@@ -1,0 +1,54 @@
+name: Bump the theme in every repo
+
+# Runs each repo's bump-theme.yml caller, so each opens or updates its bump PR now rather than on
+# its daily schedule. Run by hand: Actions → Bump the theme in every repo → Run workflow.
+
+on:
+  workflow_dispatch:
+  # To bump every repo on each change to the theme, uncomment:
+  # push:
+  #   branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    env:
+      # the repos that use the theme and have a bump-theme.yml caller
+      REPOS: >-
+        pub-docs
+        instro
+        nominal-client
+        panominal
+        matlab-client-rs
+        nominal-simulink
+        labview-client
+        ni-teststand-nominal-client
+        ni-flexlogger-streaming-plugin
+        ni-veristand-custom-device-nominal
+    steps:
+      - name: Get a NomBot token
+        id: app-token
+        uses: nominal-io/workflow-application-token-action@d8644a5aa546f763f73b94c762b092e088486db7 # 0.0.1
+        with:
+          application_id: ${{ secrets.NOMBOT_APP_ID }}
+          application_private_key: ${{ secrets.NOMBOT_PRIVATE_KEY }}
+          organization: "nominal-io"
+          permissions: "actions:write"
+          revoke_token: true
+      - name: Run each repo's bump
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          failed=0
+          for repo in $REPOS; do
+            if gh workflow run bump-theme.yml -R "nominal-io/$repo"; then
+              echo "nominal-io/$repo: started"
+            else
+              echo "::error::nominal-io/$repo: couldn't start bump-theme.yml. Does it have the caller, and is NomBot installed there?"
+              failed=1
+            fi
+          done
+          exit $failed

@@ -1,0 +1,97 @@
+name: Bump nominal-sphinx-theme
+
+# Reusable: moves the caller's uv.lock to this repo's newest commit and opens, or updates, one PR
+# for it, which merges itself once the caller's required checks pass. See "Theme updates" in the
+# README for the caller each repo adds.
+
+on:
+  workflow_call:
+    inputs:
+      uv-version:
+        description: The uv to lock with, matching the repo's own, so the lock file's format doesn't drift. Empty = the repo's `required-version`, or the newest uv.
+        type: string
+        default: ""
+      auto-merge:
+        description: Merge the PR once the required checks pass. Needs "Allow auto-merge" and a ruleset on the default branch.
+        type: boolean
+        default: true
+    secrets:
+      NOMBOT_APP_ID:
+        required: true
+      NOMBOT_PRIVATE_KEY:
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    env:
+      BRANCH: chore/bump-nominal-sphinx-theme
+    steps:
+      # PRs opened with GITHUB_TOKEN don't run the caller's workflows, so its docs checks wouldn't run
+      - name: Get a NomBot token
+        id: app-token
+        uses: nominal-io/workflow-application-token-action@d8644a5aa546f763f73b94c762b092e088486db7 # 0.0.1
+        with:
+          application_id: ${{ secrets.NOMBOT_APP_ID }}
+          application_private_key: ${{ secrets.NOMBOT_PRIVATE_KEY }}
+          organization: "nominal-io"
+          permissions: "contents:write, pull_requests:write"
+          revoke_token: true
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+      - name: Install uv
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          enable-cache: false
+          version: ${{ inputs.uv-version }}
+
+      - name: Upgrade the theme in uv.lock
+        id: lock
+        run: |
+          set -euo pipefail
+          # the theme's commit, from its source line in uv.lock
+          theme() { grep -oE 'nominal-sphinx-theme[^"#]*#[0-9a-f]{40}' uv.lock | head -1 | cut -d'#' -f2; }
+          old=$(theme)
+          uv lock --upgrade-package nominal-sphinx-theme
+          new=$(theme)
+          echo "old=$old" >> "$GITHUB_OUTPUT"
+          echo "new=$new" >> "$GITHUB_OUTPUT"
+          if git diff --quiet uv.lock; then
+            echo "Already on nominal-sphinx-theme@${new:0:7}"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open or update the PR
+        if: steps.lock.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          OLD: ${{ steps.lock.outputs.old }}
+          NEW: ${{ steps.lock.outputs.new }}
+          AUTO_MERGE: ${{ inputs.auto-merge }}
+        run: |
+          set -euo pipefail
+          title="chore(deps): bump nominal-sphinx-theme to ${NEW:0:7}"
+          body="Moves \`uv.lock\` to [nominal-sphinx-theme@${NEW:0:7}](https://github.com/nominal-io/nominal-sphinx-theme/commit/$NEW): [changes since ${OLD:0:7}](https://github.com/nominal-io/nominal-sphinx-theme/compare/$OLD...$NEW).
+
+          Opened by [this run]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID) of nominal-sphinx-theme's bump workflow."
+          git switch -C "$BRANCH"
+          git -c user.name=NomBot -c user.email=117409387+nominal-bot@users.noreply.github.com \
+            commit -m "$title" uv.lock
+          # one PR at a time: a newer bump replaces the branch
+          git push --force origin "$BRANCH"
+          if pr=$(gh pr view "$BRANCH" --json number,state -q 'select(.state == "OPEN") | .number' 2>/dev/null) && [ -n "$pr" ]; then
+            gh pr edit "$pr" --title "$title" --body "$body"
+          else
+            gh pr create --head "$BRANCH" --title "$title" --body "$body"
+          fi
+          if [ "$AUTO_MERGE" = "true" ]; then
+            # refused when the default branch has no required checks or reviews to wait for
+            gh pr merge "$BRANCH" --auto --squash \
+              || echo "::warning::Couldn't turn on auto-merge. Turn on \"Allow auto-merge\" and add a ruleset that requires the docs checks."
+          fi
