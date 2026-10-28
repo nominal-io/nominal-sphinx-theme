@@ -161,6 +161,42 @@ To test the directive:
 uv run --group dev pytest
 ```
 
+## Theme updates
+
+Each repo using the theme pins a commit of it in `uv.lock`. A daily workflow there moves the pin to
+the theme's newest commit and opens one PR, `chore(deps): bump nominal-sphinx-theme to <sha>`, which
+merges itself once the repo's required checks pass. If the theme hasn't changed, it does nothing.
+
+To add it to a repo, copy this to `.github/workflows/bump-theme.yml`:
+
+```yaml
+name: Bump nominal-sphinx-theme
+
+on:
+  schedule:
+    - cron: "0 6 * * *" # daily, 06:00 UTC
+  workflow_dispatch:
+
+jobs:
+  bump:
+    uses: nominal-io/nominal-sphinx-theme/.github/workflows/bump-theme.yml@main
+    # with:
+    #   uv-version: "0.8.x"   # the repo's own uv, so uv.lock's format doesn't drift
+    #   auto-merge: false     # leave the PR for a person
+    secrets: inherit
+```
+
+Then add the repo to `REPOS` in [`bump-all.yml`](.github/workflows/bump-all.yml).
+
+The repo needs:
+
+- the NomBot App installed, and its `NOMBOT_APP_ID` and `NOMBOT_PRIVATE_KEY` secrets
+- "Allow auto-merge" turned on, and a ruleset on the default branch that requires its docs checks.
+  Without required checks, auto-merge has nothing to wait for and is refused, so the PR waits for a person.
+
+To bump a repo now, open its **Actions** tab, pick **Bump nominal-sphinx-theme** and click **Run
+workflow**. To bump every repo, do the same here with **Bump the theme in every repo**.
+
 ## Docs skill for AI agents
 
 [`skills/nominal-docs/`](skills/nominal-docs/) holds Nominal's shared rules for writing docs and docstrings, as a Claude Code plugin.
