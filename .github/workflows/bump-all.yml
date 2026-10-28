@@ -30,7 +30,8 @@ jobs:
           application_id: ${{ secrets.NOMBOT_APP_ID }}
           application_private_key: ${{ secrets.NOMBOT_PRIVATE_KEY }}
           organization: "nominal-io"
-          permissions: "actions:write"
+          # contents:read, for gh to find each repo's default branch
+          permissions: "actions:write, contents:read"
           revoke_token: true
       - name: Run each repo's bump
         env:
