@@ -36,7 +36,8 @@ Any other keyword to `theme_options` is passed through as a Shibuya option.
 
 | Setting                   | Default | Effect                                                                 |
 | ------------------------- | ------- | ---------------------------------------------------------------------- |
-| `nominal_hub_url`         | `None`  | The docs hub's home page, where DOCS in the logo links (and DEVELOPERS, to its `developers/`). `None` = the docs hub's home page, two levels up. Set to `"https://dev.nominal.io/"` for standalone sites. |
+| `nominal_hub_url`         | `None`  | The docs hub's home page, where DEVELOPERS in the logo links. `None` = the docs hub's home page, two levels up. Set to `"https://dev.nominal.io/"` for standalone sites. |
+| `nominal_docs_url`        | `"https://docs.nominal.io/"` | Where DOCS in the logo links, in a new tab.               |
 | `nominal_section_sidebar` | `True`  | Sidebar shows only the current tab's captioned toctrees.               |
 | `nominal_sidebar_open`    | `None`  | Sidebar groups fold under their captions. See [Folding sidebar groups](#folding-sidebar-groups). |
 | `nominal_ga_id`           | `None`  | Google Analytics measurement ID.                                       |
@@ -46,9 +47,9 @@ A project's own `_static` and `_templates` override the theme's files of the sam
 ## Header
 
 The header shows the Nominal logo, which reads like a path, NOMINAL / DOCS / DEVELOPERS, then `/` and
-the project's logo (or its name, without one). NOMINAL links to nominal.io, DOCS to the docs hub's
-home page, and DEVELOPERS to the hub's For developers tab, `developers/`. Those links are relative (the
-hub's root, two above a project's home at `/{lang}/{project}/`), so they work on the hub and in its
+the project's logo (or its name, without one). NOMINAL links to nominal.io, DOCS to Nominal's docs
+(`nominal_docs_url`) in a new tab, and DEVELOPERS to the docs hub's home page. That link is relative
+(the hub's root, two above a project's home at `/{lang}/{project}/`), so it works on the hub and in its
 offline copies. A site published on its own, outside the hub, sets `nominal_hub_url` instead.
 
 On wide screens with tabs, the search sits at the right of the tabs' row, under the buttons.
