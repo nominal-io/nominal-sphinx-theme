@@ -199,7 +199,8 @@ The repo needs:
 
 - the NomBot App installed, and its `NOMBOT_APP_ID` and `NOMBOT_PRIVATE_KEY` secrets
 - "Allow auto-merge" turned on, and a ruleset on the default branch that requires its docs checks.
-  Without required checks, auto-merge has nothing to wait for and is refused, so the PR waits for a person.
+  Without required checks, the workflow doesn't turn on auto-merge, which would merge the PR at once,
+  and the PR waits for a person.
 
 To bump a repo now, open its **Actions** tab, pick **Bump nominal-sphinx-theme** and click **Run
 workflow**. To bump every repo, do the same here with **Bump the theme in every repo**.
