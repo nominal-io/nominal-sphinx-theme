@@ -652,10 +652,18 @@ html.dark .sd-card:hover {
   padding: 0.25rem 0.5rem;
 }
 
-/* A heading's "#" copies its link (nominal.js), then says so for a moment. */
+/* A heading's "#" copies its link (nominal.js), then says so for a moment. The label floats
+   beside the "#" without taking up space, so a centered heading doesn't shift. */
+.yue a.headerlink {
+  position: relative;
+}
 .yue a.headerlink.nominal-copied::after {
   content: "Copied";
+  position: absolute;
+  left: 100%;
+  top: 0;
   margin-left: 0.4em;
+  white-space: nowrap;
 }
 
 /* Callouts: a screenshot marked with red numbers (an image with class callout-screenshot),
