@@ -48,8 +48,8 @@ __version__ = "0.1.0"
 HERE = Path(__file__).parent
 logger = logging.getLogger(__name__)
 
-# the landing page's fonts
-FONTS = "https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;700&display=swap"
+# the Nominal design system's fonts (https://design.nominal.io/DESIGN.md)
+FONTS = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
 
 # the rendered sidebar: one block per captioned toctree group, and the links in it
 _CAPTION = re.compile(r'(?=<p class="caption")')
@@ -280,7 +280,7 @@ def setup(app: Sphinx) -> dict[str, Any]:
     app.add_config_value("nominal_hub_url", None, "html", types=[str, type(None)])
     # Nominal's docs, where DOCS in the header's logo leads, in a new tab
     app.add_config_value(
-        "nominal_docs_url", "https://docs.nominal.io/", "html", types=[str]
+        "nominal_docs_url", "https://dev.nominal.io/", "html", types=[str]
     )
     # show only the current tab's toctree groups in the left sidebar
     app.add_config_value("nominal_section_sidebar", True, "html", types=[bool])

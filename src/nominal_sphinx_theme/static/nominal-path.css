@@ -1,11 +1,11 @@
 /* The words after the Nominal logo (templates/nominal/path.html), on the docs and the hub's landing pages
    alike: NOMINAL / DOCS / DEVELOPERS, each word a link of its own. The words are set like the logo's:
-   Geist Mono at the cap height of the 18px logo. Each page sets the --nominal-path-* colours from its
+   the mono font at the cap height of the 18px logo. Each page sets the --nominal-path-* colours from its
    palette; the defaults are the landing page's dark ones. */
 .nominal-path {
   display: flex;
   align-items: center;
-  font-family: var(--nominal-path-font, "Geist Mono", ui-monospace, monospace);
+  font-family: var(--nominal-path-font, "JetBrains Mono", ui-monospace, monospace);
   font-size: 21.68px;
   font-weight: 400;
   line-height: 1;

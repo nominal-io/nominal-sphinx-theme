@@ -1,35 +1,45 @@
-/* Nominal's look for Shibuya: the landing page's (landing/styles.css) fonts, dark palette, and
-   header, on top of instro's docs styling. Project-specific styles stay in each project. */
+/* Nominal's look for Shibuya, from the Nominal design system (https://design.nominal.io/DESIGN.md):
+   its fonts and its light and dark colors, with the landing page's header, on top of instro's docs
+   styling. Project-specific styles stay in each project. */
 
 :root {
-  --sy-f-text: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --sy-f-heading: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --sy-f-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  --accent-9: #0b0b0b;
-  --accent-10: #262626;
-  --accent-a11: #0b0b0b;
-  --accent-a12: #0b0b0b;
-  --sy-c-link: #0b0b0b;
-  --sy-c-link-hover: #525252;
+  --sy-f-text: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --sy-f-heading: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --sy-f-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --accent-9: #0c0c0c;
+  --accent-10: #333333;
+  --accent-a11: #0c0c0c;
+  --accent-a12: #0c0c0c;
+  --sy-c-link: #0c0c0c;
+  --sy-c-link-hover: #6b6b6b;
 }
 
-/* Light mode's greys: an ivory-dark header over an ivory-medium page, code blocks between the two,
-   and cards lighter than the page. */
+/* Light mode, as DESIGN.md's tokens: a white page (background), a muted header, footer and code
+   blocks (background-muted), white cards (background-raised), and its text and border colors. */
 :root,
 html.light {
-  --sy-c-background: #f0f0eb;
-  --nominal-header: #e5e4df;
-  --code-block-background: #e9e8e3;
-  --nominal-card: #f8f8f5;
-  --nominal-card-hover: #ffffff;
+  --sy-c-background: #ffffff;
+  --sy-c-surface: #f5f5f5;
+  --sy-c-text: #333333;
+  --sy-c-heading: #0c0c0c;
+  --sy-c-bold: #0c0c0c;
+  --sy-c-light: #6b6b6b;
+  --sy-c-border: rgba(18, 18, 18, 0.11);
+  --sy-c-divider: rgba(18, 18, 18, 0.11);
+  --sy-c-foot-background: #f5f5f5;
+  --nominal-header: #f5f5f5;
+  --code-block-background: #f5f5f5;
+  --nominal-card: #ffffff;
+  --nominal-card-hover: #f3f3f3;
 }
 /* Shibuya gives code in tabs and notebook outputs their own light background; keep them like the rest. */
 html.light .sd-tab-content,
 html.light .jupyter_container .cell_output {
-  --code-block-background: #e9e8e3;
+  --code-block-background: #f5f5f5;
 }
 
-/* The landing page's dark palette: neutral greys, white headings, hairline borders. */
+/* Dark mode, as DESIGN.md's dark mapping: neutral-800 page, neutral-900 header, footer and code,
+   neutral-700 cards, and hairline white borders. */
 html.dark {
   --accent-9: #ffffff;
   --accent-10: #e5e5e5;
@@ -37,19 +47,19 @@ html.dark {
   --accent-a12: #ffffff;
   --sy-c-link: #ffffff;
   --sy-c-link-hover: #a3a3a3;
-  --sy-c-background: #242424;
-  --sy-c-surface: #2a2a2a;
+  --sy-c-background: #1f1f1f;
+  --sy-c-surface: #333333;
   --sy-c-text: #d4d4d4;
   --sy-c-heading: #ffffff;
   --sy-c-bold: #ffffff;
   --sy-c-light: #a3a3a3;
-  --sy-c-border: rgba(255, 255, 255, 0.08);
-  --sy-c-divider: rgba(255, 255, 255, 0.08);
-  --sy-c-foot-background: #181818;
-  --nominal-header: #181818;
-  --code-block-background: #2c2c2c;
-  --nominal-card: #2a2a2a;
-  --nominal-card-hover: #333333;
+  --sy-c-border: rgba(255, 255, 255, 0.1);
+  --sy-c-divider: rgba(255, 255, 255, 0.1);
+  --sy-c-foot-background: #121212;
+  --nominal-header: #121212;
+  --code-block-background: #121212;
+  --nominal-card: #333333;
+  --nominal-card-hover: #424242;
 }
 
 /* Header: a solid bar (--nominal-header) with a hairline border, like the landing page's (no blur). */
