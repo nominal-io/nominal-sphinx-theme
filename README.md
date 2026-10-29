@@ -246,7 +246,7 @@ doesn't run blocks the PR. Drop the path filter from `pull_request` first.
    `NOMBOT_PRIVATE_KEY` org secrets reach the repo.
 5. Add the repo to `REPOS` in `bump-all.yml`.
 
-- **Pins:** pin `uses:` to a commit of this repo, as for any action. Neither repo has releases, so
+- **Pins:** pin `uses:` to a commit of this repo, as for any action. This repo has no releases, so
   the comment is `# main, <date>`, and Dependabot can't move it. When `bump-theme.yml` or
   `docs-gate.yml` changes here, move each repo's pin by hand. The bump itself always takes the
   theme's newest commit.
