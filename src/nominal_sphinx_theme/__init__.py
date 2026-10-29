@@ -52,8 +52,8 @@ __version__ = "0.1.0"
 HERE = Path(__file__).parent
 logger = logging.getLogger(__name__)
 
-# the landing page's fonts
-FONTS = "https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;700&display=swap"
+# the Nominal design system's fonts (https://design.nominal.io/DESIGN.md)
+FONTS = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
 
 # the rendered sidebar: one block per captioned toctree group, and the links in it
 _CAPTION = re.compile(r'(?=<p class="caption")')
@@ -68,14 +68,15 @@ _TAG = re.compile(r"<[^>]+>")
 _PARAM_FIELDS = {"parameters", "keyword arguments", "other parameters"}
 _PARAM_SEPARATOR = re.compile(r" (?:--|–) ")
 
+
 def theme_options(*, github_url: str | None = None, **overrides: Any) -> dict[str, Any]:
     """Shibuya options for a Nominal docs site; keyword arguments override the defaults."""
     options: dict[str, Any] = {
         "accent_color": "gray",
-        # dark, like the landing page, unless the visitor picks light with the theme switch
-        "color_mode": "dark",
+        # follows the visitor's system setting, unless they pick light or dark with the theme switch
+        "color_mode": "auto",
         "x_url": "https://x.com/nominal_io",
-        "linkedin_url": "https://linkedin.com/company/nominal-io",
+        "linkedin_url": "https://www.linkedin.com/company/nominal-inc/",
         # header icons before the buttons; a project lists its own (Shibuya's nav_socials format)
         "nav_socials": [],
         "toctree_titles_only": True,
@@ -118,10 +119,14 @@ def _section(path: str, folders: list[str]) -> str:
     return max((f for f in folders if f and path.startswith(f)), key=len, default="")
 
 
-def _on_page(app: Sphinx, pagename: str, templatename: str, context: dict[str, Any], doctree: Any) -> None:
+def _on_page(
+    app: Sphinx, pagename: str, templatename: str, context: dict[str, Any], doctree: Any
+) -> None:
     target = app.builder.get_target_uri(pagename)
     # the docs hub's home page, two above this project's home at /{lang}/{project}/
-    context["nominal_hub_url"] = app.config.nominal_hub_url or relative_uri(target, "") + "../../"
+    context["nominal_hub_url"] = (
+        app.config.nominal_hub_url or relative_uri(target, "") + "../../"
+    )
     context["nominal_docs_url"] = app.config.nominal_docs_url
 
     tabs = _tabs(app)
@@ -144,7 +149,9 @@ def _on_page(app: Sphinx, pagename: str, templatename: str, context: dict[str, A
                 href = _HREF.search(block)
                 if not href:
                     continue
-                linked = posixpath.normpath(posixpath.join(page_dir, href.group(1) or "."))
+                linked = posixpath.normpath(
+                    posixpath.join(page_dir, href.group(1) or ".")
+                )
                 if _section(linked + "/", list(tabs)) != current:
                     continue
             kept.append(block if open_groups is None else _fold(block, open_groups))
@@ -183,16 +190,26 @@ def _check_open_groups(app: Sphinx, env: BuildEnvironment) -> None:
     open_groups = app.config.nominal_sidebar_open
     if not isinstance(open_groups, list):
         return
-    captions = {node.get("caption") for node in env.get_doctree(app.config.root_doc).findall(addnodes.toctree)}
+    captions = {
+        node.get("caption")
+        for node in env.get_doctree(app.config.root_doc).findall(addnodes.toctree)
+    }
     for name in open_groups:
         if name not in captions:
-            logger.warning("nominal_sidebar_open: no toctree caption %r in %s", name, app.config.root_doc)
+            logger.warning(
+                "nominal_sidebar_open: no toctree caption %r in %s",
+                name,
+                app.config.root_doc,
+            )
 
 
 def _on_builder_inited(app: Sphinx) -> None:
     ga_id = app.config.nominal_ga_id
     if ga_id:
-        app.add_js_file(f"https://www.googletagmanager.com/gtag/js?id={ga_id}", loading_method="async")
+        app.add_js_file(
+            f"https://www.googletagmanager.com/gtag/js?id={ga_id}",
+            loading_method="async",
+        )
         app.add_js_file(
             None,
             body=(
@@ -232,9 +249,17 @@ def _split_params(app: Sphinx, doctree: nodes.document) -> None:
         body = field[1]
         if body.children and isinstance(body[0], nodes.bullet_list):
             body[0]["classes"].append("nominal-params")
-            heads = [item[0] for item in body[0].children if item.children and isinstance(item[0], nodes.paragraph)]
+            heads = [
+                item[0]
+                for item in body[0].children
+                if item.children and isinstance(item[0], nodes.paragraph)
+            ]
         else:
-            heads = [body[0]] if body.children and isinstance(body[0], nodes.paragraph) else []
+            heads = (
+                [body[0]]
+                if body.children and isinstance(body[0], nodes.paragraph)
+                else []
+            )
         for para in heads:
             _split_param(para)
 
@@ -243,7 +268,9 @@ def _set_highlighting(app: Sphinx) -> None:
     # Shibuya's highlighter writes a light and a dark style; swap in ours, unless the project picked
     # its own pygments_style (Shibuya then uses that one alone)
     highlighter = getattr(app.builder, "highlighter", None)
-    if app.config.pygments_style is not None or not hasattr(highlighter, "dark_style_name"):
+    if app.config.pygments_style is not None or not hasattr(
+        highlighter, "dark_style_name"
+    ):
         return
     new = type(highlighter)("html", app.config.nominal_pygments_style)
     new.dark_style_name = app.config.nominal_pygments_dark_style
@@ -255,18 +282,26 @@ def setup(app: Sphinx) -> dict[str, Any]:
     # code highlighting in light and dark mode: Pygments style names, or dotted paths to style classes
     # (default: Atom's One Light and One Dark, in pygments_styles.py)
     styles = "nominal_sphinx_theme.pygments_styles"
-    app.add_config_value("nominal_pygments_style", f"{styles}.OneLightStyle", "html", types=[str])
-    app.add_config_value("nominal_pygments_dark_style", f"{styles}.OneDarkStyle", "html", types=[str])
+    app.add_config_value(
+        "nominal_pygments_style", f"{styles}.OneLightStyle", "html", types=[str]
+    )
+    app.add_config_value(
+        "nominal_pygments_dark_style", f"{styles}.OneDarkStyle", "html", types=[str]
+    )
     # the docs hub's home page, where DEVELOPERS in the header's logo leads; None: the hub's home page,
     # relative to the project
     app.add_config_value("nominal_hub_url", None, "html", types=[str, type(None)])
     # Nominal's docs, where DOCS in the header's logo leads, in a new tab
-    app.add_config_value("nominal_docs_url", "https://docs.nominal.io/", "html", types=[str])
+    app.add_config_value(
+        "nominal_docs_url", "https://dev.nominal.io/", "html", types=[str]
+    )
     # show only the current tab's toctree groups in the left sidebar
     app.add_config_value("nominal_section_sidebar", True, "html", types=[bool])
     # fold the left sidebar's toctree groups: True/False start them all open/folded, a list of
     # captions starts those open; None (the default) doesn't fold them
-    app.add_config_value("nominal_sidebar_open", None, "html", types=[type(None), bool, list])
+    app.add_config_value(
+        "nominal_sidebar_open", None, "html", types=[type(None), bool, list]
+    )
     # the {nominal-snippet} directive: fragments shared by every project using the theme
     app.setup_extension("nominal_sphinx_theme.snippet_directive")
     app.connect("config-inited", _on_config_inited)
@@ -280,4 +315,8 @@ def setup(app: Sphinx) -> dict[str, Any]:
     app.add_css_file("nominal.css")
     app.add_css_file("nominal-path.css")
     app.add_js_file("nominal.js")
-    return {"version": __version__, "parallel_read_safe": True, "parallel_write_safe": True}
+    return {
+        "version": __version__,
+        "parallel_read_safe": True,
+        "parallel_write_safe": True,
+    }
