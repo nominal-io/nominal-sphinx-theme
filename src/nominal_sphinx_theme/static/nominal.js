@@ -62,8 +62,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const setCurrent = (entry) => {
     if (entry === current) return;
     current?.link.classList.remove("nominal-current");
+    current?.link.removeAttribute("aria-current");
     current = entry;
     entry.link.classList.add("nominal-current");
+    entry.link.setAttribute("aria-current", "true");
     const box = toc.closest(".sy-rside-inner");
     if (!box) return;
     const at = entry.link.getBoundingClientRect();
@@ -79,6 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // An anchor jump puts the target at its scroll-margin-top, give or take a pixel.
     let found = entries[0];
     for (const entry of entries) {
+      if (!entry.target.getClientRects().length) continue; // hidden, e.g. in a closed <details>
       const margin = parseFloat(getComputedStyle(entry.target).scrollMarginTop) || 0;
       if (entry.target.getBoundingClientRect().top > margin + 4) break;
       found = entry;
@@ -101,8 +104,12 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("hashchange", () => {
     const entry = entries.find((e) => e.link.hash === location.hash);
     if (entry) pin(entry);
+    else {
+      unpin();
+      update();
+    }
   });
-  for (const type of ["wheel", "touchmove", "keydown"]) window.addEventListener(type, unpin, { passive: true });
+  for (const type of ["wheel", "touchmove", "keydown", "pointerdown"]) window.addEventListener(type, unpin, { passive: true });
   window.addEventListener("scroll", update, { passive: true });
   window.addEventListener("resize", update);
 
