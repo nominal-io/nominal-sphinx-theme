@@ -16,12 +16,14 @@ jobs:
   dispatch:
     runs-on: ubuntu-latest
     env:
-      # the repos with a bump-theme.yml caller. Still to add one: instro, nominal-client,
-      # matlab-client-rs, nominal-simulink, labview-client, ni-teststand-nominal-client,
+      # the repos with a bump-theme.yml caller. Still to add one: matlab-client-rs,
+      # nominal-simulink, labview-client, ni-teststand-nominal-client,
       # ni-flexlogger-streaming-plugin, ni-veristand-custom-device-nominal
       REPOS: >-
         pub-docs
         panominal
+        instro
+        nominal-client
     steps:
       - name: Get a NomBot token
         id: app-token
