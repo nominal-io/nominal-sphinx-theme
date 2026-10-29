@@ -652,6 +652,30 @@ html.dark .sd-card:hover {
   padding: 0.25rem 0.5rem;
 }
 
+/* Current heading in the right nav (nominal.js): the left nav's shading and weight, plus an
+   underline. Entries are all blocks, and the box's vertical padding is drawn with shadows, so the
+   list does not shift as the current entry changes. The right side has no padding, leaving room for
+   the bolder text. Shibuya's own `.active` colour is neutralised. */
+.sy-rside .localtoc a {
+  display: block;
+}
+.sy-rside .localtoc li.active > a {
+  color: inherit;
+}
+.sy-rside .localtoc li > a.nominal-current {
+  background: var(--gray-a3);
+  margin: 0 -0.5rem;
+  padding: 0 0 0 0.5rem;
+  box-shadow:
+    0 0.25rem 0 var(--gray-a3),
+    0 -0.25rem 0 var(--gray-a3);
+  color: var(--sy-c-link);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
 /* A heading's "#" copies its link (nominal.js), then says so for a moment. The label floats
    beside the "#" without taking up space, so a centered heading doesn't shift. */
 .yue a.headerlink {
