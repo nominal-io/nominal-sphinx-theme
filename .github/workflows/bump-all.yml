@@ -16,8 +16,8 @@ jobs:
   dispatch:
     runs-on: ubuntu-latest
     env:
-      # the repos with a bump-theme.yml caller. Still to add one: labview-client,
-      # ni-veristand-custom-device-nominal
+      # the repos with a bump-theme.yml caller. Still to add one: labview-client
+      # (nominal-io/labview-client#93)
       REPOS: >-
         pub-docs
         panominal
@@ -27,6 +27,7 @@ jobs:
         nominal-simulink
         ni-teststand-nominal-client
         ni-flexlogger-streaming-plugin
+        ni-veristand-custom-device-nominal
     steps:
       - name: Get a NomBot token
         id: app-token
