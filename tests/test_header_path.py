@@ -31,7 +31,7 @@ def links(page: Path) -> dict[str, tuple[str, str]]:
 def test_docs_opens_nominal_docs_in_a_new_tab_and_developers_the_hub(tmp_path):
     out = build(tmp_path)
     assert links(out / "index.html") == {
-        "docs": ("https://docs.nominal.io/", ' target="_blank" rel="noopener noreferrer"'),
+        "docs": ("https://dev.nominal.io/", ' target="_blank" rel="noopener noreferrer"'),
         "developer docs": ("../../", ""),
     }
     assert links(out / "guide" / "index.html")["developer docs"] == ("../../../", "")
