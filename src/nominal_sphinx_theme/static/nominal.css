@@ -652,6 +652,14 @@ html.dark .sd-card:hover {
   padding: 0.25rem 0.5rem;
 }
 
+/* The right nav sticks below the whole header, as the left nav does; Shibuya fixes it at 4rem, which
+   is under the second header row. */
+@media (min-width: 1280px) {
+  .sy-rside .sy-rside-inner {
+    top: var(--sy-s-offset-top);
+  }
+}
+
 /* Current heading in the right nav (nominal.js): the left nav's shading and weight, plus an
    underline. Entries are all blocks, and the box's vertical padding is drawn with shadows, so the
    list does not shift as the current entry changes. The right side has no padding, leaving room for
