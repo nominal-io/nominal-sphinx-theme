@@ -35,3 +35,78 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+
+// "On this page" highlights the entry for the heading the reader is at: the last heading at or above
+// the top of the viewport (below the sticky header), or the last one at the bottom of the page.
+// Shibuya marks entries `.active` by its own rules; this marks `.nominal-current` instead, which
+// nominal.css styles. A clicked entry stays current until the reader scrolls by hand, because the
+// page may be too short to bring its heading to the top.
+document.addEventListener("DOMContentLoaded", () => {
+  const toc = document.querySelector(".sy-rside .localtoc");
+  if (!toc) return;
+  const entries = [];
+  for (const link of toc.querySelectorAll("a[href^='#']")) {
+    const target = document.getElementById(decodeURIComponent(link.hash.slice(1)));
+    if (target) entries.push({ link, target });
+  }
+  if (!entries.length) return;
+
+  // Shibuya's spy also scrolls the list to its own pick; shadowing its scroll call leaves that to
+  // setCurrent below.
+  for (const item of toc.querySelectorAll("li")) item.scrollIntoViewIfNeeded = null;
+
+  let current = null;
+  let pinned = null; // the entry the reader chose, until they scroll by hand
+
+  const setCurrent = (entry) => {
+    if (entry === current) return;
+    current?.link.classList.remove("nominal-current");
+    current = entry;
+    entry.link.classList.add("nominal-current");
+    const box = toc.closest(".sy-rside-inner");
+    if (!box) return;
+    const at = entry.link.getBoundingClientRect();
+    const view = box.getBoundingClientRect();
+    if (at.top < view.top) box.scrollTop -= view.top - at.top;
+    else if (at.bottom > view.bottom) box.scrollTop += at.bottom - view.bottom;
+  };
+
+  const update = () => {
+    if (pinned) return setCurrent(pinned);
+    const atBottom = window.innerHeight + Math.round(window.scrollY) >= document.documentElement.scrollHeight;
+    if (atBottom) return setCurrent(entries[entries.length - 1]);
+    // An anchor jump puts the target at its scroll-margin-top, give or take a pixel.
+    let found = entries[0];
+    for (const entry of entries) {
+      const margin = parseFloat(getComputedStyle(entry.target).scrollMarginTop) || 0;
+      if (entry.target.getBoundingClientRect().top > margin + 4) break;
+      found = entry;
+    }
+    setCurrent(found);
+  };
+
+  const pin = (entry) => {
+    pinned = entry;
+    update();
+  };
+  const unpin = () => {
+    pinned = null;
+  };
+
+  toc.addEventListener("click", (event) => {
+    const entry = entries.find((e) => e.link === event.target.closest("a"));
+    if (entry) pin(entry);
+  });
+  window.addEventListener("hashchange", () => {
+    const entry = entries.find((e) => e.link.hash === location.hash);
+    if (entry) pin(entry);
+  });
+  for (const type of ["wheel", "touchmove", "keydown"]) window.addEventListener(type, unpin, { passive: true });
+  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", update);
+
+  const landed = entries.find((e) => e.link.hash === location.hash);
+  if (landed) pin(landed);
+  else update();
+});
