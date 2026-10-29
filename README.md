@@ -162,49 +162,98 @@ To test the directive:
 uv run --group dev pytest
 ```
 
-## Theme updates
+## CI
 
-Each repo using the theme pins a commit of it in `uv.lock`. A daily workflow there moves the pin to
-the theme's newest commit and opens one PR, `chore(deps): bump nominal-sphinx-theme to <sha>`, which
-merges itself once the repo's required checks pass. If the theme hasn't changed, it does nothing.
+| Workflow | Runs | Does |
+| --- | --- | --- |
+| [`tests.yml`](.github/workflows/tests.yml) | PRs and pushes to `main` | The tests in `tests/`, on Python 3.12 and 3.13 |
+| [`bump-theme.yml`](.github/workflows/bump-theme.yml) | Called by each repo that uses the theme | Moves that repo's `uv.lock` to the theme's newest commit, in one PR |
+| [`docs-gate.yml`](.github/workflows/docs-gate.yml) | Called by each repo's docs workflow | The check that stops a bump PR merging when the docs don't build |
+| [`bump-all.yml`](.github/workflows/bump-all.yml) | By hand | Runs every repo's bump now |
 
-To add it to a repo, copy this to `.github/workflows/bump-theme.yml`:
+### Theme updates
 
-```yaml
-name: Bump nominal-sphinx-theme
+Each repo using the theme pins a commit of it in `uv.lock`. A daily workflow there, calling
+`bump-theme.yml`, runs `uv lock --upgrade-package nominal-sphinx-theme`. If that changes `uv.lock`,
+NomBot opens one PR, `chore(deps): bump nominal-sphinx-theme to <sha>`, from the branch
+`chore/bump-nominal-sphinx-theme`, or updates the one already open. The PR merges itself once the
+repo's required checks pass.
 
-on:
-  schedule:
-    - cron: "0 6 * * *" # daily, 06:00 UTC
-  workflow_dispatch:
-
-jobs:
-  bump:
-    uses: nominal-io/nominal-sphinx-theme/.github/workflows/bump-theme.yml@<commit> # main, <date>
-    # with:
-    #   uv-version: "0.8.x"   # the repo's own uv, so uv.lock's format doesn't drift
-    #   auto-merge: false     # leave the PR for a person
-    secrets:
-      NOMBOT_APP_ID: ${{ secrets.NOMBOT_APP_ID }}
-      NOMBOT_PRIVATE_KEY: ${{ secrets.NOMBOT_PRIVATE_KEY }}
-```
-
-- Pin `uses:` to a commit of this repo, as for any action. The bump still takes the theme's newest
-  commit; the pin only fixes which version of the workflow runs with the repo's NomBot secrets.
-- Pass the two NomBot secrets, not `secrets: inherit`, which hands every secret in the repo to
-  this repo's workflow. Semgrep blocks `secrets: inherit`.
-
-Then add the repo to `REPOS` in [`bump-all.yml`](.github/workflows/bump-all.yml).
-
-The repo needs:
-
-- the NomBot App installed, and its `NOMBOT_APP_ID` and `NOMBOT_PRIVATE_KEY` secrets
-- "Allow auto-merge" turned on, and a ruleset on the default branch that requires its docs checks.
-  Without required checks, the workflow doesn't turn on auto-merge, which would merge the PR at once,
-  and the PR waits for a person.
+- **NomBot:** the workflow mints a NomBot App token. A PR opened with `GITHUB_TOKEN` wouldn't run the
+  repo's other workflows, so its docs wouldn't be checked.
+- **Auto-merge:** turned on only when the default branch has required checks. With none,
+  `gh pr merge --auto` would merge the PR at once, so the workflow leaves it for a person instead.
+- **uv:** the bump locks with the newest uv, unless the caller passes `uv-version`. A new uv can move
+  `uv.lock` to a new revision, a one-line change.
 
 To bump a repo now, open its **Actions** tab, pick **Bump nominal-sphinx-theme** and click **Run
-workflow**. To bump every repo, do the same here with **Bump the theme in every repo**.
+workflow**. To bump every repo, do the same here with **Bump the theme in every repo**. It runs
+`bump-theme.yml` in each repo listed in `REPOS`, with a NomBot token that has `actions:write`. Its
+trigger on push to `main` is there, commented out.
+
+### Docs gate
+
+A bump PR shouldn't merge if the docs don't build, but requiring the docs build on `main` would
+block every PR whenever the docs break. So each repo requires `docs-gate / gate` instead. On a bump
+PR, the gate fails unless the docs build succeeded. On any other PR, it passes, whatever the docs
+build did.
+
+The gate is a job in the same workflow as the docs build, since it needs that job's result. If the
+docs workflow runs only for some paths, the gate doesn't run on other PRs, and a required check that
+doesn't run blocks the PR. Drop the path filter from `pull_request` first.
+
+### Adding a repo
+
+1. Copy this to `.github/workflows/bump-theme.yml`:
+
+   ```yaml
+   name: Bump nominal-sphinx-theme
+
+   on:
+     schedule:
+       - cron: "0 6 * * *" # daily, 06:00 UTC
+     workflow_dispatch:
+
+   permissions:
+     contents: read
+
+   jobs:
+     bump:
+       uses: nominal-io/nominal-sphinx-theme/.github/workflows/bump-theme.yml@<commit> # main, <date>
+       # with:
+       #   uv-version: "0.13.x"  # lock with this uv instead of the newest
+       #   auto-merge: false     # leave every PR for a person
+       secrets:
+         NOMBOT_APP_ID: ${{ secrets.NOMBOT_APP_ID }}
+         NOMBOT_PRIVATE_KEY: ${{ secrets.NOMBOT_PRIVATE_KEY }}
+   ```
+
+2. Add the gate to the workflow that builds the docs on PRs, naming its docs job in `needs` and
+   `docs-result`:
+
+   ```yaml
+     docs-gate:
+       needs: build-docs
+       if: always()
+       uses: nominal-io/nominal-sphinx-theme/.github/workflows/docs-gate.yml@<commit> # main, <date>
+       with:
+         docs-result: ${{ needs.build-docs.result }}
+   ```
+
+3. In the repo's settings, turn on **Allow auto-merge**. Under **Rules → Rulesets**, require the
+   status check `docs-gate / gate` on the default branch.
+4. Check that the NomBot App is installed there and that the `NOMBOT_APP_ID` and
+   `NOMBOT_PRIVATE_KEY` org secrets reach the repo.
+5. Add the repo to `REPOS` in `bump-all.yml`.
+
+- **Pins:** pin `uses:` to a commit of this repo, as for any action. This repo has no releases, so
+  the comment is `# main, <date>`, and Dependabot can't move it. When `bump-theme.yml` or
+  `docs-gate.yml` changes here, move each repo's pin by hand. The bump itself always takes the
+  theme's newest commit.
+- **Secrets:** pass the two NomBot secrets, not `secrets: inherit`, which hands every secret in the
+  repo to this repo's workflow. Semgrep blocks `secrets: inherit`.
+- **Permissions:** a called workflow can't have more `GITHUB_TOKEN` permissions than its caller.
+  `bump-theme.yml` asks for `contents: read`, and `docs-gate.yml` for none.
 
 ## Docs skill for AI agents
 

@@ -28,6 +28,7 @@ jobs:
   bump:
     runs-on: ubuntu-latest
     env:
+      # docs-gate.yml recognizes bump PRs by this branch
       BRANCH: chore/bump-nominal-sphinx-theme
     steps:
       # PRs opened with GITHUB_TOKEN don't run the caller's workflows, so its docs checks wouldn't run

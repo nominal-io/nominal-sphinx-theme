@@ -1,0 +1,31 @@
+name: Docs gate
+
+# Reusable: the check a repo's ruleset requires in place of its docs build. A theme bump PR needs
+# a passing docs build; every other PR passes, whatever the docs build did. See "CI" in the README.
+
+on:
+  workflow_call:
+    inputs:
+      docs-result:
+        description: The docs job's result in the calling workflow, `needs.<job>.result`.
+        type: string
+        required: true
+
+permissions: {}
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: A bump PR needs a passing docs build
+        env:
+          # bump-theme.yml's branch
+          BUMP_BRANCH: chore/bump-nominal-sphinx-theme
+          HEAD_REF: ${{ github.head_ref }}
+          RESULT: ${{ inputs.docs-result }}
+        run: |
+          if [ "$HEAD_REF" = "$BUMP_BRANCH" ] && [ "$RESULT" != "success" ]; then
+            echo "::error::The docs build's result is $RESULT, so this theme bump can't merge"
+            exit 1
+          fi
+          echo "Docs build: $RESULT"
