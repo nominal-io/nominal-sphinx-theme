@@ -69,8 +69,8 @@ def theme_options(*, github_url: str | None = None, **overrides: Any) -> dict[st
     """Shibuya options for a Nominal docs site; keyword arguments override the defaults."""
     options: dict[str, Any] = {
         "accent_color": "gray",
-        # dark, like the landing page, unless the visitor picks light with the theme switch
-        "color_mode": "dark",
+        # follows the visitor's system setting, unless they pick light or dark with the theme switch
+        "color_mode": "auto",
         "x_url": "https://x.com/nominal_io",
         "linkedin_url": "https://www.linkedin.com/company/nominal-inc/",
         # header icons before the buttons; a project lists its own (Shibuya's nav_socials format)
