@@ -748,3 +748,9 @@ div.cell > div.cell_input {
   margin-top: 0.5rem;
   font-size: 0.75rem;
 }
+
+/* Shibuya inverts Mermaid diagrams in dark mode, but sphinxcontrib-mermaid already draws them with
+   Mermaid's dark theme there, so the inversion only muddies their colors. */
+html.dark pre.mermaid > svg {
+  filter: none;
+}

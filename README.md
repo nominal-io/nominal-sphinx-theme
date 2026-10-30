@@ -146,6 +146,28 @@ Clicking the `#` after a heading copies a link to that section, as well as going
 "Copied" shows beside it for a moment. Copying needs a secure page (https, or localhost when
 previewing); elsewhere the `#` is a plain link.
 
+## Mermaid diagrams
+
+With [sphinxcontrib-mermaid](https://github.com/mgaitan/sphinxcontrib-mermaid) in `extensions`, a
+diagram can set its options in Mermaid's own front matter, as VS Code's preview and GitHub read it:
+
+````markdown
+```mermaid
+---
+config:
+  layout: elk
+name: stack-diagram
+---
+flowchart TB
+```
+````
+
+`config` and `title` become the directive's options, and `name` the diagram's HTML id, for a
+stylesheet to style one diagram. For ```` ```mermaid ```` fences, set
+`myst_fence_as_directive = ["mermaid"]`.
+
+In dark mode, diagrams keep the colors of Mermaid's dark theme; Shibuya would otherwise invert them.
+
 ## Shared snippets
 
 Snippets are MyST fragments in `src/nominal_sphinx_theme/snippets/` that any project using the theme can include, for content many projects repeat. A MyST page

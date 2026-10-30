@@ -12,8 +12,8 @@ dependencies = [
 ]
 
 [dependency-groups]
-# sphinx-design: the shipped snippets' tabs and dropdowns
-dev = ["pytest", "sphinx-design"]
+# sphinx-design: the shipped snippets' tabs and dropdowns; sphinxcontrib-mermaid: tests/test_mermaid.py
+dev = ["pytest", "sphinx-design", "sphinxcontrib-mermaid"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
