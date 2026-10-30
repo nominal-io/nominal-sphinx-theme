@@ -6,11 +6,15 @@ nominal-io/dev.nominal.io. That file is the list of these repos. Read it there r
 
 ## Publishing
 
-- The hub serves the repo's docs at `/{lang}/{project}/`, set in `sites.toml`, not by the repo's name.
+- The hub serves the repo's docs at `/{project}/`, set in `sites.toml`, not by the repo's name.
+- Adding a repo takes a `[[project]]` in `sites.toml` and a place in its `[groups]`, the headings of
+  the hub's `llms.txt`. The hub's build fails on a project without a group.
 - It pulls the latest docs build from the repo's default branch on each of its runs. A merged change
   shows on the hub after its next run.
-- Keep links relative, as Sphinx writes them, so they work under `/{lang}/{project}/` and in the
-  hub's offline copy.
+- Keep links within the docs relative, as Sphinx writes them, so they work under `/{project}/` and
+  in the hub's offline copy.
+- Link to another project's pages by its `/{project}/` URL. The older `/{lang}/{project}/` URLs only
+  redirect.
 
 ## Theme or repo
 
