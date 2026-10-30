@@ -78,6 +78,13 @@ html_theme_options = theme_options(
 The footer's icons are Shibuya's `foot_socials`: by default, every `<name>_url` that is set (here
 GitHub, Discord, and the X and LinkedIn links `theme_options` sets).
 
+## Footer
+
+Below the copyright and icons, the footer shows the theme commit that built the page, abbreviated and
+linked to it on GitHub. The full commit is in the stamp's `data-commit` attribute
+(`<p class="nominal-theme-commit" data-commit="<sha>">`), for scripts. It's the commit a git install of
+the theme recorded, or a local checkout's `HEAD`. Without either, the footer has no stamp.
+
 ## Tabs
 
 Each `nav_links` entry that points at a page in a folder, e.g.
