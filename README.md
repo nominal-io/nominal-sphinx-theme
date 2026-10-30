@@ -32,6 +32,25 @@ html_theme_options = theme_options(
 
 Any other keyword to `theme_options` is passed through as a Shibuya option.
 
+## What goes in the theme
+
+The theme holds what every repo using it shares, so a repo gets a change by bumping its pin:
+
+- the look: the header, logo, palette, fonts, code highlighting and API page styling
+- fixes to Shibuya and to the extensions repos share, such as MyST, sphinx-design and
+  sphinxcontrib-mermaid
+- directives more than one repo uses, such as `{nominal-snippet}`
+- default Sphinx and MyST settings, which a repo's `conf.py` can override
+
+A repo keeps what only its own docs need: its pages, its logo, and styles and extensions for one
+page or project. What exists only because of the docs hub, such as its landing page and the links
+between its projects, stays in [dev.nominal.io](https://github.com/nominal-io/dev.nominal.io)
+(its README, "Theme or hub"). The theme knows the hub only by its URLs, `nominal_hub_url` and
+`nominal_docs_url`.
+
+When a second repo needs something one repo has, move it here rather than copy it. Don't override
+the theme's templates or restyle its header in a repo; change them here.
+
 ## Config
 
 | Setting                   | Default | Effect                                                                 |
@@ -271,4 +290,5 @@ To use it in a repo, add this to the repo's `.claude/settings.json`:
 ```
 
 - Repo-specific details (docs folders, build commands, layout) go in that repo's own docs skill or `AGENTS.md`.
+- [`hub.md`](skills/nominal-docs/hub.md) is for repos whose docs dev.nominal.io publishes: where things go, and how theme updates reach them. It names `sites.toml` in dev.nominal.io as the list of those repos rather than copying it.
 - The Style section and the docstring files are written by people. Change them through a PR here.

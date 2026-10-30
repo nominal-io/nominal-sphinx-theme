@@ -7,6 +7,7 @@ description: Nominal's shared rules for writing docs and docstrings. Use when wr
 
 - These are shared rules for all Nominal developer-facing docs.
 - Each repo's `README.md` or `AGENTS.md` gives its folders, build commands and layout. Read it too.
+- Docs published on dev.nominal.io, the docs hub: read [hub.md](hub.md).
 - Docstrings: read the file for the language.
   - Python: [python.md](python.md)
 
