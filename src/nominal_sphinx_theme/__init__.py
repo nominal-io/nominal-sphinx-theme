@@ -169,11 +169,15 @@ def _on_page(
     app: Sphinx, pagename: str, templatename: str, context: dict[str, Any], doctree: Any
 ) -> None:
     target = app.builder.get_target_uri(pagename)
-    # the docs hub's home page, one above this project's home at /{project}/
-    context["nominal_hub_url"] = (
-        app.config.nominal_hub_url or relative_uri(target, "") + "../"
+    # the docs hub's home page, nominal_hub_depth folders above this project's home (one, from
+    # /{project}/)
+    context["nominal_hub_url"] = app.config.nominal_hub_url or (
+        relative_uri(target, "") + "../" * app.config.nominal_hub_depth or "./"
     )
     context["nominal_docs_url"] = app.config.nominal_docs_url
+    context["nominal_header_project"] = app.config.nominal_header_project
+    context["nominal_header_search"] = app.config.nominal_header_search
+    context["nominal_header_buttons"] = app.config.nominal_header_buttons
     # stamped in the footer (partials/site-foot.html)
     context["nominal_theme_commit"] = theme_commit()
 
@@ -339,6 +343,16 @@ def setup(app: Sphinx) -> dict[str, Any]:
     # the docs hub's home page, where DEVELOPERS in the header's logo leads; None: the hub's home page,
     # relative to the project
     app.add_config_value("nominal_hub_url", None, "html", types=[str, type(None)])
+    # how many folders the hub's home page is above the project's home, when nominal_hub_url is None:
+    # 1 for a project at /{project}/, 0 for the hub's own home page
+    app.add_config_value("nominal_hub_depth", 1, "html", types=[int])
+    # the header: the project's logo or name after the Nominal logo, the search, and which buttons
+    # it shows (named in templates/partials/nav-socials.html)
+    app.add_config_value("nominal_header_project", True, "html", types=[bool])
+    app.add_config_value("nominal_header_search", True, "html", types=[bool])
+    app.add_config_value(
+        "nominal_header_buttons", ["product-guides", "request-demo", "open-app"], "html", types=[list]
+    )
     # Nominal's docs, where DOCS in the header's logo leads, in a new tab
     app.add_config_value(
         "nominal_docs_url", "https://dev.nominal.io/", "html", types=[str]
