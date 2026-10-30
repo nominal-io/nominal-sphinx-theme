@@ -16,18 +16,10 @@ jobs:
   dispatch:
     runs-on: ubuntu-latest
     env:
-      # the repos with a bump-theme.yml caller
-      REPOS: >-
-        dev.nominal.io
-        panominal
-        instro
-        nominal-client
-        matlab-client-rs
-        nominal-simulink
-        ni-teststand-nominal-client
-        ni-flexlogger-streaming-plugin
-        ni-veristand-custom-device-nominal
-        labview-client
+      # repos that use the theme but aren't in dev.nominal.io's sites.toml; the rest are read from there
+      EXTRA_REPOS: >-
+        nominal-io/dev.nominal.io
+        nominal-io/panominal
     steps:
       - name: Get a NomBot token
         id: app-token
@@ -36,19 +28,31 @@ jobs:
           application_id: ${{ secrets.NOMBOT_APP_ID }}
           application_private_key: ${{ secrets.NOMBOT_PRIVATE_KEY }}
           organization: "nominal-io"
-          # contents:read, for gh to find each repo's default branch
+          # contents:read, for the hub's sites.toml and for gh to find each repo's default branch
           permissions: "actions:write, contents:read"
           revoke_token: true
-      - name: Run each repo's bump
+      - name: List the repos
+        id: repos
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
+          # every [[project]] the docs hub pulls in, from its main branch
+          gh api repos/nominal-io/dev.nominal.io/contents/sites.toml -H "Accept: application/vnd.github.raw" > "$RUNNER_TEMP/sites.toml"
+          hub=$(python3 -c 'import sys, tomllib; print(" ".join(p["repo"] for p in tomllib.load(open(sys.argv[1], "rb")).get("project", [])))' "$RUNNER_TEMP/sites.toml")
+          repos=$(printf '%s\n' $EXTRA_REPOS $hub | sort -u | tr '\n' ' ')
+          echo "Repos: $repos"
+          echo "repos=$repos" >> "$GITHUB_OUTPUT"
+      - name: Run each repo's bump
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          REPOS: ${{ steps.repos.outputs.repos }}
+        run: |
           failed=0
           for repo in $REPOS; do
-            if gh workflow run bump-theme.yml -R "nominal-io/$repo"; then
-              echo "nominal-io/$repo: started"
+            if gh workflow run bump-theme.yml -R "$repo"; then
+              echo "$repo: started"
             else
-              echo "::error::nominal-io/$repo: couldn't start bump-theme.yml. Does it have the caller, and is NomBot installed there?"
+              echo "::error::$repo: couldn't start bump-theme.yml. Does it have the caller, and is NomBot installed there?"
               failed=1
             fi
           done

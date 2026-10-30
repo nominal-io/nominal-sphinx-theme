@@ -188,8 +188,11 @@ repo's required checks pass.
 
 To bump a repo now, open its **Actions** tab, pick **Bump nominal-sphinx-theme** and click **Run
 workflow**. To bump every repo, do the same here with **Bump the theme in every repo**. It runs
-`bump-theme.yml` in each repo listed in `REPOS`, with a NomBot token that has `actions:write`. Its
-trigger on push to `main` is there, commented out.
+`bump-theme.yml`, with a NomBot token that has `actions:write`, in each repo whose docs
+dev.nominal.io publishes, read from its
+[`sites.toml`](https://github.com/nominal-io/dev.nominal.io/blob/main/sites.toml) on each run, and
+in the repos in `EXTRA_REPOS`, which use the theme outside the hub. Its trigger on push to `main`
+is there, commented out.
 
 ### Docs gate
 
@@ -244,7 +247,8 @@ doesn't run blocks the PR. Drop the path filter from `pull_request` first.
    status check `docs-gate / gate` on the default branch.
 4. Check that the NomBot App is installed there and that the `NOMBOT_APP_ID` and
    `NOMBOT_PRIVATE_KEY` org secrets reach the repo.
-5. Add the repo to `REPOS` in `bump-all.yml`.
+5. If dev.nominal.io doesn't publish the repo's docs, add it to `EXTRA_REPOS` in `bump-all.yml`.
+   A repo in the hub's `sites.toml` is already included.
 
 - **Pins:** pin `uses:` to a commit of this repo, as for any action. This repo has no releases, so
   the comment is `# main, <date>`, and Dependabot can't move it. When `bump-theme.yml` or
