@@ -93,6 +93,8 @@ def _on_config_inited(app: Sphinx, config: Config) -> None:
     config.templates_path.append(str(HERE / "templates"))
     if not config.html_favicon:
         config.html_favicon = str(HERE / "static" / "favicon.svg")
+    if "sphinxcontrib.mermaid" in config.extensions:
+        app.setup_extension("nominal_sphinx_theme.mermaid_frontmatter")
     ctx = config.html_context
     if ctx.get("source_type") == "github" and ctx.get("source_user") and ctx.get("source_repo"):
         # Shibuya's defaults; its own link opens the file view, not the editor
