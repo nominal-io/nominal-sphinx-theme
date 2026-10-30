@@ -146,9 +146,9 @@ def _on_page(
     app: Sphinx, pagename: str, templatename: str, context: dict[str, Any], doctree: Any
 ) -> None:
     target = app.builder.get_target_uri(pagename)
-    # the docs hub's home page, two above this project's home at /{lang}/{project}/
+    # the docs hub's home page, one above this project's home at /{project}/
     context["nominal_hub_url"] = (
-        app.config.nominal_hub_url or relative_uri(target, "") + "../../"
+        app.config.nominal_hub_url or relative_uri(target, "") + "../"
     )
     context["nominal_docs_url"] = app.config.nominal_docs_url
     # stamped in the footer (partials/site-foot.html)
