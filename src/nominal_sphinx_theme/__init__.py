@@ -110,7 +110,28 @@ def theme_commit() -> str | None:
     return out.stdout.strip() or None
 
 
+# settings every repo using the theme had in its conf.py; each applies only when the project doesn't
+# set it, and the MyST ones only with MyST
+DEFAULTS: dict[str, Any] = {
+    "html_copy_source": False,
+    "myst_enable_extensions": ["colon_fence", "deflist", "attrs_inline", "attrs_block", "fieldlist"],
+    "myst_heading_anchors": 6,
+    "myst_links_external_new_tab": True,
+}
+
+
+def _set_defaults(config: Config) -> None:
+    # _raw_config holds what conf.py set, and _overrides what -D set; Sphinx keeps no other record
+    # of a setting's source. MyST reads its settings at builder-inited, after this.
+    for name, value in DEFAULTS.items():
+        if name in config and name not in config._raw_config and name not in config._overrides:
+            setattr(config, name, list(value) if isinstance(value, list) else value)
+    if "html_title" not in config._raw_config and "html_title" not in config._overrides:
+        config.html_title = config.project
+
+
 def _on_config_inited(app: Sphinx, config: Config) -> None:
+    _set_defaults(config)
     # appended, so a project's own _static and _templates win over the theme's
     config.html_static_path.append(str(HERE / "static"))
     config.templates_path.append(str(HERE / "templates"))
