@@ -32,9 +32,9 @@ def test_docs_opens_nominal_docs_in_a_new_tab_and_developers_the_hub(tmp_path):
     out = build(tmp_path)
     assert links(out / "index.html") == {
         "docs": ("https://dev.nominal.io/", ' target="_blank" rel="noopener noreferrer"'),
-        "developer docs": ("../../", ""),
+        "developer docs": ("../", ""),
     }
-    assert links(out / "guide" / "index.html")["developer docs"] == ("../../../", "")
+    assert links(out / "guide" / "index.html")["developer docs"] == ("../../", "")
 
 
 def test_the_links_can_be_set(tmp_path):
