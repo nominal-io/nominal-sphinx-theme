@@ -1,10 +1,16 @@
-{#- The project's social icons (nav_socials; none by default), then the landing page's header buttons; the lock on
+{#- The project's social icons (nav_socials; none by default), then the header's buttons that nominal_header_buttons names; the lock on
     Product Guides marks that it needs a sign-in. -#}
 {%- if theme_nav_socials -%}
 <div class="sy-head-socials">
   {%- include "components/nav-socials.html" -%}
 </div>
 {%- endif -%}
+{%- if "product-guides" in nominal_header_buttons %}
 <a class="nominal-btn" href="https://docs.nominal.io/"><svg class="nominal-btn-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Product Guides</a>
+{%- endif %}
+{%- if "request-demo" in nominal_header_buttons %}
 <a class="nominal-btn" href="https://nominal.io/request-demo">Request a demo</a>
+{%- endif %}
+{%- if "open-app" in nominal_header_buttons %}
 <a class="nominal-btn nominal-btn-filled" href="https://app.gov.nominal.io/home">Open app</a>
+{%- endif %}

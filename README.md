@@ -38,6 +38,10 @@ Any other keyword to `theme_options` is passed through as a Shibuya option.
 | ------------------------- | ------- | ---------------------------------------------------------------------- |
 | `nominal_hub_url`         | `None`  | The docs hub's home page, where DEVELOPERS in the logo links. `None` = the docs hub's home page, two levels up. Set to `"https://dev.nominal.io/"` for standalone sites. |
 | `nominal_docs_url`        | `"https://dev.nominal.io/"`  | Where DOCS in the logo links, in a new tab.               |
+| `nominal_hub_depth`       | `2`     | How many folders the hub's home page is above the project's home, when `nominal_hub_url` is `None`. `0` for the hub's own home page. |
+| `nominal_header_project`  | `True`  | The project's logo or name after the Nominal logo. |
+| `nominal_header_search`   | `True`  | The search box in the header. |
+| `nominal_header_buttons`  | `["product-guides", "request-demo", "open-app"]` | The header's buttons to show. |
 | `nominal_section_sidebar` | `True`  | Sidebar shows only the current tab's captioned toctrees.               |
 | `nominal_sidebar_open`    | `None`  | Sidebar groups fold under their captions. See [Folding sidebar groups](#folding-sidebar-groups). |
 | `nominal_ga_id`           | `None`  | Google Analytics measurement ID.                                       |

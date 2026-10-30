@@ -23,12 +23,15 @@
       </a>
       {{ docs_path(nominal_docs_url, nominal_hub_url) }}
     </div>
+    {#- pub-docs: the project's logo or name, unless nominal_header_project is False -#}
+    {%- if nominal_header_project %}
     <span class="nominal-hub-divider" aria-hidden="true">/</span>
     <a class="sy-head-brand" href="{% if theme_logo_target %}{{ theme_logo_target }}{% else %}{{ pathto(root_doc) }}{% endif %}">
       {{ render_logo(theme_light_logo, 'light-logo') }}
       {{ render_logo(theme_dark_logo, 'dark-logo') }}
       <strong>{{ project }}</strong>
     </a>
+    {%- endif %}
     {#- pub-docs: a divider between the logos and the tabs -#}
     {%- if theme_nav_links %}
     <span class="nominal-hub-divider nominal-tabs-divider" aria-hidden="true">/</span>
@@ -40,7 +43,9 @@
         {%- endif -%}
       </nav>
       <div class="sy-head-extra flex items-center print:hidden">
+        {%- if nominal_header_search -%}
         {%- include "components/searchbox.html" -%}
+        {%- endif -%}
         {#- pub-docs: kept together, so the search can move to the tabs' row (nominal.css) -#}
         <div class="nominal-head-buttons flex items-center">
           {%- include "components/nav-versions.html" -%}
