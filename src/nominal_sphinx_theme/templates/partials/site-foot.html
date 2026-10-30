@@ -1,0 +1,15 @@
+{#- Shibuya's partials/site-foot.html, with the theme's commit below: abbreviated, linked to the commit,
+    and in full in data-commit for scripts that read it, such as the docs hub's manifest -#}
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      {% include "components/foot-copyright.html" %}
+      {% include "partials/foot-socials.html" %}
+    </div>
+    {%- if nominal_theme_commit %}
+    <p class="nominal-theme-commit" data-commit="{{ nominal_theme_commit }}">
+      Theme <a href="https://github.com/nominal-io/nominal-sphinx-theme/commit/{{ nominal_theme_commit }}"><code>{{ nominal_theme_commit[:7] }}</code></a>
+    </p>
+    {%- endif %}
+  </div>
+</footer>

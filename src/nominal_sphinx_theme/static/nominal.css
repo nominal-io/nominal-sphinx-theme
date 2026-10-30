@@ -742,3 +742,9 @@ div.cell > div.cell_input {
   border-radius: var(--radius);
   background: none;
 }
+
+/* the theme's commit, below the footer's copyright and icons (partials/site-foot.html) */
+.nominal-theme-commit {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+}
