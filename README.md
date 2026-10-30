@@ -44,6 +44,22 @@ Any other keyword to `theme_options` is passed through as a Shibuya option.
 
 A project's own `_static` and `_templates` override the theme's files of the same name.
 
+### Defaults
+
+The theme sets these Sphinx and MyST settings, which every repo using it had in its `conf.py`. A
+setting in `conf.py`, or on the command line with `-D`, wins. The MyST ones apply only with
+`myst_parser` in `extensions`.
+
+| Setting | Default |
+| --- | --- |
+| `html_title` | `project` |
+| `html_copy_source` | `False` |
+| `myst_enable_extensions` | `["colon_fence", "deflist", "attrs_inline", "attrs_block", "fieldlist"]` |
+| `myst_heading_anchors` | `6` |
+| `myst_links_external_new_tab` | `True`: Markdown links to other sites open in a new tab |
+
+`html_theme = "shibuya"` and the `extensions` list stay in `conf.py`.
+
 ## Header
 
 The header shows the Nominal logo, which reads like a path, NOMINAL / DOCS / DEVELOPERS, then `/` and
