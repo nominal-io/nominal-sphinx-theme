@@ -3,62 +3,8 @@
 
 There is a one-time setup of API-keys required to use   Nominal clients. There are 2 steps: 
 
-## 1. Create the config file. 
-
-::::{tab-set}
-:sync-group: os
-
-:::{tab-item} Windows
-:sync: windows
-
-Save it as `%USERPROFILE%\.config\nominal\config.yml`:
-
-```yaml
-version: 2
-profiles:
-  default:
-    token: API_KEY
-    base_url: BASE_URL
-    workspace_rid: WORKSPACE_RID
-```
-:::
-
-:::{tab-item} Linux
-:sync: linux
-
-Save it as `~/.config/nominal/config.yml`:
-
-```yaml
-version: 2
-profiles:
-  default:
-    token: API_KEY
-    base_url: BASE_URL
-    workspace_rid: WORKSPACE_RID
-```
-:::
-
-:::{tab-item} macOS
-:sync: macos
-
-Save it as `~/.config/nominal/config.yml`:
-
-```yaml
-version: 2
-profiles:
-  default:
-    token: API_KEY
-    base_url: BASE_URL
-    workspace_rid: WORKSPACE_RID
-```
-:::
-::::
-
-
-
-The file holds your API key in plain text, so keep it out of version control and shared folders!
-## 2. Fill in your  KEYS
-Next, visit your [API keys](https://app.gov.nominal.io/settings/org/api-keys) page in the cloud Nominal app, and copy three values to store in your config file.   
+## 1. Copy your keys
+Visit your [API keys](https://app.gov.nominal.io/settings/org/api-keys) page in the cloud Nominal app, and copy three values.   
 
 
 ```{image} api-keys.png
@@ -74,16 +20,7 @@ There are 3 values:
 1. **Base URL:** Find **API URL** and click **COPY URL**.
 1. **Workspace RID:** Find your workspace and click **COPY RID**.
 
-
-## Details
-:::{dropdown} Profiles
- Each key under `profiles` (`default` in the template above) is a profile name, and you can add more profiles to connect to other workspaces or instances.
-:::
-
- 
-
-
-:::::{dropdown} Store credentials with command line tools
+## 2. Store them with a command line tool
 Nominal provides two command line tools, a [Rust-based](https://github.com/nominal-io/nominal-client-rs#nomctl-cli) one, `nomctl`, and a [Python-based](https://github.com/nominal-io/nominal-client#-install) one. Use `nomctl` unless you already use the Python client or IT restrictions make the Python CLI easier to install.
 
 **Rust: nomctl**
@@ -186,4 +123,63 @@ python3 -m nominal.cli config profile list
 ```
 :::
 ::::
+
+The credential file holds your API key in plain text, so keep it out of version control and shared folders!
+
+## Details
+:::::{dropdown} Create the config file by hand
+Instead of using a command line tool, you can save the file yourself, with the three values from step 1:
+
+::::{tab-set}
+:sync-group: os
+
+:::{tab-item} Windows
+:sync: windows
+
+Save it as `%USERPROFILE%\.config\nominal\config.yml`:
+
+```yaml
+version: 2
+profiles:
+  default:
+    token: API_KEY
+    base_url: BASE_URL
+    workspace_rid: WORKSPACE_RID
+```
+:::
+
+:::{tab-item} Linux
+:sync: linux
+
+Save it as `~/.config/nominal/config.yml`:
+
+```yaml
+version: 2
+profiles:
+  default:
+    token: API_KEY
+    base_url: BASE_URL
+    workspace_rid: WORKSPACE_RID
+```
+:::
+
+:::{tab-item} macOS
+:sync: macos
+
+Save it as `~/.config/nominal/config.yml`:
+
+```yaml
+version: 2
+profiles:
+  default:
+    token: API_KEY
+    base_url: BASE_URL
+    workspace_rid: WORKSPACE_RID
+```
+:::
+::::
 :::::
+
+:::{dropdown} Profiles
+ Each key under `profiles` (`default` in the template above) is a profile name, and you can add more profiles to connect to other workspaces or instances.
+:::
