@@ -33,9 +33,13 @@ Edit links: with Shibuya's ``source_*`` keys in ``html_context`` (``source_type 
 ``source_edit_template`` in ``html_context``.
 """
 
+import functools
 import html
+import json
 import posixpath
 import re
+import subprocess
+from importlib import metadata
 from pathlib import Path
 from typing import Any
 
@@ -85,6 +89,25 @@ def theme_options(*, github_url: str | None = None, **overrides: Any) -> dict[st
         options["github_url"] = github_url
     options.update(overrides)
     return options
+
+
+@functools.cache
+def theme_commit() -> str | None:
+    """The theme's git commit: the one a git install recorded, or a local checkout's HEAD."""
+    try:
+        direct_url = metadata.distribution("nominal-sphinx-theme").read_text("direct_url.json")
+        commit = json.loads(direct_url or "{}").get("vcs_info", {}).get("commit_id")
+    except (metadata.PackageNotFoundError, json.JSONDecodeError):
+        commit = None
+    if commit:
+        return commit
+    try:
+        out = subprocess.run(
+            ["git", "rev-parse", "HEAD"], cwd=HERE, capture_output=True, text=True, check=True
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    return out.stdout.strip() or None
 
 
 # settings every repo using the theme had in its conf.py; each applies only when the project doesn't
@@ -144,11 +167,13 @@ def _on_page(
     app: Sphinx, pagename: str, templatename: str, context: dict[str, Any], doctree: Any
 ) -> None:
     target = app.builder.get_target_uri(pagename)
-    # the docs hub's home page, two above this project's home at /{lang}/{project}/
+    # the docs hub's home page, one above this project's home at /{project}/
     context["nominal_hub_url"] = (
-        app.config.nominal_hub_url or relative_uri(target, "") + "../../"
+        app.config.nominal_hub_url or relative_uri(target, "") + "../"
     )
     context["nominal_docs_url"] = app.config.nominal_docs_url
+    # stamped in the footer (partials/site-foot.html)
+    context["nominal_theme_commit"] = theme_commit()
 
     tabs = _tabs(app)
     current = _section(pagename, list(tabs))

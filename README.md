@@ -36,7 +36,7 @@ Any other keyword to `theme_options` is passed through as a Shibuya option.
 
 | Setting                   | Default | Effect                                                                 |
 | ------------------------- | ------- | ---------------------------------------------------------------------- |
-| `nominal_hub_url`         | `None`  | The docs hub's home page, where DEVELOPERS in the logo links. `None` = the docs hub's home page, two levels up. Set to `"https://dev.nominal.io/"` for standalone sites. |
+| `nominal_hub_url`         | `None`  | The docs hub's home page, where DEVELOPERS in the logo links. `None` = the docs hub's home page, one level up. Set to `"https://dev.nominal.io/"` for standalone sites. |
 | `nominal_docs_url`        | `"https://dev.nominal.io/"`  | Where DOCS in the logo links, in a new tab.               |
 | `nominal_section_sidebar` | `True`  | Sidebar shows only the current tab's captioned toctrees.               |
 | `nominal_sidebar_open`    | `None`  | Sidebar groups fold under their captions. See [Folding sidebar groups](#folding-sidebar-groups). |
@@ -65,7 +65,7 @@ setting in `conf.py`, or on the command line with `-D`, wins. The MyST ones appl
 The header shows the Nominal logo, which reads like a path, NOMINAL / DOCS / DEVELOPERS, then `/` and
 the project's logo (or its name, without one). NOMINAL links to nominal.io, DOCS to Nominal's docs
 (`nominal_docs_url`) in a new tab, and DEVELOPERS to the docs hub's home page. That link is relative
-(the hub's root, two above a project's home at `/{lang}/{project}/`), so it works on the hub and in its
+(the hub's root, one above a project's home at `/{project}/`), so it works on the hub and in its
 offline copies. A site published on its own, outside the hub, sets `nominal_hub_url` instead.
 
 On wide screens with tabs, the search sits at the right of the tabs' row, under the buttons.
@@ -93,6 +93,13 @@ html_theme_options = theme_options(
 
 The footer's icons are Shibuya's `foot_socials`: by default, every `<name>_url` that is set (here
 GitHub, Discord, and the X and LinkedIn links `theme_options` sets).
+
+## Footer
+
+Below the copyright and icons, the footer shows the theme commit that built the page, abbreviated and
+linked to it on GitHub. The full commit is in the stamp's `data-commit` attribute
+(`<p class="nominal-theme-commit" data-commit="<sha>">`), for scripts. It's the commit a git install of
+the theme recorded, or a local checkout's `HEAD`. Without either, the footer has no stamp.
 
 ## Tabs
 
