@@ -156,6 +156,7 @@ Most repos split docs into three types. Folders and names differ per project.
 - Product: "Nominal" or "the Nominal platform", not "Nominal Core".
 - "Nominal for Developers" is only the client-access product without the UI. Use "Nominal" for anything the whole platform does.
 - Don't use "load bearing" unless the topic is physical loads.
+- "Real-time" only for deterministic control, with guaranteed timing. For data shown with low latency but no guaranteed timing, say "live".
 
 ### Files
 
