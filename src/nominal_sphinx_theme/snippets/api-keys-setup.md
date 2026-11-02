@@ -182,4 +182,6 @@ profiles:
 
 :::{dropdown} Profiles
  Each key under `profiles` (`default` in the template above) is a profile name, and you can add more profiles to connect to other workspaces or instances.
+
+Create one profile for each workspace, each with its own name. Profiles in the same organization can usually share an API key.
 :::
