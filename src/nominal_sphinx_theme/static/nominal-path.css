@@ -1,12 +1,12 @@
-/* The words after the Nominal logo (templates/nominal/path.html), on the docs and the hub's landing pages
-   alike: NOMINAL / DOCS / DEVELOPERS, each word a link of its own. The words are set like the logo's:
-   the mono font at the cap height of the 18px logo. Each page sets the --nominal-path-* colours from its
-   palette; the defaults are the landing page's dark ones. */
+/* The word after the Nominal logo (templates/nominal/path.html), on the docs and the hub's landing pages
+   alike: NOMINAL / DOCS, each word a link of its own. The word is set like the logo's: the mono font at
+   the cap height of the 22px logo. Each page sets the --nominal-path-* colours from its palette; the
+   defaults are the landing page's dark ones. */
 .nominal-path {
   display: flex;
   align-items: center;
   font-family: var(--nominal-path-font, "JetBrains Mono", ui-monospace, monospace);
-  font-size: 21.68px;
+  font-size: 26.5px;
   font-weight: 400;
   line-height: 1;
   text-transform: uppercase;
@@ -24,7 +24,7 @@
 .nominal-path-sep {
   margin: 0 0.4rem;
   color: #7a7a7a;
-  font-size: 1.25rem;
+  font-size: 1.53rem;
   font-weight: 300;
 }
 /* On narrow screens the logo is NOMINAL alone. */

@@ -12,10 +12,9 @@ In a project's conf.py::
         dark_logo="_static/logo/instro-logo-solid-white.svg",
     )
 
-The header shows the Nominal logo, reading NOMINAL / DOCS / DEVELOPERS, then the project's logo (or its
-name). NOMINAL links to nominal.io, DOCS to Nominal's docs (``nominal_docs_url``, in a new tab), and
-DEVELOPERS to the docs hub's home page. Projects published on their own, outside the docs hub, set
-``nominal_hub_url = "https://dev.nominal.io/"`` so DEVELOPERS leads there.
+The header shows the Nominal logo, reading NOMINAL / DOCS, then the project's logo (or its name). NOMINAL
+links to nominal.io, and DOCS to the docs hub's home page. Projects published on their own, outside the
+docs hub, set ``nominal_hub_url = "https://dev.nominal.io/"`` so DOCS leads there.
 
 Tabs: each ``nav_links`` entry pointing at a page in a folder (``{"title": "Examples", "url":
 "examples/index"}``) is a section: pages in that folder belong to it, and every other page to the
@@ -340,7 +339,7 @@ def setup(app: Sphinx) -> dict[str, Any]:
     app.add_config_value(
         "nominal_pygments_dark_style", f"{styles}.OneDarkStyle", "html", types=[str]
     )
-    # the docs hub's home page, where DEVELOPERS in the header's logo leads; None: the hub's home page,
+    # the docs hub's home page, where DOCS in the header's logo leads; None: the hub's home page,
     # relative to the project
     app.add_config_value("nominal_hub_url", None, "html", types=[str, type(None)])
     # how many folders the hub's home page is above the project's home, when nominal_hub_url is None:
