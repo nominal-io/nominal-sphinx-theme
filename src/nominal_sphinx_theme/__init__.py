@@ -365,6 +365,8 @@ def setup(app: Sphinx) -> dict[str, Any]:
     )
     # the {nominal-snippet} directive: fragments shared by every project using the theme
     app.setup_extension("nominal_sphinx_theme.snippet_directive")
+    # stand-ins for the UUIDs in executed notebook outputs (output_ids.py)
+    app.setup_extension("nominal_sphinx_theme.output_ids")
     app.connect("config-inited", _on_config_inited)
     app.connect("builder-inited", _on_builder_inited)
     # after Shibuya's builder-inited, which sets up its highlighter
