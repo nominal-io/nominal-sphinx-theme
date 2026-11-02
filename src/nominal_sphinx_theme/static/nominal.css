@@ -78,22 +78,20 @@ html.dark {
   border-radius: 0 !important;
 }
 
-/* The background grid, on every page: 60px squares in faint lines, behind the page's sheet (on the
+/* The background grid, on every page: faint dots 24px apart, behind the page's sheet (on the
    header, the color around the sheet and the footer), or behind the page where there's no sheet;
-   fixed to the window, so the header's lines and the page's line up. */
+   fixed to the window, so the header's dots and the page's line up. */
 :root {
-  --nominal-grid-line: rgba(0, 0, 0, 0.04);
+  --nominal-grid-dot: rgba(0, 0, 0, 0.14);
 }
 html.dark {
-  --nominal-grid-line: rgba(255, 255, 255, 0.03);
+  --nominal-grid-dot: rgba(255, 255, 255, 0.12);
 }
 :root,
 body,
 .sy-head-blur {
-  background-image:
-    linear-gradient(to right, var(--nominal-grid-line) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--nominal-grid-line) 1px, transparent 1px);
-  background-size: 60px 60px;
+  background-image: radial-gradient(circle, var(--nominal-grid-dot) 1px, transparent 1.5px);
+  background-size: 24px 24px;
   background-attachment: fixed;
 }
 
