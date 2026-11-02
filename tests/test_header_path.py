@@ -2,11 +2,15 @@ import io
 import re
 from pathlib import Path
 
+from jinja2 import Environment, FileSystemLoader
 from sphinx.application import Sphinx
 from sphinx.util.docutils import docutils_namespace
 
-# the DOCS and DEVELOPERS links after the Nominal logo (templates/nominal/path.html)
-LINK = re.compile(r'<a href="([^"]*)" title="Nominal (docs|developer docs)"([^>]*)>')
+import nominal_sphinx_theme
+
+# the DOCS link after the Nominal logo (templates/nominal/path.html)
+LINK = re.compile(r'<a href="([^"]*)" title="Nominal (developer docs)"([^>]*)>')
+TEMPLATES = Path(nominal_sphinx_theme.__file__).parent / "templates"
 
 
 def build(tmp_path: Path, conf: str = "") -> Path:
@@ -28,21 +32,24 @@ def links(page: Path) -> dict[str, tuple[str, str]]:
     return {title: (href, attrs) for href, title, attrs in LINK.findall(page.read_text())}
 
 
-def test_docs_opens_nominal_docs_in_a_new_tab_and_developers_the_hub(tmp_path):
+def test_docs_leads_to_the_hub(tmp_path):
     out = build(tmp_path)
-    assert links(out / "index.html") == {
-        "docs": ("https://dev.nominal.io/", ' target="_blank" rel="noopener noreferrer"'),
-        "developer docs": ("../", ""),
-    }
+    assert links(out / "index.html") == {"developer docs": ("../", "")}
     assert links(out / "guide" / "index.html")["developer docs"] == ("../../", "")
 
 
-def test_the_links_can_be_set(tmp_path):
-    out = build(tmp_path, 'nominal_docs_url = "https://example.com/docs/"\nnominal_hub_url = "https://dev.nominal.io/"\n')
-    assert links(out / "index.html") == {
-        "docs": ("https://example.com/docs/", ' target="_blank" rel="noopener noreferrer"'),
-        "developer docs": ("https://dev.nominal.io/", ""),
-    }
+def test_the_hub_link_can_be_set(tmp_path):
+    out = build(tmp_path, 'nominal_hub_url = "https://dev.nominal.io/"\n')
+    assert links(out / "index.html") == {"developer docs": ("https://dev.nominal.io/", "")}
+
+
+def test_without_a_hub_docs_opens_nominal_docs_in_a_new_tab():
+    # the docs hub's landing pages call the macro without a hub URL
+    macro = Environment(loader=FileSystemLoader(TEMPLATES)).get_template("nominal/path.html").module.docs_path
+    page = str(macro("https://example.com/docs/"))
+    assert LINK.findall(page) == [
+        ("https://example.com/docs/", "developer docs", ' target="_blank" rel="noopener noreferrer"')
+    ]
 
 
 def test_the_hub_home_links_to_itself(tmp_path):
