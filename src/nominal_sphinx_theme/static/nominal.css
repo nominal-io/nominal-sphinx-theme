@@ -78,7 +78,7 @@ html.dark {
   border-radius: 0 !important;
 }
 
-/* The background grid, on every page: faint dots 24px apart, behind the page's sheet (on the
+/* The background grid, on every page: faint dots 12px apart, behind the page's sheet (on the
    header, the color around the sheet and the footer), or behind the page where there's no sheet;
    fixed to the window, so the header's dots and the page's line up. */
 :root {
@@ -91,7 +91,7 @@ html.dark {
 body,
 .sy-head-blur {
   background-image: radial-gradient(circle, var(--nominal-grid-dot) 1px, transparent 1.5px);
-  background-size: 24px 24px;
+  background-size: 12px 12px;
   background-attachment: fixed;
 }
 
