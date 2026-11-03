@@ -115,6 +115,7 @@ Most repos split docs into three types. Folders and names differ per project.
 - Use values a reader would really use.
 - Leave out filters, options and placeholders the point doesn't need. Don't invent filters.
 - To show syntax, use placeholders (`WHERE name = <channel name>`), not made-up literals.
+- In code, write a date or time that doesn't matter as noon UTC on January 1 of the current year, such as `2026-01-01T12:00:00Z`, so readers can tell it's arbitrary. Sample output can keep the values a real query returned.
 - Examples under about 30 lines follow these rules strictly. Full applications can relax them.
 
 ### Clear references
