@@ -1,0 +1,13 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    # "/" covers .github/workflows; composite actions need their own entry
+    directories: ["/", "/.github/actions/*"]
+    schedule:
+      interval: monthly
+    # skip releases younger than a week, which are likelier to be broken or compromised
+    cooldown:
+      default-days: 7
+    groups:
+      actions:
+        patterns: ["*"]
