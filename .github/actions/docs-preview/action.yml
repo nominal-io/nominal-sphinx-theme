@@ -1,0 +1,67 @@
+name: Docs preview
+description: >-
+  On a PR, uploads the built docs as the artifact that the renderdoc Worker serves, and sets a
+  "docs preview" commit status that links to the preview, or to the run if the build failed.
+  See "Docs previews" in the README.
+
+inputs:
+  path:
+    description: The built site, for example docs/_build/dirhtml.
+    required: true
+  job-status:
+    description: "`job.status` of the calling job. The step must run with `if: always()`."
+    required: true
+  artifact:
+    description: Artifact name. Must match the repo's `artifact` in the Worker's REPOS.
+    default: docs-site
+  host:
+    description: Host of the renderdoc Worker.
+    default: renderdoc.cloudflare-admins.workers.dev
+  retention-days:
+    description: Days that GitHub keeps the artifact, and so the preview.
+    default: "30"
+  token:
+    description: "Token with `statuses: write` on the repo."
+    default: ${{ github.token }}
+
+runs:
+  using: composite
+  steps:
+    - name: Upload the built docs
+      id: upload
+      if: github.event_name == 'pull_request' && inputs.job-status == 'success'
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      with:
+        name: ${{ inputs.artifact }}
+        path: ${{ inputs.path }}
+        retention-days: ${{ inputs.retention-days }}
+
+    # Fork PRs get a read-only token, and the Worker does not serve them.
+    - name: Set the docs preview status
+      if: >-
+        always() &&
+        github.event_name == 'pull_request' &&
+        github.event.pull_request.head.repo.full_name == github.repository
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+        SHA: ${{ github.event.pull_request.head.sha }}
+        JOB_STATUS: ${{ inputs.job-status }}
+        UPLOAD: ${{ steps.upload.outcome }}
+        PREVIEW_URL: https://${{ inputs.host }}/${{ github.repository }}/pull/${{ github.event.pull_request.number }}/
+        RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      run: |
+        set -euo pipefail
+        # Descriptions reject 4-byte Unicode, such as emoji.
+        if [ "$UPLOAD" = success ]; then
+          state=success url=$PREVIEW_URL description="↗ Open the rendered docs"
+        elif [ "$JOB_STATUS" = cancelled ]; then
+          state=error url=$RUN_URL description="Docs build was cancelled, so there is no preview"
+        else
+          state=failure url=$RUN_URL description="Docs build failed, so there is no preview"
+        fi
+        gh api "repos/$GITHUB_REPOSITORY/statuses/$SHA" \
+          -f state="$state" \
+          -f context="docs preview" \
+          -f description="$description" \
+          -f target_url="$url"
