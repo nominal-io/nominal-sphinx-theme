@@ -1,8 +1,8 @@
 name: Bump nominal-sphinx-theme
 
-# Reusable: moves the caller's uv.lock to this repo's newest commit and opens, or updates, one PR
-# for it, which merges itself once the caller's required checks pass. See "Theme updates" in the
-# README for the caller each repo adds.
+# Reusable: moves the caller's uv.lock, and its workflow pins on this repo, to this repo's newest
+# commit, and opens, or updates, one PR for it, which merges itself once the caller's required
+# checks pass. See "Theme updates" in the README for the caller each repo adds.
 
 on:
   workflow_call:
@@ -39,7 +39,8 @@ jobs:
           application_id: ${{ secrets.NOMBOT_APP_ID }}
           application_private_key: ${{ secrets.NOMBOT_PRIVATE_KEY }}
           organization: "nominal-io"
-          permissions: "contents:write, pull_requests:write"
+          # workflows:write, to push the moved pins in .github/workflows
+          permissions: "contents:write, pull_requests:write, workflows:write"
           revoke_token: true
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -50,8 +51,10 @@ jobs:
           enable-cache: false
           version: ${{ inputs.uv-version }}
 
-      - name: Upgrade the theme in uv.lock
+      - name: Upgrade the theme in uv.lock and the workflow pins
         id: lock
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           set -euo pipefail
           # the theme's commit, from its source line in uv.lock
@@ -59,9 +62,16 @@ jobs:
           old=$(theme)
           uv lock --upgrade-package nominal-sphinx-theme
           new=$(theme)
+          # Moves each pin on this repo to the theme commit in uv.lock, with that commit's date, e.g.
+          #   uses: nominal-io/nominal-sphinx-theme/.github/actions/docs-preview@<40-hex sha> # main, 2026-10-28
+          pin='(nominal-io/nominal-sphinx-theme/[^@ ]+@)[0-9a-f]{40}( # main, )[0-9-]{10}'
+          if grep -hoE "$pin" .github/workflows/*.y*ml | grep -vq "@$new "; then
+            day=$(gh api "repos/nominal-io/nominal-sphinx-theme/commits/$new" -q '.commit.committer.date[:10]')
+            sed -i -E "s|$pin|\1$new\2$day|" .github/workflows/*.y*ml
+          fi
           echo "old=$old" >> "$GITHUB_OUTPUT"
           echo "new=$new" >> "$GITHUB_OUTPUT"
-          if git diff --quiet uv.lock; then
+          if git diff --quiet uv.lock .github/workflows; then
             echo "Already on nominal-sphinx-theme@${new:0:7}"
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
@@ -78,12 +88,12 @@ jobs:
         run: |
           set -euo pipefail
           title="chore(deps): bump nominal-sphinx-theme to ${NEW:0:7}"
-          body="Moves \`uv.lock\` to [nominal-sphinx-theme@${NEW:0:7}](https://github.com/nominal-io/nominal-sphinx-theme/commit/$NEW): [changes since ${OLD:0:7}](https://github.com/nominal-io/nominal-sphinx-theme/compare/$OLD...$NEW).
+          body="Moves \`uv.lock\` and the workflow pins to [nominal-sphinx-theme@${NEW:0:7}](https://github.com/nominal-io/nominal-sphinx-theme/commit/$NEW): [changes since ${OLD:0:7}](https://github.com/nominal-io/nominal-sphinx-theme/compare/$OLD...$NEW).
 
           Opened by [this run]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID) of nominal-sphinx-theme's bump workflow."
           git switch -C "$BRANCH"
           git -c user.name=NomBot -c user.email=117409387+nominal-bot@users.noreply.github.com \
-            commit -m "$title" uv.lock
+            commit -m "$title" uv.lock .github/workflows
           # one PR at a time: a newer bump replaces the branch
           git push --force origin "$BRANCH"
           if pr=$(gh pr view "$BRANCH" --json number,state -q 'select(.state == "OPEN") | .number' 2>/dev/null) && [ -n "$pr" ]; then

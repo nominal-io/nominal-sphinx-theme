@@ -236,20 +236,23 @@ uv run --group dev pytest
 | Workflow | Runs | Does |
 | --- | --- | --- |
 | [`tests.yml`](.github/workflows/tests.yml) | PRs and pushes to `main` | The tests in `tests/`, on Python 3.12 and 3.13 |
-| [`bump-theme.yml`](.github/workflows/bump-theme.yml) | Called by each repo that uses the theme | Moves that repo's `uv.lock` to the theme's newest commit, in one PR |
+| [`bump-theme.yml`](.github/workflows/bump-theme.yml) | Called by each repo that uses the theme | Moves that repo's `uv.lock` and its pins on this repo to the theme's newest commit, in one PR |
 | [`docs-gate.yml`](.github/workflows/docs-gate.yml) | Called by each repo's docs workflow | The check that stops a bump PR merging when the docs don't build |
 | [`bump-all.yml`](.github/workflows/bump-all.yml) | By hand | Runs every repo's bump now |
+| [`docs-preview`](.github/actions/docs-preview/action.yml) (action) | A step in each repo's docs build | Uploads the built docs and links the PR's preview as a commit status |
 
 ### Theme updates
 
 Each repo using the theme pins a commit of it in `uv.lock`. A daily workflow there, calling
-`bump-theme.yml`, runs `uv lock --upgrade-package nominal-sphinx-theme`. If that changes `uv.lock`,
-NomBot opens one PR, `chore(deps): bump nominal-sphinx-theme to <sha>`, from the branch
+`bump-theme.yml`, runs `uv lock --upgrade-package nominal-sphinx-theme`. It then moves each pin on
+this repo in `.github/workflows`, such as `bump-theme.yml@<sha> # main, <date>`, to the same commit
+and that commit's date. If either changes, NomBot opens one PR, `chore(deps): bump nominal-sphinx-theme to <sha>`, from the branch
 `chore/bump-nominal-sphinx-theme`, or updates the one already open. The PR merges itself once the
 repo's required checks pass.
 
 - **NomBot:** the workflow mints a NomBot App token. A PR opened with `GITHUB_TOKEN` wouldn't run the
-  repo's other workflows, so its docs wouldn't be checked.
+  repo's other workflows, so its docs wouldn't be checked. The token has `workflows:write`, because
+  GitHub refuses a push that changes `.github/workflows` without it.
 - **Auto-merge:** turned on only when the default branch has required checks. With none,
   `gh pr merge --auto` would merge the PR at once, so the workflow leaves it for a person instead.
 - **uv:** the bump locks with the newest uv, unless the caller passes `uv-version`. A new uv can move
@@ -319,14 +322,48 @@ doesn't run blocks the PR. Drop the path filter from `pull_request` first.
 5. If dev.nominal.io doesn't publish the repo's docs, add it to `EXTRA_REPOS` in `bump-all.yml`.
    A repo in the hub's `sites.toml` is already included.
 
-- **Pins:** pin `uses:` to a commit of this repo, as for any action. This repo has no releases, so
-  the comment is `# main, <date>`, and Dependabot can't move it. When `bump-theme.yml` or
-  `docs-gate.yml` changes here, move each repo's pin by hand. The bump itself always takes the
-  theme's newest commit.
+- **Pins:** pin `uses:` to a commit of this repo, as for any action, with the comment
+  `# main, <date>`, the commit's date. This repo has no releases, so Dependabot can't move the pin.
+  The bump moves it, but only with that comment: it leaves any other pin as it is.
 - **Secrets:** pass the two NomBot secrets, not `secrets: inherit`, which hands every secret in the
   repo to this repo's workflow. Semgrep blocks `secrets: inherit`.
 - **Permissions:** a called workflow can't have more `GITHUB_TOKEN` permissions than its caller.
   `bump-theme.yml` asks for `contents: read`, and `docs-gate.yml` for none.
+
+### Docs previews
+
+The renderdoc Cloudflare Worker serves a PR's built docs, from its artifact, at
+`https://renderdoc.cloudflare-admins.workers.dev/<owner>/<repo>/pull/<n>/`. The `docs-preview`
+action, as the last step of the docs build, gives each PR a link to it:
+
+- If the build passed, it uploads the site as the `docs-site` artifact and sets the commit status
+  `docs preview` to success, linked to the preview.
+- If the build failed or was cancelled, it sets the status to failure or error, linked to the run.
+- On a PR from a fork, it uploads the site but sets no status: the PR's token is read-only, and the
+  Worker serves only PRs from branches in the repo.
+- On other events it does nothing.
+
+Add it to the job that builds the docs on PRs, after the build:
+
+```yaml
+permissions:
+  contents: read
+  statuses: write
+
+    steps:
+      # ...build the docs...
+      - name: "Built docs: upload and preview"
+        if: always() && github.event_name == 'pull_request'
+        uses: nominal-io/nominal-sphinx-theme/.github/actions/docs-preview@<commit> # main, <date>
+        with:
+          path: docs/_build/dirhtml
+          job-status: ${{ job.status }}
+          # artifact: docs-site   # must match the repo's `artifact` in the Worker's REPOS
+          # retention-days: 30    # how long the preview stays
+```
+
+The step needs `if: always()` to run after a failed build, and `job-status`, because an action can't
+read the job's status. The Worker must allow the repo; `nominal-io/*` is allowed.
 
 ## Docs skill for AI agents
 
