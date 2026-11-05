@@ -478,6 +478,14 @@ html.dark .sd-card:hover {
   font-size: 1rem;
 }
 
+/* A site with tabs keeps its page in the page's color at every width, so the background grid shows
+   only on the header and footer; on narrow screens, where the header has one row, the page fills the
+   width with no gap around it (the sheet, below, is for wide screens). */
+body:has(.sy-head.nominal-two-row) > .sy-page,
+body:has(.sy-head.nominal-two-row) > .sy-container.body {
+  background-color: var(--sy-c-background);
+}
+
 /* Two-row header, on wide screens when there are tabs (nominal-two-row, templates/partials/site-head.html):
    logos and buttons on the first row, tabs and search on the second. Shibuya places the sidebars,
    anchors and tab menus below --sy-s-navbar-height, so it spans both rows, and the first row's own
@@ -552,7 +560,6 @@ html.dark .sd-card:hover {
   body:has(.sy-head.nominal-two-row) > .sy-container.body {
     width: calc(100% - 2 * var(--nominal-sheet-gap));
     margin-bottom: var(--nominal-sheet-gap);
-    background-color: var(--sy-c-background);
     border-radius: var(--nominal-tab-radius) !important;
   }
   /* the footer sits on the header's color, below the sheet */
@@ -657,6 +664,19 @@ html.dark .sd-card:hover {
 @media (min-width: 1280px) {
   .sy-rside .sy-rside-inner {
     top: var(--sy-s-offset-top);
+  }
+  /* Under the tabs, the text scrolls out of sight a little below them rather than at their edge: a
+     band of the sheet's color stuck to the sheet's top. Narrower screens have the breadcrumbs' bar
+     there instead. The band overlaps the page's own top space, so the page doesn't move down. */
+  body:has(.sy-head.nominal-two-row) > .sy-page > .sy-main::before {
+    content: "";
+    display: block;
+    position: sticky;
+    top: var(--sy-s-offset-top);
+    z-index: 5;
+    height: var(--nominal-sheet-gap);
+    margin-bottom: calc(-1 * var(--nominal-sheet-gap));
+    background-color: var(--sy-c-background);
   }
 }
 
