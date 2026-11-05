@@ -86,7 +86,7 @@ setting in `conf.py`, or on the command line with `-D`, wins. The MyST ones appl
 
 ## Header
 
-The header shows the Nominal logo, which reads like a path, NOMINAL / DOCS / DEVELOPERS, then `/` and
+The header shows the Nominal logo, which reads like a path, NOMINAL / DEV / DEVELOPERS, then `/` and
 the project's logo (or its name, without one). NOMINAL links to nominal.io, DOCS to Nominal's docs
 (`nominal_docs_url`) in a new tab, and DEVELOPERS to the docs hub's home page. That link is relative
 (the hub's root, one above a project's home at `/{project}/`), so it works on the hub and in its

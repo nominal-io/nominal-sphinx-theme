@@ -121,7 +121,7 @@ body,
 }
 
 /* The Nominal logo before the project's (templates/partials/site-head.html), linking to nominal.io,
-   with the word that makes it a path (NOMINAL / DOCS), then a divider. */
+   with the word that makes it a path (NOMINAL / DEV), then a divider. */
 .nominal-hub {
   display: flex;
   align-items: center;

@@ -12,7 +12,7 @@ In a project's conf.py::
         dark_logo="_static/logo/instro-logo-solid-white.svg",
     )
 
-The header shows the Nominal logo, reading NOMINAL / DOCS, then the project's logo (or its name). NOMINAL
+The header shows the Nominal logo, reading NOMINAL / DEV, then the project's logo (or its name). NOMINAL
 links to nominal.io, and DOCS to the docs hub's home page. Projects published on their own, outside the
 docs hub, set ``nominal_hub_url = "https://dev.nominal.io/"`` so DOCS leads there.
 
