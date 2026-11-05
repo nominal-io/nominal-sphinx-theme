@@ -478,12 +478,42 @@ html.dark .sd-card:hover {
   font-size: 1rem;
 }
 
-/* A site with tabs keeps its page in the page's color at every width, so the background grid shows
-   only on the header and footer; on narrow screens, where the header has one row, the page fills the
-   width with no gap around it (the sheet, below, is for wide screens). */
-body:has(.sy-head.nominal-two-row) > .sy-page,
-body:has(.sy-head.nominal-two-row) > .sy-container.body {
+/* Every site keeps its page in the page's color at every width, so the background grid shows only on
+   the header and footer; on narrow screens the page fills the width with no gap around it (the
+   sheet, below, is for wide screens). */
+body:has(.sy-head) > .sy-page,
+body:has(.sy-head) > .sy-container.body {
   background-color: var(--sy-c-background);
+}
+
+/* The page as a sheet of paper, on wide screens, with or without tabs: the header's color around it,
+   the sheet in the page's color with rounded corners, and the footer below it. The sheet is the docs'
+   .sy-page, or the simple layout's .sy-container.body. With tabs, the current one joins the sheet's
+   top (below); without them, the header's color shows above the sheet too. */
+@media (min-width: 768px) {
+  :root:has(.sy-head),
+  body:has(.sy-head) {
+    background-color: var(--nominal-header);
+  }
+  body:has(.sy-head) > .sy-page,
+  body:has(.sy-head) > .sy-container.body {
+    width: calc(100% - 2 * var(--nominal-sheet-gap));
+    margin-bottom: var(--nominal-sheet-gap);
+    border-radius: var(--nominal-tab-radius) !important;
+  }
+  body:has(.sy-head:not(.nominal-two-row)) > .sy-page,
+  body:has(.sy-head:not(.nominal-two-row)) > .sy-container.body {
+    margin-top: var(--nominal-sheet-gap);
+  }
+  /* the footer sits on the header's color, below the sheet */
+  body:has(.sy-head) > .sy-foot {
+    background-color: transparent;
+    border-top: 0;
+  }
+  /* the sheet's edge separates the header from the page; the header draws no line of its own */
+  .sy-head .sy-head-blur {
+    box-shadow: none;
+  }
 }
 
 /* Two-row header, on wide screens when there are tabs (nominal-two-row, templates/partials/site-head.html):
@@ -495,7 +525,7 @@ body:has(.sy-head.nominal-two-row) > .sy-container.body {
   --nominal-tabs-row: 44px;
   /* how far the tabs start right of the logo */
   --nominal-tabs-indent: 2rem;
-  /* the header's color around the page's sheet, on wide screens with tabs */
+  /* the header's color around the page's sheet, on wide screens */
   --nominal-sheet-gap: 1rem;
   /* the tabs' rounded top corners */
   --nominal-tab-radius: 3px;
@@ -549,30 +579,9 @@ body:has(.sy-head.nominal-two-row) > .sy-container.body {
   .nominal-two-row .nav-languages {
     height: var(--nominal-head-row);
   }
-  /* The page as a sheet of paper: the header's color around it, the sheet in the page's color with
-     rounded corners, and the footer below it. The sheet is the docs' .sy-page, or the simple
-     layout's .sy-container.body. */
-  :root:has(.sy-head.nominal-two-row),
-  body:has(.sy-head.nominal-two-row) {
-    background-color: var(--nominal-header);
-  }
-  body:has(.sy-head.nominal-two-row) > .sy-page,
-  body:has(.sy-head.nominal-two-row) > .sy-container.body {
-    width: calc(100% - 2 * var(--nominal-sheet-gap));
-    margin-bottom: var(--nominal-sheet-gap);
-    border-radius: var(--nominal-tab-radius) !important;
-  }
-  /* the footer sits on the header's color, below the sheet */
-  body:has(.sy-head.nominal-two-row) > .sy-foot {
-    background-color: transparent;
-    border-top: 0;
-  }
   /* Tabs, starting --nominal-tabs-indent right of the logo, shaded and outlined with rounded tops,
      like a folder's. The current one is filled with the page's color and open at the bottom, and joins
-     the sheet below it; the header draws no line of its own. */
-  .nominal-two-row .sy-head-blur {
-    box-shadow: none;
-  }
+     the sheet below it. */
   .nominal-two-row .sy-head-links {
     grid-area: tabs;
     align-self: stretch;
