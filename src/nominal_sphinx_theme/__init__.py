@@ -72,8 +72,14 @@ _PARAM_FIELDS = {"parameters", "keyword arguments", "other parameters"}
 _PARAM_SEPARATOR = re.compile(r" (?:--|–) ")
 
 
-def theme_options(*, github_url: str | None = None, **overrides: Any) -> dict[str, Any]:
-    """Shibuya options for a Nominal docs site; keyword arguments override the defaults."""
+def theme_options(
+    *, github_url: str | None = None, github_tab: bool = True, **overrides: Any
+) -> dict[str, Any]:
+    """Shibuya options for a Nominal docs site; keyword arguments override the defaults.
+
+    With ``github_url`` and tabs (``nav_links``), a GitHub tab to the repo ends the tabs, unless
+    ``github_tab=False`` or a tab already links there.
+    """
     options: dict[str, Any] = {
         "accent_color": "gray",
         # follows the visitor's system setting, unless they pick light or dark with the theme switch
@@ -87,7 +93,15 @@ def theme_options(*, github_url: str | None = None, **overrides: Any) -> dict[st
     if github_url:
         options["github_url"] = github_url
     options.update(overrides)
+    links = options.get("nav_links")
+    if github_url and github_tab and links:
+        if not any(_same_url(link.get("url"), github_url) for link in links):
+            options["nav_links"] = [*links, {"title": "GitHub", "url": github_url}]
     return options
+
+
+def _same_url(a: str | None, b: str) -> bool:
+    return bool(a) and a.rstrip("/").lower() == b.rstrip("/").lower()
 
 
 @functools.cache

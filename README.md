@@ -118,6 +118,12 @@ html_theme_options = theme_options(
 The footer's icons are Shibuya's `foot_socials`: by default, every `<name>_url` that is set (here
 GitHub, Discord, and the X and LinkedIn links `theme_options` sets).
 
+## GitHub tab
+
+With `github_url` and tabs (`nav_links`), a GitHub tab to the repo ends the tabs. Pass
+`github_tab=False` to `theme_options` to leave it out. A tab the project already has to the same URL
+isn't repeated, and a project without `github_url` or without tabs gets none.
+
 ## Footer
 
 Below the copyright and icons, the footer shows the theme commit that built the page, abbreviated and
