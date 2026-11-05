@@ -8,7 +8,7 @@ from sphinx.util.docutils import docutils_namespace
 
 import nominal_sphinx_theme
 
-# the DOCS link after the Nominal logo (templates/nominal/path.html)
+# the DEV link after the Nominal logo (templates/nominal/path.html)
 LINK = re.compile(r'<a href="([^"]*)" title="Nominal (developer docs)"([^>]*)>')
 TEMPLATES = Path(nominal_sphinx_theme.__file__).parent / "templates"
 

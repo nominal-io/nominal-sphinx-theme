@@ -1,5 +1,5 @@
 /* The word after the Nominal logo (templates/nominal/path.html), on the docs and the hub's landing pages
-   alike: NOMINAL / DOCS, each word a link of its own. The word is set in the mono font at about the
+   alike: NOMINAL / DEV, each word a link of its own. The word is set in the mono font at about the
    project name's size. Each page sets the --nominal-path-* colours from its palette; the defaults are the
    landing page's dark ones. */
 .nominal-path {
