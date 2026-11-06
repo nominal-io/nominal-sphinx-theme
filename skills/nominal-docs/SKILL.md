@@ -161,7 +161,9 @@ Most repos split docs into three types. Folders and names differ per project.
 
 ### Tables
 
-- Right-align columns of numbers with `---:` in the separator row. Leave text columns left-aligned.
+- Right-align columns of quantities, such as counts, measurements and durations, with `---:` in the separator row.
+- Left-align text, and numbers that are labels, such as IDs, years and versions.
+- In a right-aligned column, give each value the same number of decimal places.
 
 ### Files
 

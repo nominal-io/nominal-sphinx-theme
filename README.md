@@ -176,7 +176,8 @@ previewing); elsewhere the `#` is a plain link.
 ## Tables
 
 Table columns are left-aligned. In a MyST table, colons in the separator row set a column's
-alignment: `:---` left, `:---:` center, `---:` right. Right-align columns of numbers:
+alignment: `:---` left, `:---:` center, `---:` right. Right-align columns of quantities, so that
+digits of the same place value line up. Right-aligned cells use tabular figures:
 
 ```markdown
 | Channel     | Samples |

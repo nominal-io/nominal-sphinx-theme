@@ -28,3 +28,4 @@ def test_alignment_classes_have_rules(tmp_path: Path):
         assert f'<td class="text-{side}">' in html
         rule = re.search(rf"\.yue td\.text-{side} \{{\s*text-align: {side};", css)
         assert rule, side
+    assert re.search(r"\.yue td\.text-right \{[^}]*tabular-nums", css)
