@@ -114,8 +114,12 @@ def theme_commit() -> str | None:
 DEFAULTS: dict[str, Any] = {
     "html_copy_source": False,
     "myst_enable_extensions": ["colon_fence", "deflist", "attrs_inline", "attrs_block", "fieldlist"],
+    # a plain ```mermaid fence is a diagram, as on GitHub and in JupyterLab
+    "myst_fence_as_directive": ["mermaid"],
     "myst_heading_anchors": 6,
     "myst_links_external_new_tab": True,
+    # each diagram as tall as its content, not sphinxcontrib-mermaid's fixed 500px
+    "mermaid_height": "auto",
 }
 
 
@@ -136,8 +140,6 @@ def _on_config_inited(app: Sphinx, config: Config) -> None:
     config.templates_path.append(str(HERE / "templates"))
     if not config.html_favicon:
         config.html_favicon = str(HERE / "static" / "favicon.svg")
-    if "sphinxcontrib.mermaid" in config.extensions:
-        app.setup_extension("nominal_sphinx_theme.mermaid_frontmatter")
     ctx = config.html_context
     if ctx.get("source_type") == "github" and ctx.get("source_user") and ctx.get("source_repo"):
         # Shibuya's defaults; its own link opens the file view, not the editor
@@ -367,6 +369,9 @@ def setup(app: Sphinx) -> dict[str, Any]:
     app.setup_extension("nominal_sphinx_theme.snippet_directive")
     # stand-ins for the UUIDs in executed notebook outputs (output_ids.py)
     app.setup_extension("nominal_sphinx_theme.output_ids")
+    # Mermaid diagrams, with Mermaid's own front matter (mermaid_frontmatter.py)
+    app.setup_extension("sphinxcontrib.mermaid")
+    app.setup_extension("nominal_sphinx_theme.mermaid_frontmatter")
     app.connect("config-inited", _on_config_inited)
     app.connect("builder-inited", _on_builder_inited)
     # after Shibuya's builder-inited, which sets up its highlighter
