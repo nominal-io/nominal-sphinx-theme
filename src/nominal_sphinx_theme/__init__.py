@@ -345,10 +345,7 @@ def _set_highlighting(app: Sphinx) -> None:
 
 
 def setup(app: Sphinx) -> dict[str, Any]:
-    # the GA4 measurement ID, the property docs.nominal.io and dev.nominal.io share; None: no analytics
-    app.add_config_value(
-        "nominal_ga_id", "G-XJXZ2G04E3", "html", types=[str, type(None)]
-    )
+    app.add_config_value("nominal_ga_id", None, "html", types=[str, type(None)])
     # code highlighting in light and dark mode: Pygments style names, or dotted paths to style classes
     # (default: Atom's One Light and One Dark, in pygments_styles.py)
     styles = "nominal_sphinx_theme.pygments_styles"
