@@ -79,8 +79,10 @@ setting in `conf.py`, or on the command line with `-D`, wins. The MyST ones appl
 | `html_title` | `project` |
 | `html_copy_source` | `False` |
 | `myst_enable_extensions` | `["colon_fence", "deflist", "attrs_inline", "attrs_block", "fieldlist"]` |
+| `myst_fence_as_directive` | `["mermaid"]`: a ```` ```mermaid ```` fence is a diagram |
 | `myst_heading_anchors` | `6` |
 | `myst_links_external_new_tab` | `True`: Markdown links to other sites open in a new tab |
+| `mermaid_height` | `"auto"`: each diagram is as tall as its content |
 
 `html_theme = "shibuya"` and the `extensions` list stay in `conf.py`.
 
@@ -175,8 +177,10 @@ previewing); elsewhere the `#` is a plain link.
 
 ## Mermaid diagrams
 
-With [sphinxcontrib-mermaid](https://github.com/mgaitan/sphinxcontrib-mermaid) in `extensions`, a
-diagram can set its options in Mermaid's own front matter, as VS Code's preview and GitHub read it:
+The theme sets up [sphinxcontrib-mermaid](https://github.com/mgaitan/sphinxcontrib-mermaid), so a
+```` ```mermaid ```` fence is a diagram, with no entry in `extensions`. Each diagram is as tall as its
+content. A diagram can set its options in Mermaid's own front matter, as VS Code's preview and
+GitHub read it:
 
 ````markdown
 ```mermaid
@@ -190,10 +194,10 @@ flowchart TB
 ````
 
 `config` and `title` become the directive's options, and `name` the diagram's HTML id, for a
-stylesheet to style one diagram. For ```` ```mermaid ```` fences, set
-`myst_fence_as_directive = ["mermaid"]`.
+stylesheet to style one diagram.
 
 In dark mode, diagrams keep the colors of Mermaid's dark theme; Shibuya would otherwise invert them.
+The fullscreen button is an icon in the diagram's bottom-right corner.
 
 ## Shared snippets
 

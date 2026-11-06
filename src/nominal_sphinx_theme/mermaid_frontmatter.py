@@ -19,7 +19,7 @@ front matter in the HTML. The source stays plain Mermaid for the previews.
 A `name` key becomes the `:name:` option, which is the diagram's HTML id, so a stylesheet
 can style one diagram. Mermaid ignores front matter keys it doesn't know.
 
-The theme loads this when a project's extensions include sphinxcontrib.mermaid.
+The theme loads this, with sphinxcontrib.mermaid.
 """
 
 import json

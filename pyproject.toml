@@ -9,11 +9,13 @@ dependencies = [
     "shibuya>=2026.7.12",
     # shared snippets are MyST
     "myst-parser>=5.0",
+    # Mermaid diagrams, set up by the theme
+    "sphinxcontrib-mermaid>=2.1",
 ]
 
 [dependency-groups]
-# sphinx-design: the shipped snippets' tabs and dropdowns; sphinxcontrib-mermaid: tests/test_mermaid.py
-dev = ["pytest", "sphinx-design", "sphinxcontrib-mermaid"]
+# sphinx-design: the shipped snippets' tabs and dropdowns
+dev = ["pytest", "sphinx-design"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
