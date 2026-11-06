@@ -800,3 +800,25 @@ div.cell > div.cell_input {
 html.dark pre.mermaid > svg {
   filter: none;
 }
+
+/* MyST writes a column's alignment (`:---`, `:---:`, `---:`) as a class that Shibuya has no rule for. */
+.yue th.text-left,
+.yue td.text-left {
+  text-align: left;
+}
+.yue th.text-center,
+.yue td.text-center {
+  text-align: center;
+}
+/* Right-aligned digits stack only when every digit is as wide as the others. */
+.yue th.text-right,
+.yue td.text-right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+/* pandas right-aligns a DataFrame's headers, and Shibuya left-aligns table cells: align both right. */
+.yue table.dataframe th,
+.yue table.dataframe td {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}

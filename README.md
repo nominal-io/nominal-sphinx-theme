@@ -175,6 +175,21 @@ Clicking the `#` after a heading copies a link to that section, as well as going
 "Copied" shows beside it for a moment. Copying needs a secure page (https, or localhost when
 previewing); elsewhere the `#` is a plain link.
 
+## Tables
+
+Table columns are left-aligned. In a MyST table, colons in the separator row set a column's
+alignment: `:---` left, `:---:` center, `---:` right. Right-align columns of quantities, so that
+digits of the same place value line up. Right-aligned cells use tabular figures:
+
+```markdown
+| Channel     | Samples |
+| :---------- | ------: |
+| temperature |  12,000 |
+| pressure    |     450 |
+```
+
+pandas DataFrames in notebook outputs are right-aligned, as in Jupyter.
+
 ## Mermaid diagrams
 
 The theme sets up [sphinxcontrib-mermaid](https://github.com/mgaitan/sphinxcontrib-mermaid), so a
