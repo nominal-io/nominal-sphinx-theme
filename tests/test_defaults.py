@@ -45,16 +45,19 @@ def test_defaults(tmp_path):
     assert 'class="reference external" href="https://nominal.io/" rel="noreferer noopener" target="_blank"' in html
     # the root page's title is html_title alone
     assert "<title>Demo</title>" in html
+    # every page reports to dev.nominal.io's GA4 measurement ID
+    assert "googletagmanager.com/gtag/js?id=G-6KQ94CEW2M" in html
     # Sphinx makes _sources either way; html_copy_source decides whether the pages go in it
     assert not [f for f in (out / "_sources").rglob("*") if f.is_file()]
 
 
 def test_conf_py_wins(tmp_path):
-    conf = CONF + "html_copy_source = True\nmyst_links_external_new_tab = False\nhtml_title = 'Other'\n"
+    conf = CONF + "html_copy_source = True\nmyst_links_external_new_tab = False\nhtml_title = 'Other'\nnominal_ga_id = None\n"
     app, out = build(tmp_path, conf)
     html = (out / "index.html").read_text()
     assert 'class="reference external" href="https://nominal.io/">' in html
     assert "<title>Other</title>" in html
+    assert "googletagmanager" not in html
     assert (out / "_sources" / "index.md.txt").is_file()
 
 
