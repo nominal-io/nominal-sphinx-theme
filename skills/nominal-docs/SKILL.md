@@ -159,6 +159,10 @@ Most repos split docs into three types. Folders and names differ per project.
 - Don't use "load bearing" unless the topic is physical loads.
 - "Real-time" only for deterministic control, with guaranteed timing. For data shown with low latency but no guaranteed timing, say "live".
 
+### Tables
+
+- Right-align columns of numbers with `---:` in the separator row. Leave text columns left-aligned.
+
 ### Files
 
 - No draft status in files, including comments ("pending rewrite").

@@ -32,6 +32,25 @@ html.light {
   --nominal-card: #ffffff;
   --nominal-card-hover: #f3f3f3;
 }
+/* MyST writes a column's alignment (`:---`, `:---:`, `---:`) as a class that Shibuya has no rule for. */
+.yue th.text-left,
+.yue td.text-left {
+  text-align: left;
+}
+.yue th.text-center,
+.yue td.text-center {
+  text-align: center;
+}
+.yue th.text-right,
+.yue td.text-right {
+  text-align: right;
+}
+/* pandas right-aligns a DataFrame's headers, and Shibuya left-aligns table cells: align both right. */
+.yue table.dataframe th,
+.yue table.dataframe td {
+  text-align: right;
+}
+
 /* Shibuya gives code in tabs and notebook outputs their own light background; keep them like the rest. */
 html.light .sd-tab-content,
 html.light .jupyter_container .cell_output {
