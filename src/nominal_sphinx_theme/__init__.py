@@ -157,6 +157,9 @@ DEFAULTS: dict[str, Any] = {
     # a page's code blocks run in order, like a notebook's cells, so a name imported in one block
     # links in the blocks after it
     "codeautolink_concat_default": True,
+    # a Python block that doesn't parse, such as a signature with types (`name: str = ...`), stays
+    # unlinked instead of warning; sphinx-codeautolink's other warnings are off by default
+    "suppress_warnings": ["codeautolink.parse_block"],
 }
 
 

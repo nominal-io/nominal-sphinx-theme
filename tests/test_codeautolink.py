@@ -24,6 +24,12 @@ import json
 json.dumps({})
 ```
 
+A signature, which isn't valid Python, stays unlinked:
+
+```python
+json.dumps(obj: object) -> str
+```
+
 A later block, which knows `json` from the one before:
 
 ```python
@@ -55,6 +61,13 @@ def test_code_links_to_docs(tmp_path):
     assert {"sphinx_codeautolink", "sphinx.ext.intersphinx"} <= set(app.extensions)
     # json.dumps links in both blocks: the second knows the import from the first
     assert links(html).count("#json.dumps") == 2
+
+
+def test_unparsable_block_doesnt_warn(tmp_path):
+    # with warnings as errors, a Python block that doesn't parse would fail the build
+    app, html = build(tmp_path)
+    assert app.statuscode == 0
+    assert "codeautolink.parse_block" in app.config.suppress_warnings
 
 
 def test_conf_py_wins(tmp_path):
