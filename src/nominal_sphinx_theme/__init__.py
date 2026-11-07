@@ -100,6 +100,26 @@ def theme_options(
     return options
 
 
+# Nominal's docs sites with an intersphinx inventory, by the name each takes in intersphinx_mapping
+DOCS_SITES = {
+    "nominal": "https://nominal-io.github.io/nominal-client",
+    "instro": "https://instro.nominal.io",
+    "panominal": "https://nominal-io.github.io/panominal",
+}
+
+
+def intersphinx(*names: str) -> dict[str, tuple[str, None]]:
+    """``intersphinx_mapping`` entries for Nominal's docs sites, by name (see ``DOCS_SITES``).
+
+    ``intersphinx_mapping = {**intersphinx("nominal", "instro"), "python": (...)}`` links references
+    and, through sphinx-codeautolink, the names in code blocks to those sites' API docs.
+    """
+    unknown = sorted(set(names) - DOCS_SITES.keys())
+    if unknown:
+        raise ValueError(f"no Nominal docs site named {', '.join(unknown)}; known: {', '.join(DOCS_SITES)}")
+    return {name: (DOCS_SITES[name], None) for name in names}
+
+
 def _same_url(a: str | None, b: str) -> bool:
     return bool(a) and a.rstrip("/").lower() == b.rstrip("/").lower()
 
@@ -134,6 +154,9 @@ DEFAULTS: dict[str, Any] = {
     "myst_links_external_new_tab": True,
     # each diagram as tall as its content, not sphinxcontrib-mermaid's fixed 500px
     "mermaid_height": "auto",
+    # a page's code blocks run in order, like a notebook's cells, so a name imported in one block
+    # links in the blocks after it
+    "codeautolink_concat_default": True,
 }
 
 
@@ -389,6 +412,10 @@ def setup(app: Sphinx) -> dict[str, Any]:
     # Mermaid diagrams, with Mermaid's own front matter (mermaid_frontmatter.py)
     app.setup_extension("sphinxcontrib.mermaid")
     app.setup_extension("nominal_sphinx_theme.mermaid_frontmatter")
+    # names in code blocks link to their API docs, the project's own or, through intersphinx, other
+    # sites' (see intersphinx())
+    app.setup_extension("sphinx.ext.intersphinx")
+    app.setup_extension("sphinx_codeautolink")
     app.connect("config-inited", _on_config_inited)
     app.connect("builder-inited", _on_builder_inited)
     # after Shibuya's builder-inited, which sets up its highlighter
