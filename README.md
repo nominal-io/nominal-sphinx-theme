@@ -83,6 +83,8 @@ setting in `conf.py`, or on the command line with `-D`, wins. The MyST ones appl
 | `myst_heading_anchors` | `6` |
 | `myst_links_external_new_tab` | `True`: Markdown links to other sites open in a new tab |
 | `mermaid_height` | `"auto"`: each diagram is as tall as its content |
+| `codeautolink_concat_default` | `True`: a page's code blocks run in order, so a name imported in one links in later ones |
+| `suppress_warnings` | `["codeautolink.parse_block"]`: a Python block that doesn't parse, such as a signature with types, stays unlinked instead of warning |
 
 `html_theme = "shibuya"` and the `extensions` list stay in `conf.py`.
 
@@ -213,6 +215,28 @@ stylesheet to style one diagram.
 
 In dark mode, diagrams keep the colors of Mermaid's dark theme; Shibuya would otherwise invert them.
 The fullscreen button is an icon in the diagram's bottom-right corner.
+
+## Links in code
+
+The theme sets up [sphinx-codeautolink](https://sphinx-codeautolink.readthedocs.io) and
+`sphinx.ext.intersphinx`, with no entries in `extensions`: names in Python code blocks and notebook
+cells link to their API docs. A name links when the project documents it, or when a site in
+`intersphinx_mapping` does. `intersphinx()` gives the entries for Nominal's docs sites:
+
+```python
+from nominal_sphinx_theme import intersphinx
+
+intersphinx_mapping = {
+    **intersphinx("nominal", "instro"),  # nominal-client's docs and instro's
+    "python": ("https://docs.python.org/3", None),
+}
+```
+
+The names it knows are in `DOCS_SITES`. Links keep the code's colors and are underlined on hover.
+sphinx-codeautolink's settings (`codeautolink_*`) go in `conf.py` as usual; its warnings are off
+unless a project turns them on, and a Python block it can't parse, such as a signature with types
+(`name: str = ...`), stays unlinked without a warning. To leave a block unlinked, put
+[`autolink-skip`](https://sphinx-codeautolink.readthedocs.io/en/stable/reference.html) before it.
 
 ## Shared snippets
 

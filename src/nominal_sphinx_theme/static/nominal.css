@@ -763,11 +763,13 @@ ol.callouts > li::marker {
 }
 
 /* Links in code blocks, such as sphinx-codeautolink's, are underlined on hover, so the code reads
-   cleanly and a link still shows itself under the pointer. */
+   cleanly and a link still shows itself under the pointer. They keep the code's colors: no teal
+   hover from sphinx-codeautolink's own stylesheet. */
 .yue pre a {
   text-decoration: none;
 }
 .yue pre a:hover {
+  color: inherit;
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;

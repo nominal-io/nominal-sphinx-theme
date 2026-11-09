@@ -11,6 +11,8 @@ dependencies = [
     "myst-parser>=5.0",
     # Mermaid diagrams, set up by the theme
     "sphinxcontrib-mermaid>=2.1",
+    # names in code blocks link to their API docs, set up by the theme
+    "sphinx-codeautolink>=0.19",
 ]
 
 [dependency-groups]
