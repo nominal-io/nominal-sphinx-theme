@@ -1,0 +1,11 @@
+{#- Shibuya 2026.7.12's partials/webfonts.html, which loads Inter and sets it as the text and heading
+    font in an inline style that comes after the theme's stylesheets. The theme loads its own fonts
+    (__init__.py's FONTS) and sets Geist instead, its open stand-in for nominal.io's text font. -#}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style>
+:root {
+  --sy-f-text: "Geist", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Geist", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
