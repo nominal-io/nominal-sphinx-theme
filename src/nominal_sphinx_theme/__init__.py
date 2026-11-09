@@ -55,8 +55,10 @@ __version__ = "0.1.0"
 HERE = Path(__file__).parent
 logger = logging.getLogger(__name__)
 
-# the Nominal design system's fonts (https://design.nominal.io/DESIGN.md)
-FONTS = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+# Open stand-ins for nominal.io's fonts: Geist for its Muoto (text) and Geist Mono for its Fraktion Mono
+# (labels: tabs, captions, buttons); JetBrains Mono, the design system's code font
+# (https://design.nominal.io/DESIGN.md), stays for code.
+FONTS = "https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&family=JetBrains+Mono:wght@400;500;700&display=swap"
 
 # the rendered sidebar: one block per captioned toctree group, and the links in it
 _CAPTION = re.compile(r'(?=<p class="caption")')
