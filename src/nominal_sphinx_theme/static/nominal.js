@@ -117,3 +117,71 @@ document.addEventListener("DOMContentLoaded", () => {
   if (landed) pin(landed);
   else update();
 });
+
+
+// A button above "On this page" folds every code block on the page, and unfolds them again. A folded
+// code block leaves a "Show code" bar that opens that block alone, and an open block has a "Fold"
+// button, in the top right, that folds it again. Code a notebook hides on its own
+// (the `hide-input` tag) is folded with the rest, and the button opens it too. The button reads "Fold
+// all code" while any block is open and "Unfold all code" once every block is folded. It is not
+// added to a page without code blocks.
+document.addEventListener("DOMContentLoaded", () => {
+  const toc = document.querySelector(".sy-rside .localtoc");
+  if (!toc) return;
+
+  // A plain code block goes inside a <details>, whose summary is the bar shown while it is folded.
+  const folds = [];
+  for (const block of document.querySelectorAll('main div[class*="highlight-"]')) {
+    // Skip a cell's output (also highlighted), and a hidden notebook cell, which is handled below.
+    if (block.closest(".cell_output, details")) continue;
+    const fold = document.createElement("details");
+    fold.className = "nominal-code";
+    fold.open = true;
+    const bar = document.createElement("summary");
+    bar.textContent = "Show code";
+    block.replaceWith(fold);
+    fold.append(bar, block);
+    // A "Fold" button in the top right, apart from the copy button, folds it alone.
+    const foldOne = document.createElement("button");
+    foldOne.type = "button";
+    foldOne.className = "nominal-fold-one";
+    foldOne.textContent = "Fold";
+    foldOne.title = "Fold this code block";
+    foldOne.addEventListener("click", () => {
+      fold.open = false;
+    });
+    block.querySelector(".highlight")?.append(foldOne);
+    folds.push(fold);
+  }
+  folds.push(...document.querySelectorAll("main details.hide.above-input"));
+  if (!folds.length) return;
+
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "nominal-fold-all";
+  const icon = (name, paths) =>
+    `<svg class="${name}" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" ` +
+    `stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${paths}</svg>`;
+  // Chevrons point in while code is open (a click folds it) and out once it is folded.
+  button.innerHTML =
+    icon("fold", '<path d="M4 3l4 3.5L12 3M4 13l4-3.5L12 13"/>') +
+    icon("unfold", '<path d="M4 6.5L8 3l4 3.5M4 9.5L8 13l4-3.5"/>') +
+    "<span></span>";
+  toc.before(button); // above the list, not one of its entries
+
+  const label = button.querySelector("span");
+  const update = () => {
+    const anyOpen = folds.some((fold) => fold.open);
+    label.textContent = anyOpen ? "Fold all code" : "Unfold all code";
+    button.classList.toggle("nominal-folded", !anyOpen);
+  };
+  // Each listener is its own: `toggle` does not bubble. Shibuya stops clicks in the sidebar from
+  // reaching the document, so the button has its own too.
+  for (const fold of folds) fold.addEventListener("toggle", update);
+  button.addEventListener("click", () => {
+    const open = !folds.some((fold) => fold.open);
+    for (const fold of folds) fold.open = open;
+    update();
+  });
+  update();
+});
