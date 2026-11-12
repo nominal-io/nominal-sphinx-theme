@@ -444,6 +444,13 @@ html.dark {
   --yue-c-th-background: var(--gray-a4);
 }
 
+/* A wide HTML output, such as a DataFrame with many columns, scrolls inside the page's column
+   instead of running past it. */
+.cell_output .output.text_html {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
 /* ---- Guides: elements ported from the Mintlify site ---- */
 
 /* Page description under the title (Mintlify front-matter description). */
@@ -875,6 +882,88 @@ html.dark {
   text-decoration-color: var(--nominal-green);
   text-decoration-thickness: 2px;
   text-underline-offset: 5px;
+}
+
+/* Fold all code (nominal.js): a bordered button above "On this page", outside the list of entries, which
+   are plain links. Its chevrons point in while code is open and out once it is folded. */
+.sy-rside .nominal-fold-all {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  margin: 0 0 1.25rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--sy-c-border);
+  border-radius: 0.25rem;
+  background: none;
+  color: var(--sy-c-light);
+  font-family: var(--nominal-f-label);
+  font-size: 0.75rem;
+  letter-spacing: var(--nominal-label-tracking);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.sy-rside .nominal-fold-all:hover {
+  color: var(--sy-c-heading);
+  border-color: var(--nominal-green);
+}
+.sy-rside .nominal-fold-all .unfold,
+.sy-rside .nominal-fold-all.nominal-folded .fold {
+  display: none;
+}
+.sy-rside .nominal-fold-all.nominal-folded .unfold {
+  display: block;
+}
+
+/* A folded code block is a "Show code" bar; an open one shows only its code. */
+.yue details.nominal-code[open] > summary {
+  display: none;
+}
+.yue details.nominal-code > summary {
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--sy-c-border);
+  border-radius: 0.25rem;
+  background: var(--code-block-background);
+  color: var(--sy-c-light);
+  font-family: var(--nominal-f-label);
+  font-size: 0.75rem;
+  letter-spacing: var(--nominal-label-tracking);
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.yue details.nominal-code > summary:hover {
+  color: var(--sy-c-heading);
+}
+
+/* An open code block's "Fold" button, in the top right with a clear gap to the left of the copy button
+   (sphinx-copybutton: 1.7em square, .3em from the right, in the button's default font size; this
+   one is 0.8em, so its offset counts in those), and shown the same way: on hover, or when focused. */
+.yue button.nominal-fold-one {
+  position: absolute;
+  top: 0.3em;
+  right: 4.4em;
+  height: 1.7em;
+  padding: 0 0.6em;
+  border: 1px solid var(--sy-c-border);
+  border-radius: 0.4em;
+  background: var(--code-block-background);
+  color: var(--sy-c-light);
+  font-family: var(--nominal-f-label);
+  font-size: 0.8em;
+  letter-spacing: var(--nominal-label-tracking);
+  text-transform: uppercase;
+  line-height: 1;
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 0.3s, color 0.2s;
+}
+.yue .highlight:hover button.nominal-fold-one,
+.yue button.nominal-fold-one:focus-visible {
+  opacity: 1;
+}
+.yue button.nominal-fold-one:hover {
+  color: var(--sy-c-heading);
 }
 
 /* The current tab of a tab set, such as the languages above a code block: a green underline, like

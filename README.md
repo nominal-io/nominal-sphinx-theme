@@ -171,6 +171,14 @@ nominal_sidebar_open = ["Get started"]  # these groups start open, the others fo
 The group holding the current page always starts open. Captions in the list match the toctrees'
 `:caption:` text in the root document, and one that matches none is a build warning.
 
+## Folding code blocks
+
+A "Fold all code" button above "On this page" in the right sidebar folds every code block on the
+page; each leaves a "Show code" bar that opens that block alone, and an open block has a "Fold"
+button, in the top right and apart from the copy button, that folds it again. The sidebar button then reads "Unfold all
+code" and opens them all. Code a notebook hides itself (the `hide-input` tag) folds and unfolds
+with the rest, and a cell's output is never folded. Pages without code blocks get no button.
+
 ## Heading links
 
 Clicking the `#` after a heading copies a link to that section, as well as going to it, and
