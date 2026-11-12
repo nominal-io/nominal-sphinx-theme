@@ -246,6 +246,19 @@ unless a project turns them on, and a Python block it can't parse, such as a sig
 (`name: str = ...`), stays unlinked without a warning. To leave a block unlinked, put
 [`autolink-skip`](https://sphinx-codeautolink.readthedocs.io/en/stable/reference.html) before it.
 
+## Code fences in docstrings
+
+autodoc and sphinx-autoapi read docstrings as reStructuredText, so a Markdown ```` ``` ```` fence in
+a docstring doesn't render as code. In a repo whose docstrings use fences, add the theme's
+`docstring_fences` module to `extensions`. Unlike the theme's other features, it's off unless listed:
+
+```python
+extensions = [..., "nominal_sphinx_theme", "nominal_sphinx_theme.docstring_fences"]
+```
+
+Each fence becomes a code block, in the fence's language, before Napoleon reads the docstring's
+sections. With sphinx-click loaded, command descriptions get the same.
+
 ## Shared snippets
 
 Snippets are MyST fragments in `src/nominal_sphinx_theme/snippets/` that any project using the theme can include, for content many projects repeat. A MyST page
