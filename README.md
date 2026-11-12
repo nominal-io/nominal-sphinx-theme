@@ -173,10 +173,10 @@ The group holding the current page always starts open. Captions in the list matc
 
 ## Folding code blocks
 
-A "Fold all code" button above "On this page" in the right sidebar folds every code block on the
-page; each leaves a "Show code" bar that opens that block alone, and an open block has a "Fold"
-button, in the top right and apart from the copy button, that folds it again. The sidebar button then reads "Unfold all
-code" and opens them all. Code a notebook hides itself (the `hide-input` tag) folds and unfolds
+Each code block's bar has a "Fold" button beside the copy button. A folded block is only its bar,
+so its code can still be copied, and the button reads "Show" until it shows the code again. A "Fold
+all code" button above "On this page" in the right sidebar folds every code block on the page, then
+reads "Unfold all code" and opens them all. Code a notebook hides itself (the `hide-input` tag) folds and unfolds
 with the rest, and a cell's output is never folded. Pages without code blocks get no button.
 
 ## Heading links
