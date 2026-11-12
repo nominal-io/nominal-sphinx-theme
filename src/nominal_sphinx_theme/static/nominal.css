@@ -381,6 +381,13 @@ html.dark {
   --yue-c-th-background: var(--gray-a4);
 }
 
+/* A wide HTML output, such as a DataFrame with many columns, scrolls inside the page's column
+   instead of running past it. */
+.cell_output .output.text_html {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
 /* ---- Guides: elements ported from the Mintlify site ---- */
 
 /* Page description under the title (Mintlify front-matter description). */
