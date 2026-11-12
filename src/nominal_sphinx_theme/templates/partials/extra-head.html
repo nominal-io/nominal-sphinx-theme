@@ -1,0 +1,4 @@
+{#- Shibuya's empty partials/extra-head.html, in <head>. Marks the page as running JavaScript before it
+    first renders, so nominal.css draws the bar on code blocks only where nominal.js and sphinx-copybutton
+    fill it in, without the bar appearing late and pushing the page down. -#}
+<script>document.documentElement.classList.add("nominal-js");</script>

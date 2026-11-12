@@ -65,6 +65,69 @@ html.light .jupyter_container .cell_output {
   white-space: pre-wrap;
 }
 
+/* Code blocks have a bar on top: the language on the left (data-lang, set by nominal.js) and
+   sphinx-copybutton's button on the right, labeled and always shown rather than only on hover.
+   Both need JavaScript, so the bar is drawn only on pages marked nominal-js (partials/extra-head.html). */
+html.nominal-js .yue div.highlight {
+  border: 1px solid var(--sy-c-border);
+}
+html.nominal-js .yue div.highlight::before {
+  /* the zero-width space keeps the bar's height when there's no language */
+  content: attr(data-lang) "\200b";
+  display: block;
+  padding: 0.3rem 0.8rem;
+  border-bottom: 1px solid var(--sy-c-border);
+  background-color: var(--sy-c-background);
+  color: var(--sy-c-light);
+  font: 500 0.72rem/1.6 var(--sy-f-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+html.nominal-js .yue div.highlight > pre {
+  border-radius: 0;
+}
+.yue div.highlight button.copybtn {
+  opacity: 1;
+  top: 0.3rem;
+  right: 0.5rem;
+  width: auto;
+  height: auto;
+  gap: 0.3rem;
+  padding: 0 0.2rem;
+  border: none;
+  background: none;
+  color: var(--sy-c-text);
+  font: 500 0.72rem/1.6 var(--sy-f-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.yue div.highlight button.copybtn > svg {
+  width: 0.95rem;
+  height: 0.95rem;
+  padding: 0;
+}
+/* the label is the button's tooltip text, which turns to "Copied!"; the tooltip itself is hidden */
+.yue div.highlight button.copybtn::before {
+  content: attr(data-tooltip);
+  order: 1;
+}
+.yue div.highlight button.copybtn::after {
+  display: none;
+}
+.yue div.highlight button.copybtn:hover {
+  background: none;
+  color: var(--sy-c-bold);
+  text-decoration: underline;
+}
+.yue div.highlight button.copybtn.success {
+  color: var(--green-a10);
+}
+@media print {
+  html.nominal-js .yue div.highlight::before {
+    display: none;
+  }
+}
+
 /* Dark mode, as DESIGN.md's dark mapping: neutral-800 page, neutral-900 header, footer and code,
    neutral-700 cards, and hairline white borders. */
 html.dark {

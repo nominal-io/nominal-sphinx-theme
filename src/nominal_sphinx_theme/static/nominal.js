@@ -7,6 +7,17 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+// Each code block's bar (nominal.css) names its language, from its wrapper's highlight-<lang> class.
+// Python's other lexer names show as "python"; blocks without a set language show none.
+document.addEventListener("DOMContentLoaded", () => {
+  const names = { python3: "python", py: "python", pycon: "python", ipython: "python", ipython3: "python", ps1: "powershell", pwsh: "powershell" };
+  for (const block of document.querySelectorAll("div[class*='highlight-'] > div.highlight")) {
+    const lang = [...block.parentElement.classList].find((c) => c.startsWith("highlight-"))?.slice("highlight-".length);
+    if (lang && lang !== "default" && lang !== "none") block.dataset.lang = names[lang] ?? lang;
+  }
+});
+
+
 // The "#" after each heading also copies a link to that section, so it can be pasted straight into
 // a message. "Copied" shows beside it for a moment (nominal.css). The link still goes to the section.
 document.addEventListener("DOMContentLoaded", () => {
