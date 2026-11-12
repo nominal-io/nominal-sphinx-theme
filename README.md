@@ -173,7 +173,7 @@ The group holding the current page always starts open. Captions in the list matc
 
 ## Folding code blocks
 
-Each code block's bar has a "Fold" button beside the copy button. A folded block is only its bar,
+Each code block's bar has a "Fold" button at its upper left, the language in the middle, and the copy button at the right. A folded block is only its bar,
 so its code can still be copied, and the button reads "Show" until it shows the code again. A "Fold
 all code" button above "On this page" in the right sidebar folds every code block on the page, then
 reads "Unfold all code" and opens them all. Code a notebook hides itself (the `hide-input` tag) folds and unfolds
