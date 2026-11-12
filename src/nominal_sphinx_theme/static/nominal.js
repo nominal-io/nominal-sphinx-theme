@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// Each code block's bar (nominal.css) names its language, from its wrapper's highlight-<lang> class.
+// Each code block's bar (nominal.css) names its language in the middle, from its wrapper's highlight-<lang> class.
 // Python's other lexer names show as "python"; blocks without a set language show none.
 document.addEventListener("DOMContentLoaded", () => {
   const names = { python3: "python", py: "python", pycon: "python", ipython: "python", ipython3: "python", ps1: "powershell", pwsh: "powershell" };
@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// Each code block's bar has a "Fold" button beside the copy button (nominal.css). A folded block keeps
+// Each code block's bar has a "Fold" button at its upper left (language in the middle, copy button at the right) (nominal.css). A folded block keeps
 // its bar, so its code can still be copied, and the button reads "Show" until it shows the code again.
 // A button above "On this page" folds every code block on the page, and unfolds them again. Code a
 // notebook hides on its own (the `hide-input` tag) is folded with the rest, and the button opens it
