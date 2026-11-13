@@ -158,8 +158,9 @@ html.nominal-js .yue div.highlight > pre {
   }
 }
 
-/* Dark mode, as DESIGN.md's dark mapping: neutral-800 page, neutral-900 header, footer and code,
-   neutral-700 cards, and hairline white borders. */
+/* Dark mode, as DESIGN.md's dark mapping (neutral-800 page, neutral-900 header, footer and code,
+   neutral-700 cards, and hairline white borders), but in "midnight": each neutral gray is a
+   blue-black of about the same brightness. Text and borders keep their neutral colors. */
 html.dark {
   --accent-9: #ffffff;
   --accent-10: #e5e5e5;
@@ -167,19 +168,19 @@ html.dark {
   --accent-a12: #ffffff;
   --sy-c-link: #ffffff;
   --sy-c-link-hover: #a3a3a3;
-  --sy-c-background: #1f1f1f;
-  --sy-c-surface: #333333;
+  --sy-c-background: #121722;
+  --sy-c-surface: #1e2433;
   --sy-c-text: #d4d4d4;
   --sy-c-heading: #ffffff;
   --sy-c-bold: #ffffff;
   --sy-c-light: #a3a3a3;
   --sy-c-border: rgba(255, 255, 255, 0.1);
   --sy-c-divider: rgba(255, 255, 255, 0.1);
-  --sy-c-foot-background: #121212;
-  --nominal-header: #121212;
-  --code-block-background: #121212;
-  --nominal-card: #333333;
-  --nominal-card-hover: #424242;
+  --sy-c-foot-background: #0b0e15;
+  --nominal-header: #0b0e15;
+  --code-block-background: #0b0e15;
+  --nominal-card: #1a2030;
+  --nominal-card-hover: #232a3c;
 }
 
 /* Header: a solid bar (--nominal-header) with a hairline border, like the landing page's (no blur). */
@@ -205,7 +206,7 @@ html.dark {
   --nominal-grid-line: rgba(0, 0, 0, 0.04);
 }
 html.dark {
-  --nominal-grid-line: rgba(255, 255, 255, 0.03);
+  --nominal-grid-line: rgba(150, 175, 255, 0.04);
 }
 :root,
 body,
@@ -774,9 +775,9 @@ html.light {
   --nominal-tab-edge: #d6d6d6;
 }
 html.dark {
-  --nominal-tab: #191919;
-  --nominal-tab-hover: #242424;
-  --nominal-tab-edge: #333333;
+  --nominal-tab: #0f131c;
+  --nominal-tab-hover: #171c28;
+  --nominal-tab-edge: #1e2433;
 }
 /* On narrow screens the tabs are a list in the menu: the current one is underlined. */
 @media (max-width: 767px) {
