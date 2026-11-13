@@ -64,7 +64,7 @@ the theme's templates or restyle its header in a repo; change them here.
 | `nominal_section_sidebar` | `True`  | Sidebar shows only the current tab's captioned toctrees.               |
 | `nominal_sidebar_open`    | `None`  | Sidebar groups fold under their captions. See [Folding sidebar groups](#folding-sidebar-groups). |
 | `nominal_ga_id`           | `"G-6KQ94CEW2M"` | Google Analytics measurement ID, dev.nominal.io's by default. `None` turns analytics off. |
-| `nominal_scramble_output_ids` | `True` | Each UUID in an executed notebook's outputs becomes a stand-in derived from a hash of it, so pages don't publish the IDs of resources the build created. Code cells keep their values. |
+| `nominal_scramble_output_ids` | `True` when the `CI` environment variable is set, else `False` | Each UUID in an executed notebook's outputs becomes a stand-in derived from a hash of it, so pages don't publish the IDs of resources the build created. Code cells keep their values. A local build keeps the real IDs, so the links and copy buttons on its pages work; don't deploy it. Changing the value needs a full rebuild (`sphinx-build -E`). |
 
 A project's own `_static` and `_templates` override the theme's files of the same name.
 
