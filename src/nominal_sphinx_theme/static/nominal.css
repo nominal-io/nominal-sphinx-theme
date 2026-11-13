@@ -389,6 +389,25 @@ html.dark {
   text-decoration: underline;
 }
 
+/* Rust API entries (sphinx-rustdoc), with the same rail and colours as Python's. Their signatures
+   mark keywords, unlinked types (primitives, generics, lifetimes) and parameter names with
+   Pygments' classes, and every link in them is a type. */
+dl.rust > dd {
+  margin-left: 0;
+  padding-left: 1.25rem;
+  border-left: 1px solid var(--sy-c-divider);
+}
+.yue dl.rust > dt.sig .k {
+  color: var(--nominal-api-keyword);
+}
+.yue dl.rust > dt.sig .kt,
+.yue dl.rust > dt.sig a.reference {
+  color: var(--nominal-api-type);
+}
+.yue dl.rust > dt.sig .n {
+  color: var(--nominal-api-param);
+}
+
 /* A signature's description: body-coloured text, with its Parameters / Returns / Raises labels as
    small muted mono caps, and parameter names in mono like the signature's. */
 .yue dt.sig + dd {
