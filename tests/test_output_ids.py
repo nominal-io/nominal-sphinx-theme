@@ -1,9 +1,12 @@
 from types import SimpleNamespace
 
+import pytest
 from docutils import nodes
 from docutils.frontend import get_default_settings
 from docutils.parsers.rst import Parser
 from docutils.utils import new_document
+from sphinx.application import Sphinx
+from sphinx.util.docutils import docutils_namespace
 
 from nominal_sphinx_theme import output_ids
 
@@ -54,3 +57,40 @@ def test_setting_off_keeps_outputs():
     document = _page()
     _scramble(document, enabled=False)
     assert document.children[1].astext().count(REAL) == 2
+
+
+CONF = """
+extensions = ["nominal_sphinx_theme"]
+html_theme = "shibuya"
+"""
+
+
+def _option(tmp_path, monkeypatch, ci: str | None, conf: str = CONF) -> bool:
+    """The option's value in a project built with the CI environment variable set to ``ci``."""
+    if ci is None:
+        monkeypatch.delenv("CI", raising=False)
+    else:
+        monkeypatch.setenv("CI", ci)
+    (tmp_path / "conf.py").write_text(conf)
+    (tmp_path / "index.md").write_text("# Page\n")
+    with docutils_namespace():
+        app = Sphinx(tmp_path, tmp_path, tmp_path / "out", tmp_path / "doctrees", "dirhtml", status=None, warning=None)
+    return app.config.nominal_scramble_output_ids
+
+
+@pytest.mark.parametrize("ci", ["true", "1", "yes"])
+def test_default_scrambles_on_ci(tmp_path, monkeypatch, ci):
+    assert _option(tmp_path, monkeypatch, ci) is True
+
+
+@pytest.mark.parametrize("ci", [None, "", "0", "false", "False"])
+def test_default_keeps_ids_locally(tmp_path, monkeypatch, ci):
+    assert _option(tmp_path, monkeypatch, ci) is False
+
+
+def test_conf_can_scramble_locally(tmp_path, monkeypatch):
+    assert _option(tmp_path, monkeypatch, None, CONF + "nominal_scramble_output_ids = True\n") is True
+
+
+def test_conf_can_keep_ids_on_ci(tmp_path, monkeypatch):
+    assert _option(tmp_path, monkeypatch, "true", CONF + "nominal_scramble_output_ids = False\n") is False
