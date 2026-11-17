@@ -18,10 +18,10 @@ a prompt
 """
 
 
-def build(tmp_path: Path) -> Path:
+def build(tmp_path: Path, conf: str = "") -> Path:
     src = tmp_path / "src"
     src.mkdir()
-    (src / "conf.py").write_text('extensions = ["myst_parser", "nominal_sphinx_theme"]\nhtml_theme = "shibuya"\n')
+    (src / "conf.py").write_text('extensions = ["myst_parser", "nominal_sphinx_theme"]\nhtml_theme = "shibuya"\n' + conf)
     (src / "index.md").write_text(PAGE)
     with docutils_namespace():
         Sphinx(src, src, tmp_path / "out", tmp_path / "doctrees", "dirhtml", status=None, warningiserror=True).build()
@@ -41,3 +41,18 @@ def test_the_fold_all_script_and_style_ship_with_the_theme(tmp_path):
     script, style = (static / "nominal.js").read_text(), (static / "nominal.css").read_text()
     assert "nominal-fold-all" in script and ".nominal-fold-all" in style
     assert "nominal-fold-one" in script and ".nominal-fold-one" in style
+
+
+def test_a_link_can_set_the_fold_state(tmp_path):
+    static = build(tmp_path) / "_static"
+    script = (static / "nominal.js").read_text()
+    assert 'get("fold")' in script and "nominal-fold-link" in script
+    assert ".nominal-fold-link" in (static / "nominal.css").read_text()
+
+
+def test_nominal_fold_code_sets_the_sites_default(tmp_path):
+    out = build(tmp_path, 'nominal_fold_code = "all"\n')
+    assert 'dataset.nominalFold = "all"' in (out / "index.html").read_text()
+    other = tmp_path / "other"
+    other.mkdir()
+    assert "nominalFold" not in (build(other) / "index.html").read_text()

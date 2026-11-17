@@ -966,6 +966,22 @@ html.dark {
   display: block;
 }
 
+/* "Copy link with code folded", under the fold-all button: plain text, like a link. */
+.sy-rside .nominal-fold-link {
+  display: block;
+  margin: -0.75rem 0 1.25rem;
+  padding: 0 0.1rem;
+  border: 0;
+  background: none;
+  color: var(--sy-c-light);
+  font-family: var(--nominal-f-label);
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+.sy-rside .nominal-fold-link:hover {
+  color: var(--sy-c-heading);
+}
+
 /* The current tab of a tab set, such as the languages above a code block: a green underline, like
    the current heading's in the right nav. */
 .yue .sd-tab-set > input:checked + label {
