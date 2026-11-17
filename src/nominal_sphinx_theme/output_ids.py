@@ -5,10 +5,17 @@ those resources' IDs: printed RIDs, links into the Nominal app, and the Nominal 
 cards with their copy buttons. Before a page is written, each UUID in a cell's output becomes a
 stand-in derived from a hash of it: the same everywhere it appears and across builds, and not
 reversible. The code cells shown on the page, and the notebooks people run themselves, keep their
-real values. Set ``nominal_scramble_output_ids = False`` to publish outputs as they are.
+real values.
+
+The default depends on the environment, so a build that publishes fails safe: UUIDs are replaced when
+the ``CI`` environment variable is set (as GitHub Actions does), and kept in a local build, so the links
+and copy buttons on a locally built page still point at the real resources. Set
+``nominal_scramble_output_ids`` in ``conf.py`` to override it. A site built without ``CI`` holds real IDs
+and must not be deployed.
 """
 
 import hashlib
+import os
 import re
 from typing import Any
 
@@ -17,6 +24,11 @@ from sphinx.application import Sphinx
 
 # a UUID in a resource ID or URL, such as ri.scout.<instance>.run.<uuid>
 UUID = re.compile(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}", re.IGNORECASE)
+
+
+def _on_ci() -> bool:
+    """Whether ``CI`` is set to something other than an empty, ``0`` or ``false`` value."""
+    return os.environ.get("CI", "").strip().lower() not in ("", "0", "false")
 
 
 def _stand_in(match: re.Match[str]) -> str:
@@ -40,6 +52,6 @@ def _scramble_output_ids(app: Sphinx, doctree: nodes.document) -> None:
 
 
 def setup(app: Sphinx) -> dict[str, Any]:
-    app.add_config_value("nominal_scramble_output_ids", True, "env", types=[bool])
+    app.add_config_value("nominal_scramble_output_ids", _on_ci(), "env", types=[bool])
     app.connect("doctree-read", _scramble_output_ids)
     return {"parallel_read_safe": True, "parallel_write_safe": True}
