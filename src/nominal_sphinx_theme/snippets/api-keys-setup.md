@@ -1,7 +1,7 @@
 % Source: fern-docs 1b72bbf5, fern/docs/pages/core/sdk/python/getting-started.mdx
 % Inlined: fern/snippets/api-key.mdx, fern/snippets/python/auth.mdx
 
-There is a one-time setup of API-keys required to use   Nominal clients. There are 2 steps: 
+There is a one-time setup of API keys required to use Nominal clients. There are 2 steps:
 
 ## 1. Copy your keys
 Visit your [API keys](https://app.gov.nominal.io/settings/org/api-keys) page in the cloud Nominal app, and copy three values.   
