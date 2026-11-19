@@ -62,6 +62,7 @@ the theme's templates or restyle its header in a repo; change them here.
 | `nominal_header_search`   | `True`  | The search box in the header. |
 | `nominal_header_buttons`  | `["product-guides", "request-demo", "open-app"]` | The header's buttons to show. |
 | `nominal_section_sidebar` | `True`  | Sidebar shows only the current tab's captioned toctrees.               |
+| `nominal_fold_code`       | `None`  | `"all"` or `"none"`: open every page with its code blocks folded or open. A link's `?fold=` overrides it. See [Folding code blocks](#folding-code-blocks). |
 | `nominal_sidebar_open`    | `None`  | Sidebar groups fold under their captions. See [Folding sidebar groups](#folding-sidebar-groups). |
 | `nominal_ga_id`           | `"G-6KQ94CEW2M"` | Google Analytics measurement ID, dev.nominal.io's by default. `None` turns analytics off. |
 | `nominal_scramble_output_ids` | `True` when the `CI` environment variable is set, else `False` | Each UUID in an executed notebook's outputs becomes a stand-in derived from a hash of it, so pages don't publish the IDs of resources the build created. Code cells keep their values. A local build keeps the real IDs, so the links and copy buttons on its pages work; don't deploy it. Changing the value needs a full rebuild (`sphinx-build -E`). |
@@ -178,6 +179,11 @@ so its code can still be copied, and the button reads "Show" until it shows the 
 all code" button above "On this page" in the right sidebar folds every code block on the page, then
 reads "Unfold all code" and opens them all. Code a notebook hides itself (the `hide-input` tag) folds and unfolds
 with the rest, and a cell's output is never folded. Pages without code blocks get no button.
+
+A link can open a page with its code folded: add `?fold=all` (or `?fold=none` for every block open).
+The button then reads "Unfold all code", links to other pages of the site keep the parameter, and
+"Copy link with code folded" under the button copies the current page's link that way. Set
+`nominal_fold_code = "all"` (or `"none"`) to make that the site's default; a link's `?fold=` wins.
 
 ## Heading links
 

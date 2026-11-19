@@ -136,6 +136,11 @@ document.addEventListener("DOMContentLoaded", () => {
 // notebook hides on its own (the `hide-input` tag) is folded with the rest, and the button opens it
 // too. The button reads "Fold all code" while any block is open and "Unfold all code" once every
 // block is folded. It is not added to a page without code blocks.
+// A link can set the fold state on load: `?fold=all` opens the page with every block folded and
+// `?fold=none` with every block open. Links to other pages of the site keep the parameter, so a
+// reader who arrived folded stays folded. Without it, `nominal_fold_code` (the html element's
+// data-nominal-fold) is the site's default. "Copy link with code folded" under the button copies
+// this page's link with `?fold=all`.
 document.addEventListener("DOMContentLoaded", () => {
   const toc = document.querySelector(".sy-rside .localtoc");
   if (!toc) return;
@@ -196,4 +201,39 @@ document.addEventListener("DOMContentLoaded", () => {
     update();
   });
   update();
+
+  const param = new URLSearchParams(location.search).get("fold");
+  const mode = ["all", "none"].includes(param) ? param : document.documentElement.dataset.nominalFold;
+  if (mode === "all" || mode === "none") {
+    const open = mode === "none";
+    for (const block of blocks) setFolded(block, !open);
+    for (const cell of hidden) cell.open = open;
+    update();
+  }
+  if (param === "all" || param === "none") {
+    for (const a of document.querySelectorAll("a[href]")) {
+      const url = new URL(a.href, location.href);
+      if (!/^https?:$/.test(url.protocol) || url.origin !== location.origin || url.searchParams.has("fold")) continue;
+      if (url.pathname === location.pathname && url.hash) continue; // an anchor in this page
+      url.searchParams.set("fold", param);
+      a.href = url.href;
+    }
+  }
+
+  if (navigator.clipboard) {
+    const copy = document.createElement("button");
+    copy.type = "button";
+    copy.className = "nominal-fold-link";
+    copy.textContent = "Copy link with code folded";
+    button.after(copy);
+    copy.addEventListener("click", () => {
+      const url = new URL(location.href);
+      url.searchParams.set("fold", "all");
+      url.hash = "";
+      navigator.clipboard.writeText(url.href).then(() => {
+        copy.textContent = "Link copied";
+        setTimeout(() => (copy.textContent = "Copy link with code folded"), 1500);
+      });
+    });
+  }
 });

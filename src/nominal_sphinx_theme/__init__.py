@@ -218,6 +218,7 @@ def _on_page(
         relative_uri(target, "") + "../" * app.config.nominal_hub_depth or "./"
     )
     context["nominal_docs_url"] = app.config.nominal_docs_url
+    context["nominal_fold_code"] = app.config.nominal_fold_code or ""
     context["nominal_header_project"] = app.config.nominal_header_project
     context["nominal_header_search"] = app.config.nominal_header_search
     context["nominal_header_buttons"] = app.config.nominal_header_buttons
@@ -410,6 +411,9 @@ def setup(app: Sphinx) -> dict[str, Any]:
     app.add_config_value(
         "nominal_sidebar_open", None, "html", types=[type(None), bool, list]
     )
+    # how pages open the code blocks: "all" folds them, "none" opens them, None leaves each page as
+    # it is; a link's ?fold=all or ?fold=none overrides it (nominal.js)
+    app.add_config_value("nominal_fold_code", None, "html", types=[str, type(None)])
     # the {nominal-snippet} directive: fragments shared by every project using the theme
     app.setup_extension("nominal_sphinx_theme.snippet_directive")
     # stand-ins for the UUIDs in executed notebook outputs (output_ids.py)
