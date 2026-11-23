@@ -1066,3 +1066,74 @@ html.dark pre.mermaid > svg {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
+
+/* {example-gallery}: a grid of cards, each an image over the notebook's title. The image fills the same
+   4:3 box on every card; a notebook without one gets a tile with its octicon, or an empty tile. */
+.nominal-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr));
+  gap: 1rem;
+  margin: 0.75rem 0 1.5rem;
+}
+
+.nominal-gallery > p.nominal-gallery-card {
+  margin: 0;
+}
+
+.nominal-gallery-card > a {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid var(--sy-c-border);
+  border-radius: 6px;
+  overflow: hidden;
+  color: var(--sy-c-text);
+  text-decoration: none;
+}
+
+.nominal-gallery-card > a:hover {
+  color: var(--sy-c-link-hover);
+  text-decoration: none;
+}
+
+.nominal-gallery-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+/* the plot sits on the page's own background, in light and dark mode */
+.nominal-gallery-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  margin: 0;
+  transition: transform 0.2s ease;
+}
+
+.nominal-gallery-card > a:hover .nominal-gallery-image img {
+  transform: scale(1.03);
+}
+
+.nominal-gallery-empty {
+  background: var(--sy-c-surface);
+}
+
+.nominal-gallery-empty .sd-octicon {
+  width: 3rem;
+  height: 3rem;
+  color: var(--sy-c-text);
+  opacity: 0.6;
+}
+
+.nominal-gallery-title {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  border-top: 1px solid var(--sy-c-border);
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.95em;
+  line-height: 1.35;
+}

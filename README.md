@@ -39,7 +39,7 @@ The theme holds what every repo using it shares, so a repo gets a change by bump
 - the look: the header, logo, palette, fonts, code highlighting and API page styling
 - fixes to Shibuya and to the extensions repos share, such as MyST, sphinx-design and
   sphinxcontrib-mermaid
-- directives more than one repo uses, such as `{nominal-snippet}`
+- directives more than one repo uses, such as `{nominal-snippet}` and `{example-gallery}`
 - default Sphinx and MyST settings, which a repo's `conf.py` can override
 
 A repo keeps what only its own docs need: its pages, its logo, and styles and extensions for one
@@ -258,6 +258,33 @@ extensions = [..., "nominal_sphinx_theme", "nominal_sphinx_theme.docstring_fence
 
 Each fence becomes a code block, in the fence's language, before Napoleon reads the docstring's
 sections. With sphinx-click loaded, command descriptions get the same.
+
+## Example gallery
+
+`{example-gallery}` shows a card for each notebook in the page's folder: an image over the
+notebook's first `#` heading.
+
+````md
+```{example-gallery}
+```
+````
+
+A notebook is a MyST Markdown file with `kernelspec` in its front matter. List the notebooks in
+the sidebar with a toctree; the directive doesn't. A card's image is, in order of preference:
+
+1. the front matter's `thumbnail`, a path relative to the notebook
+2. the first image in the output of a cell tagged `thumbnail`
+3. the last image in the notebook's cell outputs, such as its last plot
+
+| Front matter       | Effect                                                                  |
+| ------------------ | ----------------------------------------------------------------------- |
+| `thumbnail: path`  | Use this image. A missing file is a warning.                            |
+| `thumbnail: false` | Show no image on the card.                                              |
+| `icon: pulse`      | The octicon on a card without an image. Needs `sphinx_design`.          |
+
+Every image fills the same 4:3 box and loads lazily. A card without an image, such as one from a
+build that doesn't run the notebooks, shows its icon, or an empty tile, with no warning. The
+images come from the executed notebooks, so a cached run (`nb_execution_mode = "cache"`) works.
 
 ## Shared snippets
 
