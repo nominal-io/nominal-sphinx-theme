@@ -414,6 +414,8 @@ def setup(app: Sphinx) -> dict[str, Any]:
     app.setup_extension("nominal_sphinx_theme.snippet_directive")
     # stand-ins for the UUIDs in executed notebook outputs (output_ids.py)
     app.setup_extension("nominal_sphinx_theme.output_ids")
+    # the {example-gallery} directive: cards for the notebooks beside a page, with images (gallery.py)
+    app.setup_extension("nominal_sphinx_theme.gallery")
     # Mermaid diagrams, with Mermaid's own front matter (mermaid_frontmatter.py)
     app.setup_extension("sphinxcontrib.mermaid")
     app.setup_extension("nominal_sphinx_theme.mermaid_frontmatter")
