@@ -816,12 +816,14 @@ html.dark {
 }
 
 /* Folding sidebar groups (nominal_sidebar_open): the caption is a button in the caption's own
-   font, with a chevron that turns when the group is open. Folded groups sit close together. */
+   font, with a chevron that turns when the group is open. Folded groups sit close together. A
+   button centers its text, so a caption long enough to wrap is set back to the left. */
 .sy-lside .caption button.nominal-fold {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  text-align: start;
   padding: 0;
   border: 0;
   background: none;
