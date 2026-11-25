@@ -47,17 +47,23 @@ def test_defaults(tmp_path):
     assert "<title>Demo</title>" in html
     # every page reports to dev.nominal.io's GA4 measurement ID
     assert "googletagmanager.com/gtag/js?id=G-6KQ94CEW2M" in html
+    # and to nominal.io's PostHog project, through its proxy
+    assert 'posthog.init("phc_q2ywmahEgRaQgwFoESazhovkXBqW2XuZy5PduwJcMqLD", {"api_host": "https://u2.nominal.io"' in html
+    assert '"outbound_link_clicked"' in html
+    # but not from a local preview or a copy opened from disk
+    assert 'if (location.protocol !== "file:" && !/^(localhost|' in html
     # Sphinx makes _sources either way; html_copy_source decides whether the pages go in it
     assert not [f for f in (out / "_sources").rglob("*") if f.is_file()]
 
 
 def test_conf_py_wins(tmp_path):
-    conf = CONF + "html_copy_source = True\nmyst_links_external_new_tab = False\nhtml_title = 'Other'\nnominal_ga_id = None\n"
+    conf = CONF + "html_copy_source = True\nmyst_links_external_new_tab = False\nhtml_title = 'Other'\nnominal_ga_id = None\nnominal_posthog_token = None\n"
     app, out = build(tmp_path, conf)
     html = (out / "index.html").read_text()
     assert 'class="reference external" href="https://nominal.io/">' in html
     assert "<title>Other</title>" in html
     assert "googletagmanager" not in html
+    assert "posthog" not in html
     assert (out / "_sources" / "index.md.txt").is_file()
 
 

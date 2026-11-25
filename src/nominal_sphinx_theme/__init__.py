@@ -50,6 +50,8 @@ from sphinx.environment import BuildEnvironment
 from sphinx.util import logging
 from sphinx.util.osutil import relative_uri
 
+from . import google_analytics, posthog
+
 __version__ = "0.1.0"
 
 HERE = Path(__file__).parent
@@ -301,18 +303,11 @@ def _check_open_groups(app: Sphinx, env: BuildEnvironment) -> None:
 def _on_builder_inited(app: Sphinx) -> None:
     ga_id = app.config.nominal_ga_id
     if ga_id:
-        app.add_js_file(
-            f"https://www.googletagmanager.com/gtag/js?id={ga_id}",
-            loading_method="async",
-        )
-        app.add_js_file(
-            None,
-            body=(
-                "window.dataLayer = window.dataLayer || [];"
-                "function gtag() { dataLayer.push(arguments); }"
-                f'gtag("js", new Date()); gtag("config", "{ga_id}");'
-            ),
-        )
+        app.add_js_file(google_analytics.src(ga_id), loading_method="async")
+        app.add_js_file(None, body=google_analytics.script(ga_id))
+    posthog_token = app.config.nominal_posthog_token
+    if posthog_token:
+        app.add_js_file(None, body=posthog.script(posthog_token))
 
 
 def _split_param(para: nodes.paragraph) -> None:
@@ -373,9 +368,13 @@ def _set_highlighting(app: Sphinx) -> None:
 
 
 def setup(app: Sphinx) -> dict[str, Any]:
-    # dev.nominal.io's GA4 measurement ID; None: no analytics
+    # dev.nominal.io's GA4 measurement ID (google_analytics.py); None: no analytics
     app.add_config_value(
-        "nominal_ga_id", "G-6KQ94CEW2M", "html", types=[str, type(None)]
+        "nominal_ga_id", google_analytics.ID, "html", types=[str, type(None)]
+    )
+    # nominal.io's PostHog project token (posthog.py); None: no PostHog
+    app.add_config_value(
+        "nominal_posthog_token", posthog.TOKEN, "html", types=[str, type(None)]
     )
     # code highlighting in light and dark mode: Pygments style names, or dotted paths to style classes
     # (default: Atom's One Light and One Dark, in pygments_styles.py)
